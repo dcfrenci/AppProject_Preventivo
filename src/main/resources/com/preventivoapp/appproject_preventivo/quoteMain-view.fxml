@@ -51,12 +51,15 @@
                               </ButtonBar>
                            </top>
                            <center>
-                              <TableView BorderPane.alignment="CENTER">
+                              <TableView stylesheets="@../../../CSS/quoteMainHeader-view.css" BorderPane.alignment="CENTER">
                                 <columns>
                                   <TableColumn prefWidth="134.4000244140625" text="LastName" />
                                   <TableColumn minWidth="2.39996337890625" prefWidth="101.5999755859375" text="Name " />
                                     <TableColumn prefWidth="91.20001220703125" text="Date" />
                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
                               </TableView>
                            </center>
                            <bottom>
@@ -93,6 +96,9 @@
                                   <TableColumn prefWidth="75.0" text="Price" />
                                     <TableColumn prefWidth="95.20001220703125" text="Price for tooth" />
                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
                               </TableView>
                            </center>
                            <bottom>
