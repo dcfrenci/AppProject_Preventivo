@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Import price list" />
+                  <MenuItem mnemonicParsing="false" text="Export price list" />
+                  <MenuItem mnemonicParsing="false" text="Settings" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+                  <MenuItem mnemonicParsing="false" text="User guide " />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Quote">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <BorderPane layoutX="213.0" layoutY="107.0" prefHeight="345.6" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <top>
+                              <ButtonBar prefHeight="40.0" prefWidth="446.0" BorderPane.alignment="CENTER">
+                                <buttons>
+                                    <Button mnemonicParsing="false" text="Name A-Z" />
+                                  <Button mnemonicParsing="false" text="Date of Creation" />
+                                    <TextField promptText="Search" />
+                                </buttons>
+                              </ButtonBar>
+                           </top>
+                           <center>
+                              <TableView BorderPane.alignment="CENTER">
+                                <columns>
+                                  <TableColumn prefWidth="134.4000244140625" text="LastName" />
+                                  <TableColumn minWidth="2.39996337890625" prefWidth="101.5999755859375" text="Name " />
+                                    <TableColumn prefWidth="91.20001220703125" text="Date" />
+                                </columns>
+                              </TableView>
+                           </center>
+                           <bottom>
+                              <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                <buttons>
+                                  <Button mnemonicParsing="false" text="New..." />
+                                    <Button mnemonicParsing="false" text="Edit..." />
+                                    <Button mnemonicParsing="false" text="Remove" />
+                                </buttons>
+                              </ButtonBar>
+                           </bottom>
+                        </BorderPane>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Price List">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <BorderPane layoutX="215.0" layoutY="87.0" prefHeight="345.6" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <top>
+                              <ButtonBar prefHeight="40.0" prefWidth="406.0" BorderPane.alignment="CENTER">
+                                 <buttons>
+                                    <Label text="Services" />
+                                    <TextField promptText="Search" />
+                                 </buttons>
+                              </ButtonBar>
+                           </top>
+                           <center>
+                              <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                <columns>
+                                  <TableColumn prefWidth="75.0" text="Name" />
+                                  <TableColumn prefWidth="75.0" text="Price" />
+                                    <TableColumn prefWidth="95.20001220703125" text="Price for tooth" />
+                                </columns>
+                              </TableView>
+                           </center>
+                           <bottom>
+                              <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                <buttons>
+                                  <Button mnemonicParsing="false" text="New..." />
+                                    <Button mnemonicParsing="false" text="Edit..." />
+                                    <Button mnemonicParsing="false" text="Remove" />
+                                </buttons>
+                              </ButtonBar>
+                           </bottom>
+                        </BorderPane>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+</BorderPane>
