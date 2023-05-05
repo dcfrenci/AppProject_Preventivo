@@ -4,23 +4,26 @@ import javafx.beans.property.ObjectProperty;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public class Quote {
     private final Person person;
-    private final List<Service> servicesChosen;
+    private final Map<Service, List<Integer>> servicesChosen;
     private final ObjectProperty<LocalDate> quoteDate;
+    private final Integer timeSelected;
 
-    public Quote(Person person, List<Service> servicesChosen, ObjectProperty<LocalDate> quoteDate) {
+    public Quote(Person person, Map<Service, List<Integer>> servicesChosen, ObjectProperty<LocalDate> quoteDate, Integer timeSelected) {
         this.person = person;
         this.servicesChosen = servicesChosen;
         this.quoteDate = quoteDate;
+        this.timeSelected = timeSelected;
     }
 
     public Person getPerson() {
         return person;
     }
 
-    public List<Service> getServicesChosen() {
+    public Map<Service, List<Integer>> getServicesChosen() {
         return servicesChosen;
     }
 
@@ -34,5 +37,9 @@ public class Quote {
 
     public void setQuoteDate(LocalDate quoteDate) {
         this.quoteDate.set(quoteDate);
+    }
+
+    public Integer getTimeSelected() {
+        return timeSelected;
     }
 }
