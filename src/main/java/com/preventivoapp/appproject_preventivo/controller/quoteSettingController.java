@@ -3,10 +3,7 @@ package com.preventivoapp.appproject_preventivo.controller;
 import com.preventivoapp.appproject_preventivo.classes.Quote;
 import com.preventivoapp.appproject_preventivo.classes.Service;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class quoteSettingController {
@@ -26,6 +23,8 @@ public class quoteSettingController {
     @FXML private Button newQuoteSave;
     @FXML private TextField newQuoteSearch;
     @FXML private TableColumn<Quote, Integer> newQuoteSelectedTooth;
+    @FXML private TableView<Service> quoteAllService;
+    @FXML private TableView<Service> quoteSelectedService;
     Quote quote;
 
     @FXML
@@ -46,10 +45,24 @@ public class quoteSettingController {
         newQuoteSelectedTooth.setCellValueFactory(new PropertyValueFactory<>("serviceChosenTooth"));
 
         //Add listener for TABLE of ALL services
-
+        quoteAllService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showServiceAll(newValue)));
+        //quoteSelectedService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showChosenService(newValue)));
 
         //Add listener for TABLE of SELECTED services
 
-        //ciao
+
+    }
+
+    private void showServiceAll(Service service){
+        if (service != null) {
+            newQuoteNameColumn.setText(service.getServiceName());
+            newQuotePriceColumn.setText(Double.toString(service.getServicePrice()));
+            newQuotePriceForToothColumn.setText(Double.toString(service.getServicePriceForTooth()));
+        }
+        else{
+            newQuoteNameColumn.setText("");
+            newQuotePriceColumn.setText("");
+            newQuotePriceForToothColumn.setText("");
+        }
     }
 }

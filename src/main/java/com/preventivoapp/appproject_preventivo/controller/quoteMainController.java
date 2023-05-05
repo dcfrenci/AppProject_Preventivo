@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class quoteMainController {
@@ -32,6 +33,9 @@ public class quoteMainController {
     @FXML private Button serviceRemove;
     @FXML private TextField serviceSearch;
     @FXML private TableView<Service> serviceTable;
+
+    List<Service> serviceList;
+    List<Quote> quoteList;
 
     /*
      * Initializes the controller class. This method is automatically called after the fxml file has been loaded.
