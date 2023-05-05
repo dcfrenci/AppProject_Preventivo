@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class serviceSettingController {
+public class serviceSettingController extends quoteMainController {
     @FXML
     private Button newServiceCancel;
     @FXML
@@ -42,7 +42,7 @@ public class serviceSettingController {
     public void handleSavePerson() {
         try {
             if ( service.getServiceName() != null && ((service.getServicePrice() > 0 && service.getServicePriceForTooth() <= 0) || (service.getServicePrice() <= 0 && service.getServicePriceForTooth() > 0)) ) {
-
+                addServiceToList(service);
             } else throw new NoSuchElementException();
         } catch (NoSuchElementException e) {
             showIncorretcInsertionAlert();
