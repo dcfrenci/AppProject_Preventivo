@@ -129,4 +129,8 @@ public class quoteMainController {
             showNoElementSelected();
         }
     }
+
+    public void addServiceToList (Service service) {
+        serviceList.add(service);
+    }
 }
