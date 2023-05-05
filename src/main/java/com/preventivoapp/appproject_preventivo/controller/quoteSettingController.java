@@ -53,6 +53,9 @@ public class quoteSettingController {
 
     }
 
+    /*
+     * Used to display the content in the columns in the ALL SERVICE table
+     */
     private void showServiceAll(Service service){
         if (service != null) {
             newQuoteNameColumn.setText(service.getServiceName());
@@ -64,5 +67,19 @@ public class quoteSettingController {
             newQuotePriceColumn.setText("");
             newQuotePriceForToothColumn.setText("");
         }
+    }
+
+    private void showChosenService(Service service){
+        if(service != null){
+            newQuoteNameChosenColumn.setText(service.getServiceName());
+            newQuoteNumberColumn.setText(getNumberOfSpecificService(service));
+        }
+    }
+    /*
+     * @return the number of a specific service in a quote
+     */
+    private String getNumberOfSpecificService(Service service){
+        //for(Service cmp: quote.getServicesChosen().)
+        return "filo";
     }
 }

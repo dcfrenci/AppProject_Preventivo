@@ -3,6 +3,8 @@ package com.preventivoapp.appproject_preventivo.controller;
 import com.preventivoapp.appproject_preventivo.classes.Person;
 import com.preventivoapp.appproject_preventivo.classes.Quote;
 import com.preventivoapp.appproject_preventivo.classes.Service;
+import javafx.beans.Observable;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -34,8 +36,8 @@ public class quoteMainController {
     @FXML private TextField serviceSearch;
     @FXML private TableView<Service> serviceTable;
 
-    List<Service> serviceList;
-    List<Quote> quoteList;
+    ObservableList<Service> serviceList;
+    ObservableList<Quote> quoteList;
 
     /*
      * Initializes the controller class. This method is automatically called after the fxml file has been loaded.
