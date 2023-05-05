@@ -20,5 +20,5 @@ public class serviceSettingController {
     @FXML
     private Button newServiceSave;
 
-    //ciao a tutti
+    //ciao a tut
 }
