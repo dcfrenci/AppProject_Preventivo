@@ -6,9 +6,9 @@ import javafx.beans.property.StringProperty;
 import java.time.LocalDate;
 
 public class Service {
-    private final StringProperty serviceName;
-    private final double servicePrice;
-    private final double servicePriceForTooth;
+    private StringProperty serviceName;
+    private double servicePrice;
+    private double servicePriceForTooth;
 
     public Service(StringProperty serviceName, double servicePrice, double servicePriceForTooth) {
         this.serviceName = serviceName;
@@ -32,7 +32,15 @@ public class Service {
         return servicePrice;
     }
 
+    public void setServicePrice(double servicePrice) {
+        this.servicePrice = servicePrice;
+    }
+
     public double getServicePriceForTooth() {
         return servicePriceForTooth;
+    }
+
+    public void setServicePriceForTooth(double servicePriceForTooth) {
+        this.servicePriceForTooth = servicePriceForTooth;
     }
 }
