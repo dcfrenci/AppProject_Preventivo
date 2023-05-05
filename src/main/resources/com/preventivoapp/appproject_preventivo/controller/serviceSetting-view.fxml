@@ -15,7 +15,7 @@
    <top>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <Label stylesheets="@../../../CSS/quoteMainHeader-view.css" text="New Service" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+            <Label stylesheets="@../../../../CSS/quoteMainHeader-view.css" text="New Service" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
          </children>
       </AnchorPane>
    </top>

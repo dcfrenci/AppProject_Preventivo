@@ -2,6 +2,8 @@ package com.preventivoapp.appproject_preventivo.controller;
 
 import com.preventivoapp.appproject_preventivo.classes.Quote;
 import com.preventivoapp.appproject_preventivo.classes.Service;
+import com.preventivoapp.appproject_preventivo.classes.ServiceDetail;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -46,15 +48,14 @@ public class quoteSettingController {
 
         //Add listener for TABLE of ALL services
         quoteAllService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showServiceAll(newValue)));
-        //quoteSelectedService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showChosenService(newValue)));
 
         //Add listener for TABLE of SELECTED services
-
+        quoteSelectedService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showChosenService(newValue)));
 
     }
 
     /*
-     * Used to display the content in the columns in the ALL SERVICE table
+     * Used to display the content in the columns in the ALL SERVICE table and CHOSEN SERVICE table
      */
     private void showServiceAll(Service service){
         if (service != null) {
@@ -72,14 +73,26 @@ public class quoteSettingController {
     private void showChosenService(Service service){
         if(service != null){
             newQuoteNameChosenColumn.setText(service.getServiceName());
-            newQuoteNumberColumn.setText(getNumberOfSpecificService(service));
+            newQuoteNumberColumn.setText(Integer.toString(quote.getTimeSelected(service)));
+            newQuoteSelectedTooth.setText(quote.getTeethSelected(service).toString());
+        }
+        else{
+            newQuoteNameChosenColumn.setText("");
+            newQuoteNumberColumn.setText("");
+            newQuoteSelectedTooth.setText("");
         }
     }
-    /*
-     * @return the number of a specific service in a quote
-     */
-    private String getNumberOfSpecificService(Service service){
-        //for(Service cmp: quote.getServicesChosen().)
-        return "filo";
+    void update(){
+        newQuoteName.textProperty().set(quote.getPerson().getFirstName());
+        newQuoteLastName.textProperty().set(quote.getPerson().getLastName());
+        newQuoteDate.valueProperty().set(quote.getQuoteDate());
+    }
+
+    public Quote getQuote(){
+        return quote;
+    }
+    public void setQuote(Quote quote){
+        this.quote = quote;
+        update();
     }
 }

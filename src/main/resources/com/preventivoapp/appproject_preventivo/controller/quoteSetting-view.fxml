@@ -49,7 +49,7 @@
             </AnchorPane>
             <AnchorPane>
                <children>
-                  <Label stylesheets="@../../../CSS/ParagraphTitle-view.css" text="Select services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                  <Label stylesheets="@../../../../CSS/ParagraphTitle-view.css" text="Select services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
                   <ButtonBar prefHeight="40.0" prefWidth="200.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
                     <buttons>
                         <TextField fx:id="newQuoteSearch" />
@@ -71,7 +71,7 @@
             </TableView>
             <AnchorPane>
                <children>
-                  <Label stylesheets="@../../../CSS/ParagraphTitle-view.css" text="Chosen services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                  <Label stylesheets="@../../../../CSS/ParagraphTitle-view.css" text="Chosen services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
                </children>
             </AnchorPane>
             <TableView>
@@ -102,7 +102,7 @@
    <top>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <Label stylesheets="@../../../CSS/quoteMainHeader-view.css" text="Create New Quote" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+            <Label stylesheets="@../../../../CSS/quoteMainHeader-view.css" text="Create New Quote" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
          </children>
       </AnchorPane>
    </top>

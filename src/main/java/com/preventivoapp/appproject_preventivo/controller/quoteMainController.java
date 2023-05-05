@@ -1,22 +1,30 @@
 package com.preventivoapp.appproject_preventivo.controller;
 
+import com.preventivoapp.appproject_preventivo.QuoteMainApplication;
 import com.preventivoapp.appproject_preventivo.classes.Person;
 import com.preventivoapp.appproject_preventivo.classes.Quote;
 import com.preventivoapp.appproject_preventivo.classes.Service;
 import javafx.beans.Observable;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.PushbackReader;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 
 public class quoteMainController {
@@ -94,40 +102,67 @@ public class quoteMainController {
             servicePriceForToothColumn.setText("");
         }
     }
-
-    /*@FXML
+    /*
+     * Handler of NEW BUTTON in the quote tab page and price list tab page
+     */
+    @FXML
     public void handleNewService(){
         try{
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("serviceSetting-view.fxml"));
-            BorderPane view = loader.load();
+            DialogPane view = loader.load();
             serviceSettingController controller = loader.getController();
 
             //controller.addServiceToList(new Service(String, "servicePrice", "servicePriceForTooth"));
-
+            controller.addServiceToList(new Service(new SimpleStringProperty("serviceName"), 0, 0));
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("New Service");
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.setDialogPane(view);
 
+
             /*Optional<ButtonType> clickedButton = dialog.showAndWait();
             if(clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK){
                 serviceTable.getItems().add(controller.)
-            }
+            }*/
         } catch (IOException e){
             e.printStackTrace();
         }
-    }*/
-
-    /*
-     * Return the index of the selected element in the TableView component
-     * @return the index of the selected element
-     */
-     int selectedIndex(){
-        int selectedIndex = quoteTable.getSelectionModel().getSelectedIndex();
-        if(selectedIndex < 0) throw new NoSuchElementException();
-        return selectedIndex;
     }
+    @FXML
+    public void handleNewQuote(){
+        try {
+            Parent loader = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("quoteSetting-view.fxml")));
+            Scene scene = new Scene(loader);
+            Stage primaryStage = new Stage();
+
+            primaryStage.setTitle("New Quote");
+            primaryStage.setScene(scene);
+            primaryStage.initModality(Modality.WINDOW_MODAL);
+            primaryStage.initOwner(quoteNew.getScene().getWindow());
+            primaryStage.show();
+
+            /*FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("quoteSetting-view.fxml"));
+            DialogPane view = loader.load();
+            quoteSettingController controller = loader.getController();
+
+            controller.setQuote(new Quote(new Person(new SimpleStringProperty("Name"), new SimpleStringProperty("LastName")), null, new SimpleObjectProperty<>(LocalDate.now())));
+
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("New Quote");
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.setDialogPane(view);
+
+            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK){
+                quoteTable.getItems().add(controller.getQuote());
+            }*/
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
     /*
      * Show a warning dialog when tried to delete an element whose not selected
      */
@@ -137,6 +172,9 @@ public class quoteMainController {
         alert.setContentText("Please select an element in the table.");
         alert.showAndWait();
     }
+    /*
+     * Handler of DELETE BUTTON in the quote tab page and price list tab page
+     */
     @FXML
     public void handleDeleteQuote(){
         try{
@@ -155,7 +193,26 @@ public class quoteMainController {
             showNoElementSelected();
         }
     }
+
+
+    /*
+    MIXED METHODS:
+     */
+
+    /**
+     * Add a service to SERVICE-LIST
+     * @param service to be added
+     */
     public void addServiceToList (Service service) {
         serviceList.add(service);
+    }
+
+    /**
+     * Return the index of the selected element in the TableView component
+     */
+    int selectedIndex(){
+        int selectedIndex = quoteTable.getSelectionModel().getSelectedIndex();
+        if(selectedIndex < 0) throw new NoSuchElementException();
+        return selectedIndex;
     }
 }
