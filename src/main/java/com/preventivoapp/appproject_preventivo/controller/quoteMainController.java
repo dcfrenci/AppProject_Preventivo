@@ -1,5 +1,8 @@
-package com.preventivoapp.appproject_preventivo;
+package com.preventivoapp.appproject_preventivo.controller;
 
+import com.preventivoapp.appproject_preventivo.classes.Person;
+import com.preventivoapp.appproject_preventivo.classes.Quote;
+import com.preventivoapp.appproject_preventivo.classes.Service;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;

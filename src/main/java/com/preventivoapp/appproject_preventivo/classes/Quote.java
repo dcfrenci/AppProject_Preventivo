@@ -1,4 +1,4 @@
-package com.preventivoapp.appproject_preventivo;
+package com.preventivoapp.appproject_preventivo.classes;
 
 import javafx.beans.property.ObjectProperty;
 

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.preventivoapp.appproject_preventivo.controller.serviceSettingController">
+   <top>
+      <AnchorPane BorderPane.alignment="CENTER">
+         <children>
+            <Label stylesheets="@../../../CSS/quoteMainHeader-view.css" text="New Service" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+         </children>
+      </AnchorPane>
+   </top>
+   <center>
+      <AnchorPane prefWidth="421.0">
+         <children>
+            <GridPane AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="30.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="Name" />
+                  <Label text="Price" GridPane.rowIndex="1" />
+                  <Label text="Price for tooth" GridPane.rowIndex="2" />
+                  <AnchorPane GridPane.columnIndex="1">
+                     <children>
+                        <TextField fx:id="newServiceNameColumn" layoutX="-9.0" layoutY="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="11.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <children>
+                        <TextField fx:id="newServicePriceColumn" layoutY="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="11.0" />
+                        <Label layoutX="178.0" layoutY="5.0" text="€" AnchorPane.rightAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <children>
+                        <TextField fx:id="newServicePriceForToothColumn" layoutY="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="11.0" />
+                        <Label layoutX="158.0" layoutY="5.0" text="€" AnchorPane.rightAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </GridPane>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </AnchorPane>
+   </center>
+   <bottom>
+      <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <buttons>
+          <Button fx:id="newServiceSave" mnemonicParsing="false" onAction="#handleSavePerson" text="Save" />
+            <Button fx:id="newServiceCancel" mnemonicParsing="false" text="Cancel" />
+        </buttons>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+      </ButtonBar>
+   </bottom>
+</BorderPane>
