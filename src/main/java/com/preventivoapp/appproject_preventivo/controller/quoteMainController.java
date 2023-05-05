@@ -4,14 +4,20 @@ import com.preventivoapp.appproject_preventivo.classes.Person;
 import com.preventivoapp.appproject_preventivo.classes.Quote;
 import com.preventivoapp.appproject_preventivo.classes.Service;
 import javafx.beans.Observable;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class quoteMainController {
     //QUOTE TAB -->
@@ -62,7 +68,7 @@ public class quoteMainController {
     }
 
     /*
-     * Used to display the content in the columns in the QUOTE TAB PAGE
+     * Used to display the content in the columns in the QUOTE TAB PAGE, PRICE LIST TAB PAGE
      */
     private void showQuoteDetails(Quote quote){
         if(quote != null){
@@ -76,10 +82,6 @@ public class quoteMainController {
             quoteDateColumn.setText("");
         }
     }
-
-    /*
-     * Used to display the content in the columns in the SERVICE TAB PAGE
-     */
     private void showServiceDetail(Service service){
         if(service != null){
             serviceNameColumn.setText(service.getServiceName());
@@ -92,6 +94,30 @@ public class quoteMainController {
             servicePriceForToothColumn.setText("");
         }
     }
+
+    /*@FXML
+    public void handleNewService(){
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("serviceSetting-view.fxml"));
+            BorderPane view = loader.load();
+            serviceSettingController controller = loader.getController();
+
+            //controller.addServiceToList(new Service(String, "servicePrice", "servicePriceForTooth"));
+
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("New Service");
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.setDialogPane(view);
+
+            /*Optional<ButtonType> clickedButton = dialog.showAndWait();
+            if(clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK){
+                serviceTable.getItems().add(controller.)
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }*/
 
     /*
      * Return the index of the selected element in the TableView component
