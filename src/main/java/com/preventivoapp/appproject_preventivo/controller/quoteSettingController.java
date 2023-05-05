@@ -9,7 +9,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class QuoteSettingController {
+public class quoteSettingController {
     //NEW QUOTE -->
     @FXML private Button newQuoteAdd;
     @FXML private Button newQuoteCancel;
