@@ -4,10 +4,12 @@ import com.preventivoapp.appproject_preventivo.QuoteMainApplication;
 import com.preventivoapp.appproject_preventivo.classes.Person;
 import com.preventivoapp.appproject_preventivo.classes.Quote;
 import com.preventivoapp.appproject_preventivo.classes.Service;
+import com.preventivoapp.appproject_preventivo.classes.ServiceDetail;
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -50,8 +52,8 @@ public class quoteMainController {
     @FXML private TextField serviceSearch;
     @FXML private TableView<Service> serviceTable;
 
-    ObservableList<Service> serviceList;
-    ObservableList<Quote> quoteList;
+    private ObservableList<Service> serviceList;
+    private ObservableList<Quote> quoteList;
 
     /*
      * Initializes the controller class. This method is automatically called after the fxml file has been loaded.
@@ -67,6 +69,12 @@ public class quoteMainController {
         serviceNameColumn.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
         servicePriceColumn.setCellValueFactory(new PropertyValueFactory<>("servicePrice"));
         servicePriceForToothColumn.setCellValueFactory(new PropertyValueFactory<>("servicePriceForTooth"));
+
+        //Load QUOTE and SERVICE table
+            //--> quote
+        serviceList = FXCollections.observableArrayList();
+        setServiceList(getServiceListTemp());
+        serviceTable.setItems(getServicesList());
 
         //Listener for changes of element in the quote table
         quoteTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showQuoteDetails(newValue)));
@@ -130,37 +138,18 @@ public class quoteMainController {
         }
     }
     @FXML
-    public void handleNewQuote(){
-        try {
+    public void handleNewQuote() throws IOException{
+            //Load the .fxml file
             Parent loader = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("quoteSetting-view.fxml")));
+            //Create a new scene and new stage = new window
             Scene scene = new Scene(loader);
             Stage primaryStage = new Stage();
-
+            //Set the stage and load the scene that contains the .fxml file
             primaryStage.setTitle("New Quote");
             primaryStage.setScene(scene);
             primaryStage.initModality(Modality.WINDOW_MODAL);
             primaryStage.initOwner(quoteNew.getScene().getWindow());
             primaryStage.show();
-
-            /*FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("quoteSetting-view.fxml"));
-            DialogPane view = loader.load();
-            quoteSettingController controller = loader.getController();
-
-            controller.setQuote(new Quote(new Person(new SimpleStringProperty("Name"), new SimpleStringProperty("LastName")), null, new SimpleObjectProperty<>(LocalDate.now())));
-
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("New Quote");
-            dialog.initModality(Modality.WINDOW_MODAL);
-            dialog.setDialogPane(view);
-
-            Optional<ButtonType> clickedButton = dialog.showAndWait();
-            if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK){
-                quoteTable.getItems().add(controller.getQuote());
-            }*/
-        } catch (IOException e){
-            e.printStackTrace();
-        }
     }
 
     /*
@@ -196,7 +185,7 @@ public class quoteMainController {
 
 
     /*
-    MIXED METHODS:
+     * QUOTE-LIST SERVICE-LIST METHODS: -------------------------------------------
      */
 
     /**
@@ -206,13 +195,45 @@ public class quoteMainController {
     public void addServiceToList (Service service) {
         serviceList.add(service);
     }
+    /**
+     * Add a quote to QUOTE-LIST
+     * @param quote to be added
+     */
+    public void addQuoteToList (Quote quote){
+        quoteList.add(quote);
+    }
 
+    /**
+     * Return the list of ALL services that were been created
+     * @return the list of all services
+     */
+    public ObservableList<Service> getServicesList (){
+        return this.serviceList;
+    }
+    public void setServiceList(ObservableList<Service> serviceList) {
+        this.serviceList = serviceList;
+    }
+
+    /*
+     * MIXED METHODS: -----------------------------------------------------------
+     */
     /**
      * Return the index of the selected element in the TableView component
      */
-    int selectedIndex(){
+    public int selectedIndex(){
         int selectedIndex = quoteTable.getSelectionModel().getSelectedIndex();
         if(selectedIndex < 0) throw new NoSuchElementException();
         return selectedIndex;
+    }
+
+    public ObservableList<Service> getServiceListTemp() {
+        ObservableList<Service> observableList = FXCollections.observableArrayList();
+        observableList.add(new Service(new SimpleStringProperty("Denti 1"), 120, 0));
+        observableList.add(new Service(new SimpleStringProperty("Denti 2"), 5146, 12));
+        observableList.add(new Service(new SimpleStringProperty("Denti 3"), 451, 1));
+        observableList.add(new Service(new SimpleStringProperty("Denti 4"), 615.45, 345));
+        observableList.add(new Service(new SimpleStringProperty("Denti 5"), 1598,   1818));
+        observableList.add(new Service(new SimpleStringProperty("Denti 6"), 156, 156));
+        return observableList;
     }
 }

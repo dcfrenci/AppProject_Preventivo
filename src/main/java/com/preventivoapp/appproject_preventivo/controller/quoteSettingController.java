@@ -1,14 +1,24 @@
 package com.preventivoapp.appproject_preventivo.controller;
 
+import com.preventivoapp.appproject_preventivo.classes.Person;
 import com.preventivoapp.appproject_preventivo.classes.Quote;
 import com.preventivoapp.appproject_preventivo.classes.Service;
 import com.preventivoapp.appproject_preventivo.classes.ServiceDetail;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+import org.controlsfx.control.action.Action;
 
-public class quoteSettingController {
+import java.time.LocalDate;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+public class quoteSettingController extends quoteMainController{
     //NEW QUOTE -->
     @FXML private Button newQuoteAdd;
     @FXML private Button newQuoteCancel;
@@ -28,9 +38,8 @@ public class quoteSettingController {
     @FXML private TableView<Service> quoteAllService;
     @FXML private TableView<Service> quoteSelectedService;
     Quote quote;
-
     @FXML
-    public void initialized(){
+    public void initialize(){
         //Add listener for PERSON and DATE of the new quote
         newQuoteName.textProperty().addListener(((observable, oldValue, newValue) -> quote.getPerson().setFirstName(newValue)));
         newQuoteLastName.textProperty().addListener(((observable, oldValue, newValue) -> quote.getPerson().setLastName(newValue)));
@@ -42,16 +51,21 @@ public class quoteSettingController {
         newQuotePriceForToothColumn.setCellValueFactory(new PropertyValueFactory<>("servicePriceForTooth"));
 
         //Initialized the table of SELECTED services
-        newQuoteNameChosenColumn.setCellValueFactory(new PropertyValueFactory<>("serviceChosenName"));
+        newQuoteNameChosenColumn.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
         newQuoteNumberColumn.setCellValueFactory(new PropertyValueFactory<>("serviceChosenNumber"));
         newQuoteSelectedTooth.setCellValueFactory(new PropertyValueFactory<>("serviceChosenTooth"));
 
+        //Initialized the QUOTE
+        setQuote();
+
+        //Initialized the SERVICES TABLE
+        quoteAllService.setItems(getServicesList());
+
         //Add listener for TABLE of ALL services
-        quoteAllService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showServiceAll(newValue)));
+        //quoteAllService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showServiceAll(newValue)));
 
         //Add listener for TABLE of SELECTED services
-        quoteSelectedService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showChosenService(newValue)));
-
+        //quoteSelectedService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showChosenService(newValue)));
     }
 
     /*
@@ -91,8 +105,48 @@ public class quoteSettingController {
     public Quote getQuote(){
         return quote;
     }
-    public void setQuote(Quote quote){
-        this.quote = quote;
-        update();
+    public void setQuote(){
+        //this.quote = new Quote(new Person(new SimpleStringProperty("Generic Name"), new SimpleStringProperty("Generic LastName")), null, new SimpleObjectProperty<>(LocalDate.now()));
+        this.quote = new Quote(null, null, null);
+        //update();
+    }
+    /*
+     * Method to handle ADD SERVICE TO QUOTE
+     * Get the service from quoteAllService table and add it to the quote
+     */
+    public void handleNewQuoteAdd(){
+        try{
+            int selectedIndex = selectedIndex();
+            ServiceDetail serviceDetail = new ServiceDetail(quoteAllService.getItems().get(selectedIndex));
+            serviceDetail.setChosenTeeth(null);
+            quote.getServicesChosen().add(serviceDetail);
+        } catch (NoSuchElementException e){
+            showNoElementSelected();
+        }
+    }
+    /*
+     * Method to handle SAVE QUOTE
+     * Save the quote and add it to the list of quote in the quote tab
+     */
+    public void handleNewQuoteSave(ActionEvent actionEvent){
+        if (quote.getPerson().firstNameProperty() == null || quote.getPerson().lastNameProperty() == null || quote.getQuoteDate() == null){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Not all fields were inserted");
+            alert.setContentText("Please insert all the person detail and the date.");
+            alert.showAndWait();
+            return;
+        }
+        if (quote.getServicesChosen().size() == 0){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No services selected");
+            alert.setContentText("Please select one or more services.");
+            alert.showAndWait();
+            return;
+        }
+        //The quote can be saved
+        addQuoteToList(quote);
+
+        Stage thisWindow = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        thisWindow.close();
     }
 }

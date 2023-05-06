@@ -15,8 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.preventivoapp.appproject_preventivo.controller.quoteSettingController">
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
@@ -53,13 +52,13 @@
                   <ButtonBar prefHeight="40.0" prefWidth="200.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
                     <buttons>
                         <TextField fx:id="newQuoteSearch" />
-                        <Button fx:id="newQuoteAdd" mnemonicParsing="false" text="Add" />
+                        <Button fx:id="newQuoteAdd" mnemonicParsing="false" onAction="#handleNewQuoteAdd" text="Add" />
                       <Button fx:id="newQuoteCancel" mnemonicParsing="false" text="Cancel" />
                     </buttons>
                   </ButtonBar>
                </children>
             </AnchorPane>
-            <TableView>
+            <TableView fx:id="quoteAllService">
               <columns>
                 <TableColumn fx:id="newQuoteNameColumn" prefWidth="75.0" text="Name" />
                 <TableColumn fx:id="newQuotePriceColumn" prefWidth="75.0" text="Price" />
@@ -74,7 +73,7 @@
                   <Label stylesheets="@../../../../CSS/ParagraphTitle-view.css" text="Chosen services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
                </children>
             </AnchorPane>
-            <TableView>
+            <TableView fx:id="quoteSelectedService">
               <columns>
                 <TableColumn fx:id="newQuoteNameChosenColumn" prefWidth="75.0" text="Name" />
                   <TableColumn fx:id="newQuoteNumberColumn" maxWidth="200.0" prefWidth="-1.0" text="N°" />
@@ -90,7 +89,7 @@
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="675.0" BorderPane.alignment="CENTER">
         <buttons>
-          <Button fx:id="newQuoteSave" mnemonicParsing="false" text="Save" />
+          <Button fx:id="newQuoteSave" mnemonicParsing="false" onAction="#handleNewQuoteSave" text="Save" />
             <Button fx:id="newQuoteRemove" mnemonicParsing="false" text="Remove" />
             <Button fx:id="newQuotePreview" mnemonicParsing="false" text="Preview" />
         </buttons>
