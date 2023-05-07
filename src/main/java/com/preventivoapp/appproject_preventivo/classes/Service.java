@@ -2,6 +2,7 @@ package com.preventivoapp.appproject_preventivo.classes;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableStringValue;
 
 import java.time.LocalDate;
 
@@ -20,7 +21,7 @@ public class Service {
         return serviceName.get();
     }
 
-    public StringProperty serviceNameProperty() {
+    public ObservableStringValue serviceNameProperty() {
         return serviceName;
     }
 

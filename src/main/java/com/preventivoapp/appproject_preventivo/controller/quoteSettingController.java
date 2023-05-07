@@ -7,6 +7,8 @@ import com.preventivoapp.appproject_preventivo.classes.ServiceDetail;
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableStringValue;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,6 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.controlsfx.control.action.Action;
 
 import java.io.Console;
@@ -31,7 +34,7 @@ public class quoteSettingController extends quoteMainController{
     @FXML private DatePicker newQuoteDate;
     @FXML private TextField newQuoteLastName;
     @FXML private TextField newQuoteName;
-    @FXML private TableColumn<ServiceDetail, Service> newQuoteNameChosenColumn;
+    @FXML private TableColumn<ServiceDetail, String> newQuoteNameChosenColumn;
     @FXML private TableColumn<Service, String> newQuoteNameColumn;
     @FXML private TableColumn<ServiceDetail, Integer> newQuoteNumberColumn;
     @FXML private Button newQuotePreview;
@@ -58,7 +61,12 @@ public class quoteSettingController extends quoteMainController{
         newQuotePriceForToothColumn.setCellValueFactory(new PropertyValueFactory<>("servicePriceForTooth"));
 
         //Initialized the table of SELECTED services
-        newQuoteNameChosenColumn.setCellValueFactory(new PropertyValueFactory<>("ChosenService"));
+        newQuoteNameChosenColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ServiceDetail, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ServiceDetail, String> param) {
+                return param.getValue().getChosenService().serviceNameProperty();
+            }
+        });
         newQuoteNumberColumn.setCellValueFactory(new PropertyValueFactory<>("TimeSelected"));
         newQuoteSelectedTooth.setCellValueFactory(new PropertyValueFactory<>("ChosenTeeth"));
 
@@ -69,10 +77,10 @@ public class quoteSettingController extends quoteMainController{
 
 
         //Add listener for TABLE of ALL services
-        quoteAllService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showServiceAll(newValue)));
+        //quoteAllService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showServiceAll(newValue)));
 
         //Add listener for TABLE of SELECTED services
-        quoteSelectedService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showChosenService(newValue)));
+        //quoteSelectedService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showChosenService(newValue)));
     }
 
     /*
@@ -80,7 +88,6 @@ public class quoteSettingController extends quoteMainController{
      */
     private void showServiceAll(Service service){
         if (service != null) {
-            System.out.println("ciao belli ");
             newQuoteNameColumn.setText(service.getServiceName());
             newQuotePriceColumn.setText(Double.toString(service.getServicePrice()));
             newQuotePriceForToothColumn.setText(Double.toString(service.getServicePriceForTooth()));
@@ -94,8 +101,6 @@ public class quoteSettingController extends quoteMainController{
 
     private void showChosenService(ServiceDetail service){
         if(service != null){
-            System.out.println(service.getChosenService().getServiceName());
-
             newQuoteNameChosenColumn.setText(service.getChosenService().getServiceName());
             newQuoteNumberColumn.setText("Working on");
             newQuoteSelectedTooth.setText(service.showTeeth());
@@ -133,11 +138,9 @@ public class quoteSettingController extends quoteMainController{
         try{
             int selectedIndex = selectedIndex(quoteAllService);
             ServiceDetail serviceDetail = new ServiceDetail(quoteAllService.getItems().get(selectedIndex));
-            serviceDetail.setChosenTeeth(null);
+            serviceDetail.setChosenTeeth(List.of(1, 2, 3, 4));
             quote.getServicesChosen().add(serviceDetail);
-            quoteSelectedService.setItems(FXCollections.observableArrayList(quote.getServicesChosen()));
-
-            //System.out.println(quote.getServicesChosen().get(quote.getServicesChosen().indexOf(0)).getChosenService().getServiceName());
+            quoteSelectedService.getItems().add(serviceDetail);
         } catch (NoSuchElementException e){
             showNoElementSelected();
         }
