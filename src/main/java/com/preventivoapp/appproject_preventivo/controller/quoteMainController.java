@@ -208,7 +208,7 @@ public class quoteMainController {
     }
 
     /**
-     * Return the list of ALL services that were been created
+     * Return the ObservableList of ALL services that were been created
      * @return the list of all services
      */
     public ObservableList<Service> getServicesList (){
@@ -245,14 +245,5 @@ public class quoteMainController {
         observableList.add(new Service(new SimpleStringProperty("Denti 5"), 1598,   1818));
         observableList.add(new Service(new SimpleStringProperty("Denti 6"), 156, 156));
         return observableList;
-    }
-
-    quoteMainController getMainController() throws IOException{
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("src/main/resources/com/preventivoapp/appproject_preventivo/quoteMain-view.fxml"));
-        //loader.setLocation(getClass().getResources("quoteMain-view.fxml"));
-        loader.load();
-        //return loader.getController();
-        return null;
     }
 }
