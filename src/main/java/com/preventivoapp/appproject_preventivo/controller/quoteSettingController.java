@@ -42,7 +42,7 @@ public class quoteSettingController extends quoteMainController{
     @FXML private TextField newQuoteSearch;
     @FXML private TableColumn<Quote, Integer> newQuoteSelectedTooth;
     @FXML private TableView<Service> quoteAllService;
-    @FXML private TableView<Service> quoteSelectedService;
+    @FXML private TableView<ServiceDetail> quoteSelectedService;
     private Quote quote;
     private ObservableList<Service> serviceList;
     @FXML
@@ -58,21 +58,21 @@ public class quoteSettingController extends quoteMainController{
         newQuotePriceForToothColumn.setCellValueFactory(new PropertyValueFactory<>("servicePriceForTooth"));
 
         //Initialized the table of SELECTED services
-        newQuoteNameChosenColumn.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
-        newQuoteNumberColumn.setCellValueFactory(new PropertyValueFactory<>("serviceChosenNumber"));
-        newQuoteSelectedTooth.setCellValueFactory(new PropertyValueFactory<>("serviceChosenTooth"));
+        newQuoteNameChosenColumn.setCellValueFactory(new PropertyValueFactory<>("chosenService"));
+        newQuoteNumberColumn.setCellValueFactory(new PropertyValueFactory<>("timeSelected"));
+        newQuoteSelectedTooth.setCellValueFactory(new PropertyValueFactory<>("chosenTeeth"));
 
         //Initialized the QUOTE
-        setQuote();
+        quote = new Quote();
 
         //Initialized the SERVICES TABLE
 
 
         //Add listener for TABLE of ALL services
-        //quoteAllService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showServiceAll(newValue)));
+        quoteAllService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showServiceAll(newValue)));
 
         //Add listener for TABLE of SELECTED services
-        //quoteSelectedService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showChosenService(newValue)));
+        quoteSelectedService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showChosenService(newValue)));
     }
 
     /*
@@ -91,11 +91,11 @@ public class quoteSettingController extends quoteMainController{
         }
     }
 
-    private void showChosenService(Service service){
+    private void showChosenService(ServiceDetail service){
         if(service != null){
-            newQuoteNameChosenColumn.setText(service.getServiceName());
-            newQuoteNumberColumn.setText(Integer.toString(quote.getTimeSelected(service)));
-            newQuoteSelectedTooth.setText(quote.getTeethSelected(service).toString());
+            newQuoteNameChosenColumn.setText(quote.getServicesChosen().get(quote.getServicesChosen().indexOf(service)).getChosenService().getServiceName());
+            newQuoteNumberColumn.setText("Working on");
+            newQuoteSelectedTooth.setText(service.showTeeth());
         }
         else{
             newQuoteNameChosenColumn.setText("");
@@ -112,13 +112,11 @@ public class quoteSettingController extends quoteMainController{
     public Quote getQuote(){
         return quote;
     }
-    public void setQuote(){
-        //this.quote = new Quote(new Person(new SimpleStringProperty("Generic Name"), new SimpleStringProperty("Generic LastName")), null, new SimpleObjectProperty<>(LocalDate.now()));
-        ServiceDetail serviceDetail = new ServiceDetail(null);
-        this.quote = new Quote(new Person(null, null), List.of(serviceDetail), null);
-        //update();
-    }
 
+    /**
+     * Load the serviceList of the controller with the ObservableList passed as param
+     * @param setterServiceList to set the list of ALL services
+     */
     public void setServiceListInNewQuote(ObservableList<Service> setterServiceList) {
         this.serviceList = setterServiceList;
         quoteAllService.setItems(serviceList);
@@ -134,9 +132,15 @@ public class quoteSettingController extends quoteMainController{
             ServiceDetail serviceDetail = new ServiceDetail(quoteAllService.getItems().get(selectedIndex));
             serviceDetail.setChosenTeeth(null);
             quote.getServicesChosen().add(serviceDetail);
+            quoteSelectedService.setItems(FXCollections.observableArrayList(quote.getServicesChosen()));
+            System.out.println(quote.getServicesChosen().get(0).getChosenService().getServiceName());
+
         } catch (NoSuchElementException e){
             showNoElementSelected();
         }
+    }
+    public ObservableList<ServiceDetail> updateSelectedServices(){
+        return FXCollections.observableArrayList(quote.getServicesChosen());
     }
     /*
      * Method to handle SAVE QUOTE

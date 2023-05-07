@@ -147,7 +147,6 @@ public class quoteMainController {
         quoteSettingController quoteSettingController = (quoteSettingController) loader.getController();
         quoteSettingController.setServiceListInNewQuote(getServicesList());
         //Create a new stage = new window with all its properties
-        System.out.println(getServicesList().toString());
         Stage stage = new Stage();
         stage.setTitle("New Quote");
         stage.setScene(new Scene(parent));

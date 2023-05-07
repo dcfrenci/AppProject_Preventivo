@@ -34,4 +34,11 @@ public class Person {
     public void setLastName(String lastName) {
         this.lastName.set(lastName);
     }
+
+    @Override
+    public String toString() {
+        return "firstName=" + firstName +
+                ", lastName=" + lastName
+                ;
+    }
 }

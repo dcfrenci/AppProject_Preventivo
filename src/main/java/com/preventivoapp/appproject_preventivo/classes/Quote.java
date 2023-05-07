@@ -3,6 +3,7 @@ package com.preventivoapp.appproject_preventivo.classes;
 import javafx.beans.property.ObjectProperty;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +16,12 @@ public class Quote {
         this.person = person;
         this.servicesChosen = servicesChosen;
         this.quoteDate = quoteDate;
+    }
+
+    public Quote() {
+        this.person = null;
+        this.servicesChosen = new ArrayList<ServiceDetail>();
+        this.quoteDate = null;
     }
 
     public Person getPerson() {
@@ -60,4 +67,12 @@ public class Quote {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return "Quote{" +
+                "person=" + person +
+                ", servicesChosen=" + servicesChosen +
+                ", quoteDate=" + quoteDate +
+                '}';
+    }
 }

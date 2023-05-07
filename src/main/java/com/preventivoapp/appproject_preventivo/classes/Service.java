@@ -46,10 +46,9 @@ public class Service {
 
     @Override
     public String toString() {
-        return "Service{" +
-                "serviceName=" + serviceName +
+        return  "serviceName=" + serviceName +
                 ", servicePrice=" + servicePrice +
-                ", servicePriceForTooth=" + servicePriceForTooth +
-                '}';
+                ", servicePriceForTooth=" + servicePriceForTooth
+                ;
     }
 }
