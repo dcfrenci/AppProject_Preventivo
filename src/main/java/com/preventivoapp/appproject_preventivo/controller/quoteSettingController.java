@@ -31,9 +31,9 @@ public class quoteSettingController extends quoteMainController{
     @FXML private DatePicker newQuoteDate;
     @FXML private TextField newQuoteLastName;
     @FXML private TextField newQuoteName;
-    @FXML private TableColumn<Service, String> newQuoteNameChosenColumn;
+    @FXML private TableColumn<ServiceDetail, Service> newQuoteNameChosenColumn;
     @FXML private TableColumn<Service, String> newQuoteNameColumn;
-    @FXML private TableColumn<Quote, Integer> newQuoteNumberColumn;
+    @FXML private TableColumn<ServiceDetail, Integer> newQuoteNumberColumn;
     @FXML private Button newQuotePreview;
     @FXML private TableColumn<Service, Double> newQuotePriceColumn;
     @FXML private TableColumn<Service, Double> newQuotePriceForToothColumn;
@@ -58,9 +58,9 @@ public class quoteSettingController extends quoteMainController{
         newQuotePriceForToothColumn.setCellValueFactory(new PropertyValueFactory<>("servicePriceForTooth"));
 
         //Initialized the table of SELECTED services
-        newQuoteNameChosenColumn.setCellValueFactory(new PropertyValueFactory<>("chosenService"));
-        newQuoteNumberColumn.setCellValueFactory(new PropertyValueFactory<>("timeSelected"));
-        newQuoteSelectedTooth.setCellValueFactory(new PropertyValueFactory<>("chosenTeeth"));
+        newQuoteNameChosenColumn.setCellValueFactory(new PropertyValueFactory<>("ChosenService"));
+        newQuoteNumberColumn.setCellValueFactory(new PropertyValueFactory<>("TimeSelected"));
+        newQuoteSelectedTooth.setCellValueFactory(new PropertyValueFactory<>("ChosenTeeth"));
 
         //Initialized the QUOTE
         quote = new Quote();
@@ -80,6 +80,7 @@ public class quoteSettingController extends quoteMainController{
      */
     private void showServiceAll(Service service){
         if (service != null) {
+            System.out.println("ciao belli ");
             newQuoteNameColumn.setText(service.getServiceName());
             newQuotePriceColumn.setText(Double.toString(service.getServicePrice()));
             newQuotePriceForToothColumn.setText(Double.toString(service.getServicePriceForTooth()));
@@ -93,7 +94,9 @@ public class quoteSettingController extends quoteMainController{
 
     private void showChosenService(ServiceDetail service){
         if(service != null){
-            newQuoteNameChosenColumn.setText(quote.getServicesChosen().get(quote.getServicesChosen().indexOf(service)).getChosenService().getServiceName());
+            System.out.println(service.getChosenService().getServiceName());
+
+            newQuoteNameChosenColumn.setText(service.getChosenService().getServiceName());
             newQuoteNumberColumn.setText("Working on");
             newQuoteSelectedTooth.setText(service.showTeeth());
         }
@@ -133,14 +136,11 @@ public class quoteSettingController extends quoteMainController{
             serviceDetail.setChosenTeeth(null);
             quote.getServicesChosen().add(serviceDetail);
             quoteSelectedService.setItems(FXCollections.observableArrayList(quote.getServicesChosen()));
-            System.out.println(quote.getServicesChosen().get(0).getChosenService().getServiceName());
 
+            //System.out.println(quote.getServicesChosen().get(quote.getServicesChosen().indexOf(0)).getChosenService().getServiceName());
         } catch (NoSuchElementException e){
             showNoElementSelected();
         }
-    }
-    public ObservableList<ServiceDetail> updateSelectedServices(){
-        return FXCollections.observableArrayList(quote.getServicesChosen());
     }
     /*
      * Method to handle SAVE QUOTE
