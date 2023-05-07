@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.PushbackReader;
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -52,8 +53,8 @@ public class quoteMainController {
     @FXML private TextField serviceSearch;
     @FXML private TableView<Service> serviceTable;
 
-    private ObservableList<Service> serviceList;
-    private ObservableList<Quote> quoteList;
+    private ObservableList<Service> serviceList = FXCollections.observableArrayList();
+    private ObservableList<Quote> quoteList = FXCollections.observableArrayList();
 
     /*
      * Initializes the controller class. This method is automatically called after the fxml file has been loaded.
@@ -72,8 +73,8 @@ public class quoteMainController {
 
         //Load QUOTE and SERVICE table
             //--> quote
-        serviceList = FXCollections.observableArrayList();
-        setServiceList(getServiceListTemp());
+        //setServiceList(getServiceListTemp());
+        serviceList.addAll(getServiceListTemp());
         serviceTable.setItems(getServicesList());
 
         //Listener for changes of element in the quote table
@@ -139,7 +140,7 @@ public class quoteMainController {
     }
     @FXML
     public void handleNewQuote() throws IOException{
-            //Load the .fxml file
+            /*//Load the .fxml file
             Parent loader = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("quoteSetting-view.fxml")));
             //Create a new scene and new stage = new window
             Scene scene = new Scene(loader);
@@ -149,7 +150,16 @@ public class quoteMainController {
             primaryStage.setScene(scene);
             primaryStage.initModality(Modality.WINDOW_MODAL);
             primaryStage.initOwner(quoteNew.getScene().getWindow());
-            primaryStage.show();
+            primaryStage.show();*/
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("quoteSetting-view.fxml"));
+            loader.load();
+
+            Parent newWindow = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(newWindow));
+            stage.showAndWait();
     }
 
     /*
@@ -167,7 +177,7 @@ public class quoteMainController {
     @FXML
     public void handleDeleteQuote(){
         try{
-            int selectedIndex = selectedIndex();
+            int selectedIndex = selectedIndex(quoteTable);
             quoteTable.getItems().remove(selectedIndex);
         } catch (NoSuchElementException e){
             showNoElementSelected();
@@ -176,7 +186,7 @@ public class quoteMainController {
     @FXML
     public void handleDeleteService(){
         try{
-            int selectedIndex = selectedIndex();
+            int selectedIndex = selectedIndex(serviceTable);
             serviceTable.getItems().remove(selectedIndex);
         } catch (NoSuchElementException e){
             showNoElementSelected();
@@ -220,8 +230,8 @@ public class quoteMainController {
     /**
      * Return the index of the selected element in the TableView component
      */
-    public int selectedIndex(){
-        int selectedIndex = quoteTable.getSelectionModel().getSelectedIndex();
+    public int selectedIndex(TableView tableView){
+        int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
         if(selectedIndex < 0) throw new NoSuchElementException();
         return selectedIndex;
     }
@@ -236,4 +246,13 @@ public class quoteMainController {
         observableList.add(new Service(new SimpleStringProperty("Denti 6"), 156, 156));
         return observableList;
     }
+
+    /* quoteMainController getMainController() throws IOException{
+        /*FXMLLoader loader = new FXMLLoader();
+        //loader.setLocation(getClass().getResource("appproject_preventivo/main.quoteMain-view.fxml"));
+        //loader.setLocation(getClass().getResources("quoteMain-view.fxml"));
+        loader.load();
+        return loader.getController();
+        return null;
+    }*/
 }

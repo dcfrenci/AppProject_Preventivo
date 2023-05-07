@@ -4,16 +4,21 @@ import com.preventivoapp.appproject_preventivo.classes.Person;
 import com.preventivoapp.appproject_preventivo.classes.Quote;
 import com.preventivoapp.appproject_preventivo.classes.Service;
 import com.preventivoapp.appproject_preventivo.classes.ServiceDetail;
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.controlsfx.control.action.Action;
 
+import java.io.Console;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -39,7 +44,7 @@ public class quoteSettingController extends quoteMainController{
     @FXML private TableView<Service> quoteSelectedService;
     Quote quote;
     @FXML
-    public void initialize(){
+    public void initialize() {
         //Add listener for PERSON and DATE of the new quote
         newQuoteName.textProperty().addListener(((observable, oldValue, newValue) -> quote.getPerson().setFirstName(newValue)));
         newQuoteLastName.textProperty().addListener(((observable, oldValue, newValue) -> quote.getPerson().setLastName(newValue)));
@@ -59,7 +64,14 @@ public class quoteSettingController extends quoteMainController{
         setQuote();
 
         //Initialized the SERVICES TABLE
-        quoteAllService.setItems(getServicesList());
+        //setServiceList(getServiceListTemp());
+        /*quoteMainController quoteMainController = new quoteMainController();
+        try {
+            quoteMainController = getMainController();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        quoteAllService.setItems(quoteMainController.getServicesList());*/
 
         //Add listener for TABLE of ALL services
         //quoteAllService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showServiceAll(newValue)));
@@ -107,7 +119,8 @@ public class quoteSettingController extends quoteMainController{
     }
     public void setQuote(){
         //this.quote = new Quote(new Person(new SimpleStringProperty("Generic Name"), new SimpleStringProperty("Generic LastName")), null, new SimpleObjectProperty<>(LocalDate.now()));
-        this.quote = new Quote(null, null, null);
+        ServiceDetail serviceDetail = new ServiceDetail(null);
+        this.quote = new Quote(new Person(null, null), List.of(serviceDetail), null);
         //update();
     }
     /*
@@ -116,7 +129,7 @@ public class quoteSettingController extends quoteMainController{
      */
     public void handleNewQuoteAdd(){
         try{
-            int selectedIndex = selectedIndex();
+            int selectedIndex = selectedIndex(quoteAllService);
             ServiceDetail serviceDetail = new ServiceDetail(quoteAllService.getItems().get(selectedIndex));
             serviceDetail.setChosenTeeth(null);
             quote.getServicesChosen().add(serviceDetail);
