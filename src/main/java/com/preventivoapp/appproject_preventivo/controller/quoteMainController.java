@@ -74,7 +74,7 @@ public class quoteMainController {
         //Load QUOTE and SERVICE table
             //--> quote
         //setServiceList(getServiceListTemp());
-        serviceList.addAll(getServiceListTemp());
+            serviceList.addAll(getServiceListTemp());
         serviceTable.setItems(getServicesList());
 
         //Listener for changes of element in the quote table
@@ -140,26 +140,20 @@ public class quoteMainController {
     }
     @FXML
     public void handleNewQuote() throws IOException{
-            /*//Load the .fxml file
-            Parent loader = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("quoteSetting-view.fxml")));
-            //Create a new scene and new stage = new window
-            Scene scene = new Scene(loader);
-            Stage primaryStage = new Stage();
-            //Set the stage and load the scene that contains the .fxml file
-            primaryStage.setTitle("New Quote");
-            primaryStage.setScene(scene);
-            primaryStage.initModality(Modality.WINDOW_MODAL);
-            primaryStage.initOwner(quoteNew.getScene().getWindow());
-            primaryStage.show();*/
-
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("quoteSetting-view.fxml"));
-            loader.load();
-
-            Parent newWindow = loader.getRoot();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(newWindow));
-            stage.showAndWait();
+        //Load the .fxml file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("quoteSetting-view.fxml"));
+        Parent parent = loader.load();
+        //Create a controller of the new page used to load the serviceList into the new controller
+        quoteSettingController quoteSettingController = (quoteSettingController) loader.getController();
+        quoteSettingController.setServiceListInNewQuote(getServicesList());
+        //Create a new stage = new window with all its properties
+        System.out.println(getServicesList().toString());
+        Stage stage = new Stage();
+        stage.setTitle("New Quote");
+        stage.setScene(new Scene(parent));
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(quoteNew.getScene().getWindow());
+        stage.show();
     }
 
     /*
@@ -224,6 +218,12 @@ public class quoteMainController {
         this.serviceList = serviceList;
     }
 
+    @Override
+    public String toString() {
+        return "quoteMainController{" +
+                "serviceList=" + serviceList +
+                '}';
+    }
     /*
      * MIXED METHODS: -----------------------------------------------------------
      */
@@ -247,12 +247,12 @@ public class quoteMainController {
         return observableList;
     }
 
-    /* quoteMainController getMainController() throws IOException{
-        /*FXMLLoader loader = new FXMLLoader();
-        //loader.setLocation(getClass().getResource("appproject_preventivo/main.quoteMain-view.fxml"));
+    quoteMainController getMainController() throws IOException{
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("src/main/resources/com/preventivoapp/appproject_preventivo/quoteMain-view.fxml"));
         //loader.setLocation(getClass().getResources("quoteMain-view.fxml"));
         loader.load();
-        return loader.getController();
+        //return loader.getController();
         return null;
-    }*/
+    }
 }

@@ -7,6 +7,7 @@ import com.preventivoapp.appproject_preventivo.classes.ServiceDetail;
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -42,7 +43,8 @@ public class quoteSettingController extends quoteMainController{
     @FXML private TableColumn<Quote, Integer> newQuoteSelectedTooth;
     @FXML private TableView<Service> quoteAllService;
     @FXML private TableView<Service> quoteSelectedService;
-    Quote quote;
+    private Quote quote;
+    private ObservableList<Service> serviceList;
     @FXML
     public void initialize() {
         //Add listener for PERSON and DATE of the new quote
@@ -64,14 +66,7 @@ public class quoteSettingController extends quoteMainController{
         setQuote();
 
         //Initialized the SERVICES TABLE
-        //setServiceList(getServiceListTemp());
-        /*quoteMainController quoteMainController = new quoteMainController();
-        try {
-            quoteMainController = getMainController();
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        quoteAllService.setItems(quoteMainController.getServicesList());*/
+
 
         //Add listener for TABLE of ALL services
         //quoteAllService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showServiceAll(newValue)));
@@ -123,6 +118,12 @@ public class quoteSettingController extends quoteMainController{
         this.quote = new Quote(new Person(null, null), List.of(serviceDetail), null);
         //update();
     }
+
+    public void setServiceListInNewQuote(ObservableList<Service> setterServiceList) {
+        this.serviceList = setterServiceList;
+        quoteAllService.setItems(serviceList);
+    }
+
     /*
      * Method to handle ADD SERVICE TO QUOTE
      * Get the service from quoteAllService table and add it to the quote

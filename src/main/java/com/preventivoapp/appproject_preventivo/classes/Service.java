@@ -43,4 +43,13 @@ public class Service {
     public void setServicePriceForTooth(double servicePriceForTooth) {
         this.servicePriceForTooth = servicePriceForTooth;
     }
+
+    @Override
+    public String toString() {
+        return "Service{" +
+                "serviceName=" + serviceName +
+                ", servicePrice=" + servicePrice +
+                ", servicePriceForTooth=" + servicePriceForTooth +
+                '}';
+    }
 }
