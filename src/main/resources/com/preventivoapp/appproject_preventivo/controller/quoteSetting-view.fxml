@@ -39,7 +39,7 @@
                         <TextField fx:id="newQuoteLastName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
-                              <DatePicker fx:id="newQuoteDate" layoutX="48.0" layoutY="4.0" AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="2.0" />
+                              <DatePicker fx:id="newQuoteDate" layoutX="48.0" layoutY="4.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="2.0" />
                            </children>
                         </AnchorPane>
                      </children>
@@ -49,11 +49,18 @@
             <AnchorPane>
                <children>
                   <Label stylesheets="@../../../../CSS/ParagraphTitle-view.css" text="Select services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
-                  <ButtonBar prefHeight="40.0" prefWidth="200.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+                  <ButtonBar buttonMinWidth="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
                     <buttons>
-                        <TextField fx:id="newQuoteSearch" />
-                        <Button fx:id="newQuoteAdd" mnemonicParsing="false" onAction="#handleNewQuoteAdd" text="Add" />
-                      <Button fx:id="newQuoteCancel" mnemonicParsing="false" text="Cancel" />
+                        <ButtonBar prefHeight="40.0">
+                          <buttons>
+                              <Button fx:id="newQuoteAdd" mnemonicParsing="false" onAction="#handleNewQuoteAdd" text="Add" />
+                          </buttons>
+                        </ButtonBar>
+                        <ButtonBar>
+                          <buttons>
+                              <TextField fx:id="newQuoteSearch" prefHeight="26.0" prefWidth="257.0" />
+                          </buttons>
+                        </ButtonBar>
                     </buttons>
                   </ButtonBar>
                </children>
@@ -90,7 +97,7 @@
       <ButtonBar prefHeight="40.0" prefWidth="675.0" BorderPane.alignment="CENTER">
         <buttons>
           <Button fx:id="newQuoteSave" mnemonicParsing="false" onAction="#handleNewQuoteSave" text="Save" />
-            <Button fx:id="newQuoteRemove" mnemonicParsing="false" text="Remove" />
+            <Button fx:id="newQuoteRemove" mnemonicParsing="false" onAction="#handleNewQuoteRemove" text="Remove" />
             <Button fx:id="newQuotePreview" mnemonicParsing="false" text="Preview" />
         </buttons>
          <BorderPane.margin>

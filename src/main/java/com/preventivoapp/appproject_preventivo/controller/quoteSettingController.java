@@ -11,6 +11,7 @@ import javafx.beans.value.ObservableStringValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -48,6 +49,7 @@ public class quoteSettingController extends quoteMainController{
     @FXML private TableView<ServiceDetail> quoteSelectedService;
     private Quote quote;
     private ObservableList<Service> serviceList;
+    private FilteredList<Service> serviceSearched;
     @FXML
     public void initialize() {
         //Add listener for PERSON and DATE of the new quote
@@ -73,84 +75,63 @@ public class quoteSettingController extends quoteMainController{
         //Initialized the QUOTE
         quote = new Quote();
 
-        //Initialized the SERVICES TABLE
 
+        //FilteredList<Service> filteredService = new FilteredList<>(quoteAllService.getItems(), service -> true);
 
-        //Add listener for TABLE of ALL services
-        //quoteAllService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showServiceAll(newValue)));
-
-        //Add listener for TABLE of SELECTED services
-        //quoteSelectedService.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showChosenService(newValue)));
+        newQuoteSearch.textProperty().addListener(observable -> {
+            String nameSearched = newQuoteSearch.getText();
+            if (nameSearched == null || nameSearched.length() == 0) {
+                serviceSearched.setPredicate(service -> true);
+            } else {
+                serviceSearched.setPredicate(service -> service.getServiceName().toLowerCase().contains(nameSearched.toLowerCase()));
+            }
+        });
     }
 
-    /*
-     * Used to display the content in the columns in the ALL SERVICE table and CHOSEN SERVICE table
-     */
-    private void showServiceAll(Service service){
-        if (service != null) {
-            newQuoteNameColumn.setText(service.getServiceName());
-            newQuotePriceColumn.setText(Double.toString(service.getServicePrice()));
-            newQuotePriceForToothColumn.setText(Double.toString(service.getServicePriceForTooth()));
-        }
-        else{
-            newQuoteNameColumn.setText("");
-            newQuotePriceColumn.setText("");
-            newQuotePriceForToothColumn.setText("");
-        }
-    }
-
-    private void showChosenService(ServiceDetail service){
-        if(service != null){
-            newQuoteNameChosenColumn.setText(service.getChosenService().getServiceName());
-            newQuoteNumberColumn.setText("Working on");
-            newQuoteSelectedTooth.setText(service.showTeeth());
-        }
-        else{
-            newQuoteNameChosenColumn.setText("");
-            newQuoteNumberColumn.setText("");
-            newQuoteSelectedTooth.setText("");
-        }
-    }
-    void update(){
-        newQuoteName.textProperty().set(quote.getPerson().getFirstName());
-        newQuoteLastName.textProperty().set(quote.getPerson().getLastName());
-        newQuoteDate.valueProperty().set(quote.getQuoteDate());
-    }
 
     public Quote getQuote(){
         return quote;
     }
 
     /**
-     * Load the serviceList of the controller with the ObservableList passed as param
+     * Load the serviceList of the controller with the ObservableList and create the filteredList used to show services in the table
      * @param setterServiceList to set the list of ALL services
      */
     public void setServiceListInNewQuote(ObservableList<Service> setterServiceList) {
         this.serviceList = setterServiceList;
-        quoteAllService.setItems(serviceList);
+        this.serviceSearched = new FilteredList<>(setterServiceList, service -> true);
+        quoteAllService.setItems(serviceSearched);
     }
 
-    /*
+    /**
      * Method to handle ADD SERVICE TO QUOTE
-     * Get the service from quoteAllService table and add it to the quote
+     * Get the service from quoteAllService table and add it to the quote if already present update N°
      */
     public void handleNewQuoteAdd(){
         try{
             int selectedIndex = selectedIndex(quoteAllService);
             ServiceDetail serviceDetail = new ServiceDetail(quoteAllService.getItems().get(selectedIndex));
-            serviceDetail.setChosenTeeth(List.of(1, 2, 3, 4));
+            for(ServiceDetail service: quote.getServicesChosen()){
+                if(service.getChosenService().getServiceName().compareTo(serviceDetail.getChosenService().getServiceName()) == 0){
+                    service.setTimeSelected(service.getTimeSelected() + 1);
+                    quoteSelectedService.refresh();
+                    return;
+                }
+            }
             quote.getServicesChosen().add(serviceDetail);
             quoteSelectedService.getItems().add(serviceDetail);
         } catch (NoSuchElementException e){
             showNoElementSelected();
         }
     }
-    /*
-     * Method to handle SAVE QUOTE
-     * Save the quote and add it to the list of quote in the quote tab
+
+    /**
+     * Method to handle SAVE QUOTE.
+     * Control if the quote has all the fields completed then close the newQuote window
+     * (the new quote will be saved in the quoteMainController.handleNewQuote method
      */
     public void handleNewQuoteSave(ActionEvent actionEvent){
-        if (quote.getPerson().firstNameProperty() == null || quote.getPerson().lastNameProperty() == null || quote.getQuoteDate() == null){
+        if (quote.getPerson().firstNameProperty().toString().compareTo("") == 0 || quote.getPerson().lastNameProperty().toString().compareTo("") == 0 || quote.getQuoteDate().equals(LocalDate.of(0, 1, 1))){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not all fields were inserted");
             alert.setContentText("Please insert all the person detail and the date.");
@@ -164,10 +145,26 @@ public class quoteSettingController extends quoteMainController{
             alert.showAndWait();
             return;
         }
-        //The quote can be saved
-        addQuoteToList(quote);
-
         Stage thisWindow = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         thisWindow.close();
+    }
+
+    public void handleNewQuoteRemove(){
+        try{
+            int selectedIndex = selectedIndex(quoteSelectedService);
+            for(ServiceDetail serviceDetail: quote.getServicesChosen()){
+                if(serviceDetail.getChosenService().getServiceName().compareTo(quoteSelectedService.getItems().get(selectedIndex).getChosenService().getServiceName()) == 0){
+                    if (serviceDetail.getTimeSelected() > 1) {
+                        serviceDetail.setTimeSelected(serviceDetail.getTimeSelected() - 1);
+                        quoteSelectedService.refresh();
+                        return;
+                    }
+                }
+            }
+            quote.getServicesChosen().remove(quoteSelectedService.getItems().get(selectedIndex));
+            quoteSelectedService.getItems().remove(selectedIndex);
+        } catch (NoSuchElementException e){
+            showNoElementSelected();
+        }
     }
 }

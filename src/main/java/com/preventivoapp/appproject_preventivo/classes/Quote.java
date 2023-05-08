@@ -1,6 +1,8 @@
 package com.preventivoapp.appproject_preventivo.classes;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,9 +21,9 @@ public class Quote {
     }
 
     public Quote() {
-        this.person = null;
+        this.person = new Person(new SimpleStringProperty(""), new SimpleStringProperty(""));
         this.servicesChosen = new ArrayList<ServiceDetail>();
-        this.quoteDate = null;
+        this.quoteDate = new SimpleObjectProperty<>(LocalDate.of(0, 1,1));
     }
 
     public Person getPerson() {

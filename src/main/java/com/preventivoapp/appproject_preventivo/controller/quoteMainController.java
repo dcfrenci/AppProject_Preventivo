@@ -1,15 +1,14 @@
 package com.preventivoapp.appproject_preventivo.controller;
 
-import com.preventivoapp.appproject_preventivo.QuoteMainApplication;
 import com.preventivoapp.appproject_preventivo.classes.Person;
 import com.preventivoapp.appproject_preventivo.classes.Quote;
 import com.preventivoapp.appproject_preventivo.classes.Service;
 import com.preventivoapp.appproject_preventivo.classes.ServiceDetail;
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,27 +16,22 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
-import java.io.PushbackReader;
-import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class quoteMainController {
     //QUOTE TAB -->
     @FXML private TableColumn<Quote, LocalDate> quoteDateColumn;
     @FXML private Button quoteDateOfCreation;
     @FXML private Button quoteEdit;
-    @FXML private TableColumn<Person, String> quoteLastNameColumn;
+    @FXML private TableColumn<Quote, String> quoteLastNameColumn;
     @FXML private Button quoteNameAZ;
-    @FXML private TableColumn<Person, String> quoteNameColumn;
+    @FXML private TableColumn<Quote, String> quoteNameColumn;
     @FXML private Button quoteNew;
     @FXML private Button quoteRemove;
     @FXML private TextField quoteSearch;
@@ -62,8 +56,18 @@ public class quoteMainController {
     @FXML
     public void initialize() {
         //Load quote table
-        quoteNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        quoteLastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        quoteNameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Quote, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Quote, String> param) {
+                return param.getValue().getPerson().firstNameProperty();
+            }
+        });
+        quoteLastNameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Quote, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Quote, String> param) {
+                return param.getValue().getPerson().lastNameProperty();
+            }
+        });
         quoteDateColumn.setCellValueFactory(new PropertyValueFactory<>("quoteDate"));
 
         //Load price list table
@@ -71,17 +75,20 @@ public class quoteMainController {
         servicePriceColumn.setCellValueFactory(new PropertyValueFactory<>("servicePrice"));
         servicePriceForToothColumn.setCellValueFactory(new PropertyValueFactory<>("servicePriceForTooth"));
 
+
         //Load QUOTE and SERVICE table
             //--> quote
         //setServiceList(getServiceListTemp());
             serviceList.addAll(getServiceListTemp());
         serviceTable.setItems(getServicesList());
+            quoteList.addAll(getQuoteListTemp());
+        quoteTable.setItems(getQuoteList());
 
         //Listener for changes of element in the quote table
-        quoteTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showQuoteDetails(newValue)));
+        //quoteTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showQuoteDetails(newValue)));
 
         //Listener for changes of element in the list table
-        serviceTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showServiceDetail(newValue)));
+        //serviceTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showServiceDetail(newValue)));
     }
 
     /*
@@ -153,6 +160,7 @@ public class quoteMainController {
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(quoteNew.getScene().getWindow());
         stage.show();
+        addQuoteToList(quoteSettingController.getQuote());
     }
 
     /*
@@ -204,6 +212,7 @@ public class quoteMainController {
      */
     public void addQuoteToList (Quote quote){
         quoteList.add(quote);
+        quoteTable.setItems(getQuoteList());
     }
 
     /**
@@ -216,7 +225,9 @@ public class quoteMainController {
     public void setServiceList(ObservableList<Service> serviceList) {
         this.serviceList = serviceList;
     }
-
+    public ObservableList<Quote> getQuoteList(){
+        return this.quoteList;
+    }
     @Override
     public String toString() {
         return "quoteMainController{" +
@@ -228,6 +239,7 @@ public class quoteMainController {
      */
     /**
      * Return the index of the selected element in the TableView component
+     * @return Index in the selected table
      */
     public int selectedIndex(TableView tableView){
         int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
@@ -244,5 +256,17 @@ public class quoteMainController {
         observableList.add(new Service(new SimpleStringProperty("Denti 5"), 1598,   1818));
         observableList.add(new Service(new SimpleStringProperty("Denti 6"), 156, 156));
         return observableList;
+    }
+
+    public ObservableList<Quote> getQuoteListTemp() {
+        ObservableList<Quote> observableList = FXCollections.observableArrayList();
+        observableList.add(new Quote(new Person(new SimpleStringProperty("This me"), new SimpleStringProperty("Mario")), temp(), new SimpleObjectProperty<>(LocalDate.now())));
+        return observableList;
+    }
+
+    public List<ServiceDetail> temp(){
+        List<ServiceDetail> list = new ArrayList<>();
+        list.add(new ServiceDetail(new Service(new SimpleStringProperty("Denti 1"), 120, 0)));
+        return list;
     }
 }

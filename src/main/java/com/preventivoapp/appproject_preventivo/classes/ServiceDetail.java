@@ -9,7 +9,7 @@ public class ServiceDetail {
 
     public ServiceDetail(Service chosenService) {
         this.chosenService = chosenService;
-        this.timeSelected++;
+        this.timeSelected = 1;
     }
 
     public Service getChosenService() {
