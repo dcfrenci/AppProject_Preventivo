@@ -27,11 +27,11 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class quoteSettingController extends quoteMainController{
     //NEW QUOTE -->
     @FXML private Button newQuoteAdd;
-    @FXML private Button newQuoteCancel;
     @FXML private DatePicker newQuoteDate;
     @FXML private TextField newQuoteLastName;
     @FXML private TextField newQuoteName;
@@ -39,6 +39,7 @@ public class quoteSettingController extends quoteMainController{
     @FXML private TableColumn<Service, String> newQuoteNameColumn;
     @FXML private TableColumn<ServiceDetail, Integer> newQuoteNumberColumn;
     @FXML private Button newQuotePreview;
+    @FXML private Label windowName;
     @FXML private TableColumn<Service, Double> newQuotePriceColumn;
     @FXML private TableColumn<Service, Double> newQuotePriceForToothColumn;
     @FXML private Button newQuoteRemove;
@@ -49,7 +50,8 @@ public class quoteSettingController extends quoteMainController{
     @FXML private TableView<ServiceDetail> quoteSelectedService;
     private Quote quote;
     private ObservableList<Service> serviceList;
-    private FilteredList<Service> serviceSearched;
+    private FilteredList<Service> serviceSearchedToSelect;
+    private boolean toSave;
     @FXML
     public void initialize() {
         //Add listener for PERSON and DATE of the new quote
@@ -72,35 +74,49 @@ public class quoteSettingController extends quoteMainController{
         newQuoteNumberColumn.setCellValueFactory(new PropertyValueFactory<>("TimeSelected"));
         newQuoteSelectedTooth.setCellValueFactory(new PropertyValueFactory<>("ChosenTeeth"));
 
-        //Initialized the QUOTE
-        quote = new Quote();
-
-
-        //FilteredList<Service> filteredService = new FilteredList<>(quoteAllService.getItems(), service -> true);
-
+        //Add a listener to the ALL service table to show only searched serviced
         newQuoteSearch.textProperty().addListener(observable -> {
             String nameSearched = newQuoteSearch.getText();
             if (nameSearched == null || nameSearched.length() == 0) {
-                serviceSearched.setPredicate(service -> true);
+                serviceSearchedToSelect.setPredicate(service -> true);
             } else {
-                serviceSearched.setPredicate(service -> service.getServiceName().toLowerCase().contains(nameSearched.toLowerCase()));
+                serviceSearchedToSelect.setPredicate(service -> service.getServiceName().toLowerCase().contains(nameSearched.toLowerCase()));
             }
         });
     }
 
-
     public Quote getQuote(){
         return quote;
+    }
+
+    public Boolean getToSave(){
+        return toSave;
+    }
+
+    public void setToSave(boolean status){
+        this.toSave = status;
     }
 
     /**
      * Load the serviceList of the controller with the ObservableList and create the filteredList used to show services in the table
      * @param setterServiceList to set the list of ALL services
      */
-    public void setServiceListInNewQuote(ObservableList<Service> setterServiceList) {
+    public void setQuoteSettingController(ObservableList<Service> setterServiceList, Quote oldQuote) {
         this.serviceList = setterServiceList;
-        this.serviceSearched = new FilteredList<>(setterServiceList, service -> true);
-        quoteAllService.setItems(serviceSearched);
+        this.serviceSearchedToSelect = new FilteredList<>(setterServiceList, service -> true);
+        if (oldQuote != null){
+            windowName.setText("Edit Quote");
+            this.quote = oldQuote;
+            newQuoteName.setText(quote.getPerson().getFirstName());
+            newQuoteLastName.setText(quote.getPerson().getLastName());
+            newQuoteDate.setValue(quote.getQuoteDate());
+            quoteSelectedService.setItems(FXCollections.observableList(quote.getServicesChosen()));
+            quoteSelectedService.refresh();
+        } else {
+            this.quote = new Quote();
+        }
+        quoteAllService.setItems(serviceSearchedToSelect);
+        setToSave(false);
     }
 
     /**
@@ -145,6 +161,7 @@ public class quoteSettingController extends quoteMainController{
             alert.showAndWait();
             return;
         }
+        setToSave(true);
         Stage thisWindow = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         thisWindow.close();
     }

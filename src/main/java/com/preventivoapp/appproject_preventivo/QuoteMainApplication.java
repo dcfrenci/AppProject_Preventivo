@@ -13,6 +13,7 @@ public class QuoteMainApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         primaryStage.setTitle("Quote Maker");
         primaryStage.setScene(scene);
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
     public static void main(String[] args) {

@@ -17,6 +17,12 @@ public class Service {
         this.servicePriceForTooth = servicePriceForTooth;
     }
 
+    public Service(){
+        this.serviceName = null;
+        this.servicePrice = 0;
+        this.servicePriceForTooth = 0;
+    }
+
     public String getServiceName() {
         return serviceName.get();
     }

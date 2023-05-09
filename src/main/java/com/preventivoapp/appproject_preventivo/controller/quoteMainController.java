@@ -8,8 +8,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -27,14 +27,12 @@ import java.util.*;
 public class quoteMainController {
     //QUOTE TAB -->
     @FXML private TableColumn<Quote, LocalDate> quoteDateColumn;
-    @FXML private Button quoteDateOfCreation;
     @FXML private Button quoteEdit;
     @FXML private TableColumn<Quote, String> quoteLastNameColumn;
-    @FXML private Button quoteNameAZ;
     @FXML private TableColumn<Quote, String> quoteNameColumn;
     @FXML private Button quoteNew;
     @FXML private Button quoteRemove;
-    @FXML private TextField quoteSearch;
+    @FXML private TextField quoteSearchField;
     @FXML private TableView<Quote> quoteTable;
 
     //PRICE LIST TAB -->
@@ -44,11 +42,13 @@ public class quoteMainController {
     @FXML private TableColumn<Service, Double> servicePriceColumn;
     @FXML private TableColumn<Service, Double> servicePriceForToothColumn;
     @FXML private Button serviceRemove;
-    @FXML private TextField serviceSearch;
+    @FXML private TextField serviceSearchField;
     @FXML private TableView<Service> serviceTable;
 
     private ObservableList<Service> serviceList = FXCollections.observableArrayList();
     private ObservableList<Quote> quoteList = FXCollections.observableArrayList();
+    private FilteredList<Quote> quoteSearched;
+    private FilteredList<Service> serviceSearched;
 
     /*
      * Initializes the controller class. This method is automatically called after the fxml file has been loaded.
@@ -77,73 +77,68 @@ public class quoteMainController {
 
 
         //Load QUOTE and SERVICE table
-            //--> quote
-        //setServiceList(getServiceListTemp());
-            serviceList.addAll(getServiceListTemp());
-        serviceTable.setItems(getServicesList());
-            quoteList.addAll(getQuoteListTemp());
-        quoteTable.setItems(getQuoteList());
-
-        //Listener for changes of element in the quote table
-        //quoteTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showQuoteDetails(newValue)));
-
-        //Listener for changes of element in the list table
-        //serviceTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> showServiceDetail(newValue)));
+        loadQuotes();
+        loadServices();
+    }
+    private void loadQuotes(){
+        //temporary (must be implemented through SQLite
+        quoteList.addAll(getQuoteListTemp());
+        //Permanent
+        filteredQuoteList();
+        quoteSearchField.textProperty().addListener(observable -> {
+            String string = quoteSearchField.getText();
+            if (string == null || string.length() == 0){
+                quoteSearched.setPredicate(quote -> true);
+            } else {
+                quoteSearched.setPredicate(quote -> {
+                    if (quote.getPerson().getFirstName().toLowerCase().contains(string.toLowerCase())) return true;
+                    return quote.getPerson().getLastName().toLowerCase().contains(string.toLowerCase());
+                });
+            }
+        });
     }
 
-    /*
-     * Used to display the content in the columns in the QUOTE TAB PAGE, PRICE LIST TAB PAGE
-     */
-    private void showQuoteDetails(Quote quote){
-        if(quote != null){
-            quoteNameColumn.setText(quote.getPerson().getFirstName());
-            quoteLastNameColumn.setText(quote.getPerson().getLastName());
-            quoteDateColumn.setText(quote.getQuoteDate().toString());
-        }
-        else{
-            quoteNameColumn.setText("");
-            quoteLastNameColumn.setText("");
-            quoteDateColumn.setText("");
-        }
+    private void filteredQuoteList(){
+        quoteSearched = new FilteredList<>(getQuoteList(), quote -> true);
+        quoteTable.setItems(quoteSearched);
     }
-    private void showServiceDetail(Service service){
-        if(service != null){
-            serviceNameColumn.setText(service.getServiceName());
-            servicePriceColumn.setText(Double.toString(service.getServicePrice()));
-            servicePriceForToothColumn.setText(Double.toString(service.getServicePriceForTooth()));
-        }
-        else{
-            serviceNameColumn.setText("");
-            servicePriceColumn.setText("");
-            servicePriceForToothColumn.setText("");
-        }
+
+    private void loadServices(){
+        //temporary
+        serviceList.addAll(getServiceListTemp());
+        //Permanent
+        filteredServiceList();
+        serviceSearchField.textProperty().addListener(observable -> {
+            String string = serviceSearchField.getText();
+            if (string == null || string.length() == 0){
+                serviceSearched.setPredicate(service -> true);
+            } else {
+                serviceSearched.setPredicate(service -> service.getServiceName().toLowerCase().contains(string.toLowerCase()));
+            }
+        });
     }
+
+    private void filteredServiceList(){
+        serviceSearched = new FilteredList<>(getServicesList(), service -> true);
+        serviceTable.setItems(serviceSearched);
+    }
+
     /*
      * Handler of NEW BUTTON in the quote tab page and price list tab page
      */
     @FXML
-    public void handleNewService(){
-        try{
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("serviceSetting-view.fxml"));
-            DialogPane view = loader.load();
-            serviceSettingController controller = loader.getController();
-
-            //controller.addServiceToList(new Service(String, "servicePrice", "servicePriceForTooth"));
-            controller.addServiceToList(new Service(new SimpleStringProperty("serviceName"), 0, 0));
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("New Service");
-            dialog.initModality(Modality.WINDOW_MODAL);
-            dialog.setDialogPane(view);
-
-
-            /*Optional<ButtonType> clickedButton = dialog.showAndWait();
-            if(clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK){
-                serviceTable.getItems().add(controller.)
-            }*/
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+    public void handleNewService() throws IOException{
+        //Load the .fxml file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("serviceSetting-view.fxml"));
+        DialogPane parent = loader.load();
+        //Create a controller of the new page used to load the serviceList into the new controller
+        serviceSettingController serviceSettingController = (serviceSettingController) loader.getController();
+        serviceSettingController.setServiceSettingController(null);
+        //Create a new dialog pane
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("New Service");
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.setDialogPane(parent);
     }
     @FXML
     public void handleNewQuote() throws IOException{
@@ -152,26 +147,51 @@ public class quoteMainController {
         Parent parent = loader.load();
         //Create a controller of the new page used to load the serviceList into the new controller
         quoteSettingController quoteSettingController = (quoteSettingController) loader.getController();
-        quoteSettingController.setServiceListInNewQuote(getServicesList());
+        quoteSettingController.setQuoteSettingController(getServicesList(), null);
         //Create a new stage = new window with all its properties
         Stage stage = new Stage();
+        stage.setMaximized(true);
         stage.setTitle("New Quote");
         stage.setScene(new Scene(parent));
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(quoteNew.getScene().getWindow());
-        stage.show();
-        addQuoteToList(quoteSettingController.getQuote());
+        stage.showAndWait();
+        if (quoteSettingController.getToSave()) {
+            addQuoteToList(quoteSettingController.getQuote());
+        }
     }
 
     /*
-     * Show a warning dialog when tried to delete an element whose not selected
+     * Handler of EDIT BUTTON in the quote and price-list tab page
      */
-    void showNoElementSelected(){
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("No element selected");
-        alert.setContentText("Please select an element in the table.");
-        alert.showAndWait();
+
+    public void handleEditQuote() throws IOException{
+        //Load the .fxml file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("quoteSetting-view.fxml"));
+        Parent parent = loader.load();
+        //Create a controller of the new page used to set quoteSettingController
+        quoteSettingController quoteSettingController = (quoteSettingController) loader.getController();
+        int indexSelected;
+        try {
+            indexSelected = selectedIndex(quoteTable);
+        } catch (NoSuchElementException e ){
+            showNoElementSelected();
+            return;
+        }
+        quoteSettingController.setQuoteSettingController(getServicesList(), quoteTable.getItems().get(indexSelected));
+        //Create a new stage = new window with all its properties
+        Stage stage = new Stage();
+        stage.setMaximized(true);
+        stage.setTitle("Edit Quote");
+        stage.setScene(new Scene(parent));
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(quoteNew.getScene().getWindow());
+        stage.showAndWait();
+        if (quoteSettingController.getToSave()){
+            addQuoteToList(quoteSettingController.getQuote(), indexSelected);
+        }
     }
+
     /*
      * Handler of DELETE BUTTON in the quote tab page and price list tab page
      */
@@ -193,32 +213,31 @@ public class quoteMainController {
             showNoElementSelected();
         }
     }
-
+    public void showNoElementSelected(){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("No element selected");
+        alert.setContentText("Please select an element in the table.");
+        alert.showAndWait();
+    }
 
     /*
      * QUOTE-LIST SERVICE-LIST METHODS: -------------------------------------------
      */
-
-    /**
-     * Add a service to SERVICE-LIST
-     * @param service to be added
-     */
     public void addServiceToList (Service service) {
         serviceList.add(service);
     }
-    /**
-     * Add a quote to QUOTE-LIST
-     * @param quote to be added
-     */
+
+    public void addQuoteToList (Quote quote, int index){
+        quoteList.set(index, quote);
+        filteredQuoteList();
+        quoteTable.refresh();
+    }
     public void addQuoteToList (Quote quote){
         quoteList.add(quote);
-        quoteTable.setItems(getQuoteList());
+        filteredQuoteList();
+        quoteTable.refresh();
     }
 
-    /**
-     * Return the ObservableList of ALL services that were been created
-     * @return the list of all services
-     */
     public ObservableList<Service> getServicesList (){
         return this.serviceList;
     }

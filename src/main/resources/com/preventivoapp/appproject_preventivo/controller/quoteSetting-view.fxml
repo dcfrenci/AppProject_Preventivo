@@ -58,7 +58,7 @@
                         </ButtonBar>
                         <ButtonBar>
                           <buttons>
-                              <TextField fx:id="newQuoteSearch" prefHeight="26.0" prefWidth="257.0" />
+                              <TextField fx:id="newQuoteSearch" alignment="CENTER" prefHeight="26.0" prefWidth="257.0" promptText="Search" />
                           </buttons>
                         </ButtonBar>
                     </buttons>
@@ -108,7 +108,7 @@
    <top>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <Label stylesheets="@../../../../CSS/quoteMainHeader-view.css" text="Create New Quote" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+            <Label fx:id="windowName" stylesheets="@../../../../CSS/quoteMainHeader-view.css" text="Create New Quote" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
          </children>
       </AnchorPane>
    </top>

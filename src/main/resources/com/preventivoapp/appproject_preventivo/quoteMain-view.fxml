@@ -58,7 +58,7 @@
                               <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                 <buttons>
                                   <Button fx:id="quoteNew" mnemonicParsing="false" onAction="#handleNewQuote" text="New..." />
-                                    <Button fx:id="quoteEdit" mnemonicParsing="false" text="Edit..." />
+                                    <Button fx:id="quoteEdit" mnemonicParsing="false" onAction="#handleEditQuote" text="Edit..." />
                                     <Button fx:id="quoteRemove" mnemonicParsing="false" onAction="#handleDeleteQuote" text="Remove" />
                                 </buttons>
                                  <BorderPane.margin>
@@ -69,11 +69,9 @@
                            <top>
                               <AnchorPane BorderPane.alignment="CENTER">
                                  <children>
-                                    <ButtonBar prefHeight="40.0" prefWidth="450.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
+                                    <ButtonBar prefHeight="40.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
                                        <buttons>
-                                          <Button fx:id="quoteNameAZ" mnemonicParsing="false" text="Name A-Z" />
-                                          <Button fx:id="quoteDateOfCreation" mnemonicParsing="false" text="Date of Creation" />
-                                          <TextField fx:id="quoteSearch" promptText="Search" />
+                                          <TextField fx:id="quoteSearchField" prefWidth="250.0" promptText="Search by LastName, Name..." />
                                        </buttons>
                                     </ButtonBar>
                                     <Label stylesheets="@../../../CSS/quoteMainHeader-view.css" text="Quotation" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
@@ -118,9 +116,9 @@
                               <AnchorPane BorderPane.alignment="CENTER">
                                  <children>
                                     <Label stylesheets="@../../../CSS/quoteMainHeader-view.css" text="Services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
-                                    <ButtonBar prefHeight="40.0" prefWidth="200.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
+                                    <ButtonBar prefHeight="40.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
                                       <buttons>
-                                          <TextField fx:id="serviceSearch" prefWidth="250.0" promptText="Search" />
+                                          <TextField fx:id="serviceSearchField" prefWidth="250.0" promptText="Search by Name..." />
                                       </buttons>
                                     </ButtonBar>
                                  </children>
