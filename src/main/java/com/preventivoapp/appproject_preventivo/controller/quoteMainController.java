@@ -6,7 +6,6 @@ import com.preventivoapp.appproject_preventivo.classes.Service;
 import com.preventivoapp.appproject_preventivo.classes.ServiceDetail;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -19,8 +18,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -28,26 +25,20 @@ import java.util.*;
 public class quoteMainController {
     //QUOTE TAB -->
     @FXML private TableColumn<Quote, LocalDate> quoteDateColumn;
-    @FXML private Button quoteEdit;
     @FXML private TableColumn<Quote, String> quoteLastNameColumn;
     @FXML private TableColumn<Quote, String> quoteNameColumn;
     @FXML private Button quoteNew;
-    @FXML private Button quoteRemove;
     @FXML private TextField quoteSearchField;
     @FXML private TableView<Quote> quoteTable;
 
     //PRICE LIST TAB -->
-    @FXML private Button serviceEdit;
     @FXML private TableColumn<Service, String> serviceNameColumn;
-    @FXML private Button serviceNew;
     @FXML private TableColumn<Service, Double> servicePriceColumn;
     @FXML private TableColumn<Service, Double> servicePriceForToothColumn;
-    @FXML private Button serviceRemove;
     @FXML private TextField serviceSearchField;
     @FXML private TableView<Service> serviceTable;
-
-    private ObservableList<Service> serviceList = FXCollections.observableArrayList();
-    private ObservableList<Quote> quoteList = FXCollections.observableArrayList();
+    private ObservableList<Service> serviceList;
+    private ObservableList<Quote> quoteList;
     private FilteredList<Quote> quoteSearched;
     private FilteredList<Service> serviceSearched;
 
@@ -57,18 +48,8 @@ public class quoteMainController {
     @FXML
     public void initialize() {
         //Load quote table
-        quoteNameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Quote, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Quote, String> param) {
-                return param.getValue().getPerson().firstNameProperty();
-            }
-        });
-        quoteLastNameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Quote, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Quote, String> param) {
-                return param.getValue().getPerson().lastNameProperty();
-            }
-        });
+        quoteNameColumn.setCellValueFactory(param -> param.getValue().getPerson().firstNameProperty());
+        quoteLastNameColumn.setCellValueFactory(param -> param.getValue().getPerson().lastNameProperty());
         quoteDateColumn.setCellValueFactory(new PropertyValueFactory<>("quoteDate"));
 
         //Load price list table
@@ -82,8 +63,12 @@ public class quoteMainController {
         loadServices();
     }
     private void loadQuotes(){
+        //Permanent
+        quoteList = FXCollections.observableArrayList();
+
         //temporary (must be implemented through SQLite
         quoteList.addAll(getQuoteListTemp());
+
         //Permanent
         filteredQuoteList();
         quoteSearchField.textProperty().addListener(observable -> {
@@ -105,8 +90,12 @@ public class quoteMainController {
     }
 
     private void loadServices(){
-        //temporary
+        //Permanent
+        serviceList  = FXCollections.observableArrayList();
+
+        //temporary (must be implemented through SQLite
         serviceList.addAll(getServiceListTemp());
+
         //Permanent
         filteredServiceList();
         serviceSearchField.textProperty().addListener(observable -> {
@@ -133,7 +122,7 @@ public class quoteMainController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("serviceSetting-view.fxml"));
         DialogPane parent = loader.load();
         //Create a controller of the new page used to load the serviceList into the new controller
-        serviceSettingController serviceSettingController = (serviceSettingController) loader.getController();
+        serviceSettingController serviceSettingController = loader.getController();
         serviceSettingController.setServiceSettingController(null);
         //Create a new dialog pane
         Dialog<ButtonType> dialog = new Dialog<>();
@@ -157,7 +146,7 @@ public class quoteMainController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("quoteSetting-view.fxml"));
         Parent parent = loader.load();
         //Create a controller of the new page used to load the serviceList into the new controller
-        quoteSettingController quoteSettingController = (quoteSettingController) loader.getController();
+        quoteSettingController quoteSettingController = loader.getController();
         quoteSettingController.setQuoteSettingController(getServicesList(), null);
         //Create a new stage = new window with all its properties
         Stage stage = new Stage();
@@ -180,10 +169,10 @@ public class quoteMainController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("serviceSetting-view.fxml"));
         DialogPane parent = loader.load();
         //Create a controller of the new page used to load the serviceList into the new controller
-        serviceSettingController serviceSettingController = (serviceSettingController) loader.getController();
+        serviceSettingController serviceSettingController = loader.getController();
         int indexSelected;
         try {
-            indexSelected = selectedIndex(serviceTable);
+            indexSelected = selectedIndexInServiceTable(serviceTable);
         } catch (NoSuchElementException e ){
             showNoElementSelected();
             return;
@@ -210,10 +199,10 @@ public class quoteMainController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("quoteSetting-view.fxml"));
         Parent parent = loader.load();
         //Create a controller of the new page used to set quoteSettingController
-        quoteSettingController quoteSettingController = (quoteSettingController) loader.getController();
+        quoteSettingController quoteSettingController = loader.getController();
         int indexSelected;
         try {
-            indexSelected = selectedIndex(quoteTable);
+            indexSelected = selectedIndexInQuoteTable(quoteTable);
         } catch (NoSuchElementException e ){
             showNoElementSelected();
             return;
@@ -238,7 +227,7 @@ public class quoteMainController {
     @FXML
     public void handleDeleteQuote(){
         try{
-            int selectedIndex = selectedIndex(quoteTable);
+            int selectedIndex = selectedIndexInQuoteTable(quoteTable);
             removeQuoteToList(selectedIndex);
         } catch (NoSuchElementException e){
             showNoElementSelected();
@@ -247,7 +236,7 @@ public class quoteMainController {
     @FXML
     public void handleDeleteService(){
         try{
-            int selectedIndex = selectedIndex(serviceTable);
+            int selectedIndex = selectedIndexInServiceTable(serviceTable);
             removeServiceToList(selectedIndex);
         } catch (NoSuchElementException e){
             showNoElementSelected();
@@ -298,9 +287,7 @@ public class quoteMainController {
     public ObservableList<Service> getServicesList (){
         return this.serviceList;
     }
-    public void setServiceList(ObservableList<Service> serviceList) {
-        this.serviceList = serviceList;
-    }
+
     public ObservableList<Quote> getQuoteList(){
         return this.quoteList;
     }
@@ -317,7 +304,17 @@ public class quoteMainController {
      * Return the index of the selected element in the TableView component
      * @return Index in the selected table
      */
-    public int selectedIndex(TableView tableView){
+    public int selectedIndexInServiceTable(TableView<Service> tableView){
+        int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
+        if(selectedIndex < 0) throw new NoSuchElementException();
+        return selectedIndex;
+    }
+    public int selectedIndexInQuoteTable(TableView<Quote> tableView){
+        int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
+        if(selectedIndex < 0) throw new NoSuchElementException();
+        return selectedIndex;
+    }
+    public int selectedIndexInServiceDetailTable(TableView<ServiceDetail> tableView){
         int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
         if(selectedIndex < 0) throw new NoSuchElementException();
         return selectedIndex;
@@ -325,12 +322,12 @@ public class quoteMainController {
 
     public ObservableList<Service> getServiceListTemp() {
         ObservableList<Service> observableList = FXCollections.observableArrayList();
-        observableList.add(new Service(new SimpleStringProperty("Denti 1"), 120, 0));
-        observableList.add(new Service(new SimpleStringProperty("Denti 2"), 5146, 12));
-        observableList.add(new Service(new SimpleStringProperty("Denti 3"), 451, 1));
-        observableList.add(new Service(new SimpleStringProperty("Denti 4"), 615.45, 345));
-        observableList.add(new Service(new SimpleStringProperty("Denti 5"), 1598,   1818));
-        observableList.add(new Service(new SimpleStringProperty("Denti 6"), 156, 156));
+        observableList.add(new Service(new SimpleStringProperty("Dent 1"), 120, 0));
+        observableList.add(new Service(new SimpleStringProperty("Dent 2"), 5146, 12));
+        observableList.add(new Service(new SimpleStringProperty("Dent 3"), 451, 1));
+        observableList.add(new Service(new SimpleStringProperty("Dent 4"), 615.45, 345));
+        observableList.add(new Service(new SimpleStringProperty("Dent 5"), 1598,   1818));
+        observableList.add(new Service(new SimpleStringProperty("Dent 6"), 156, 156));
         return observableList;
     }
 
@@ -342,7 +339,7 @@ public class quoteMainController {
 
     public List<ServiceDetail> temp(){
         List<ServiceDetail> list = new ArrayList<>();
-        list.add(new ServiceDetail(new Service(new SimpleStringProperty("Denti 1"), 120, 0)));
+        list.add(new ServiceDetail(new Service(new SimpleStringProperty("Dent 1"), 120, 0)));
         return list;
     }
 }

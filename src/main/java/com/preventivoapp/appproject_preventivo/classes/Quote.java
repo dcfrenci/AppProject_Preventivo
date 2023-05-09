@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleStringProperty;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class Quote {
     private Person person;
@@ -22,7 +21,7 @@ public class Quote {
 
     public Quote() {
         this.person = new Person(new SimpleStringProperty(""), new SimpleStringProperty(""));
-        this.servicesChosen = new ArrayList<ServiceDetail>();
+        this.servicesChosen = new ArrayList<>();
         this.quoteDate = new SimpleObjectProperty<>(LocalDate.of(0, 1,1));
     }
 

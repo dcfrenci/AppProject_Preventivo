@@ -1,55 +1,36 @@
 package com.preventivoapp.appproject_preventivo.controller;
 
-import com.preventivoapp.appproject_preventivo.classes.Person;
 import com.preventivoapp.appproject_preventivo.classes.Quote;
 import com.preventivoapp.appproject_preventivo.classes.Service;
 import com.preventivoapp.appproject_preventivo.classes.ServiceDetail;
-import javafx.beans.Observable;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableStringValue;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import org.controlsfx.control.action.Action;
-
-import java.io.Console;
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 public class quoteSettingController extends quoteMainController{
     //NEW QUOTE -->
-    @FXML private Button newQuoteAdd;
     @FXML private DatePicker newQuoteDate;
     @FXML private TextField newQuoteLastName;
     @FXML private TextField newQuoteName;
     @FXML private TableColumn<ServiceDetail, String> newQuoteNameChosenColumn;
     @FXML private TableColumn<Service, String> newQuoteNameColumn;
     @FXML private TableColumn<ServiceDetail, Integer> newQuoteNumberColumn;
-    @FXML private Button newQuotePreview;
     @FXML private Label windowName;
     @FXML private TableColumn<Service, Double> newQuotePriceColumn;
     @FXML private TableColumn<Service, Double> newQuotePriceForToothColumn;
-    @FXML private Button newQuoteRemove;
-    @FXML private Button newQuoteSave;
     @FXML private TextField newQuoteSearch;
     @FXML private TableColumn<Quote, Integer> newQuoteSelectedTooth;
     @FXML private TableView<Service> quoteAllService;
     @FXML private TableView<ServiceDetail> quoteSelectedService;
     private Quote quote;
-    private ObservableList<Service> serviceList;
     private FilteredList<Service> serviceSearchedToSelect;
     private boolean toSave;
     @FXML
@@ -65,12 +46,7 @@ public class quoteSettingController extends quoteMainController{
         newQuotePriceForToothColumn.setCellValueFactory(new PropertyValueFactory<>("servicePriceForTooth"));
 
         //Initialized the table of SELECTED services
-        newQuoteNameChosenColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ServiceDetail, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ServiceDetail, String> param) {
-                return param.getValue().getChosenService().serviceNameProperty();
-            }
-        });
+        newQuoteNameChosenColumn.setCellValueFactory(param -> param.getValue().getChosenService().serviceNameProperty());
         newQuoteNumberColumn.setCellValueFactory(new PropertyValueFactory<>("TimeSelected"));
         newQuoteSelectedTooth.setCellValueFactory(new PropertyValueFactory<>("ChosenTeeth"));
 
@@ -102,7 +78,6 @@ public class quoteSettingController extends quoteMainController{
      * @param setterServiceList to set the list of ALL services
      */
     public void setQuoteSettingController(ObservableList<Service> setterServiceList, Quote oldQuote) {
-        this.serviceList = setterServiceList;
         this.serviceSearchedToSelect = new FilteredList<>(setterServiceList, service -> true);
         if (oldQuote != null){
             windowName.setText("Edit Quote");
@@ -125,7 +100,7 @@ public class quoteSettingController extends quoteMainController{
      */
     public void handleNewQuoteAdd(){
         try{
-            int selectedIndex = selectedIndex(quoteAllService);
+            int selectedIndex = selectedIndexInServiceTable(quoteAllService);
             ServiceDetail serviceDetail = new ServiceDetail(quoteAllService.getItems().get(selectedIndex));
             for(ServiceDetail service: quote.getServicesChosen()){
                 if(service.getChosenService().getServiceName().compareTo(serviceDetail.getChosenService().getServiceName()) == 0){
@@ -168,7 +143,7 @@ public class quoteSettingController extends quoteMainController{
 
     public void handleNewQuoteRemove(){
         try{
-            int selectedIndex = selectedIndex(quoteSelectedService);
+            int selectedIndex = selectedIndexInServiceDetailTable(quoteSelectedService);
             for(ServiceDetail serviceDetail: quote.getServicesChosen()){
                 if(serviceDetail.getChosenService().getServiceName().compareTo(quoteSelectedService.getItems().get(selectedIndex).getChosenService().getServiceName()) == 0){
                     if (serviceDetail.getTimeSelected() > 1) {

@@ -60,7 +60,6 @@ public class serviceSettingController extends quoteMainController {
     }
 
     public boolean handleServiceSave(){
-        System.out.println(service.getServiceName());
         if (service.getServiceName().length() == 0){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not all fields were inserted");
@@ -95,7 +94,7 @@ public class serviceSettingController extends quoteMainController {
     @FXML
     private Button newServiceSave;
 
-    Service service;
+    Service newService;
 
     @FXML
     public void initialize() {
@@ -104,7 +103,7 @@ public class serviceSettingController extends quoteMainController {
         newServicePriceForToothColumn.textProperty().addListener((observable, oldValue, newValue) -> service.setServicePrice(Double.valueOf(newValue)));
     }
 
-    void showIncorretcInsertionAlert() {
+    void showIncorrectInsertionAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Field filled incorrectly");
@@ -119,7 +118,7 @@ public class serviceSettingController extends quoteMainController {
                 addServiceToList(service);
             } else throw new NoSuchElementException();
         } catch (NoSuchElementException e) {
-            showIncorretcInsertionAlert();
+            showIncorrectInsertionAlert();
         }
 
     }*/
