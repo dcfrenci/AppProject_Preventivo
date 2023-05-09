@@ -10,6 +10,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -139,6 +140,16 @@ public class quoteMainController {
         dialog.setTitle("New Service");
         dialog.initModality(Modality.WINDOW_MODAL);
         dialog.setDialogPane(parent);
+        dialog.show();
+        Button save = (Button) dialog.getDialogPane().lookupButton(ButtonType.APPLY);
+        save.addEventFilter(ActionEvent.ACTION, event -> {
+            if (!serviceSettingController.handleServiceSave()){
+                event.consume();
+            } else {
+                dialog.show();
+                addServiceToList(serviceSettingController.getService());
+            }
+        });
     }
     @FXML
     public void handleNewQuote() throws IOException{
@@ -164,7 +175,36 @@ public class quoteMainController {
     /*
      * Handler of EDIT BUTTON in the quote and price-list tab page
      */
-
+    public void handleEditService() throws IOException{
+        //Load the .fxml file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("serviceSetting-view.fxml"));
+        DialogPane parent = loader.load();
+        //Create a controller of the new page used to load the serviceList into the new controller
+        serviceSettingController serviceSettingController = (serviceSettingController) loader.getController();
+        int indexSelected;
+        try {
+            indexSelected = selectedIndex(serviceTable);
+        } catch (NoSuchElementException e ){
+            showNoElementSelected();
+            return;
+        }
+        serviceSettingController.setServiceSettingController(serviceTable.getItems().get(indexSelected));
+        //Create a new dialog pane
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("New Service");
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.setDialogPane(parent);
+        dialog.show();
+        Button save = (Button) dialog.getDialogPane().lookupButton(ButtonType.APPLY);
+        save.addEventFilter(ActionEvent.ACTION, event -> {
+            if (!serviceSettingController.handleServiceSave()){
+                event.consume();
+            } else {
+                dialog.show();
+                addServiceToList(serviceSettingController.getService(), indexSelected);
+            }
+        });
+    }
     public void handleEditQuote() throws IOException{
         //Load the .fxml file
         FXMLLoader loader = new FXMLLoader(getClass().getResource("quoteSetting-view.fxml"));
@@ -199,7 +239,7 @@ public class quoteMainController {
     public void handleDeleteQuote(){
         try{
             int selectedIndex = selectedIndex(quoteTable);
-            quoteTable.getItems().remove(selectedIndex);
+            removeQuoteToList(selectedIndex);
         } catch (NoSuchElementException e){
             showNoElementSelected();
         }
@@ -208,7 +248,7 @@ public class quoteMainController {
     public void handleDeleteService(){
         try{
             int selectedIndex = selectedIndex(serviceTable);
-            serviceTable.getItems().remove(selectedIndex);
+            removeServiceToList(selectedIndex);
         } catch (NoSuchElementException e){
             showNoElementSelected();
         }
@@ -223,10 +263,16 @@ public class quoteMainController {
     /*
      * QUOTE-LIST SERVICE-LIST METHODS: -------------------------------------------
      */
+    public void addServiceToList (Service service, int index) {
+        serviceList.set(index, service);
+        filteredServiceList();
+        serviceTable.refresh();
+    }
     public void addServiceToList (Service service) {
         serviceList.add(service);
+        filteredServiceList();
+        serviceTable.refresh();
     }
-
     public void addQuoteToList (Quote quote, int index){
         quoteList.set(index, quote);
         filteredQuoteList();
@@ -234,6 +280,17 @@ public class quoteMainController {
     }
     public void addQuoteToList (Quote quote){
         quoteList.add(quote);
+        filteredQuoteList();
+        quoteTable.refresh();
+    }
+
+    public void removeServiceToList(int index){
+        serviceList.remove(index);
+        filteredServiceList();
+        serviceTable.refresh();
+    }
+    public void removeQuoteToList (int index){
+        quoteList.remove(index);
         filteredQuoteList();
         quoteTable.refresh();
     }

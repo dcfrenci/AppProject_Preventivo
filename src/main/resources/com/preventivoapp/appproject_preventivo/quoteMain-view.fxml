@@ -104,7 +104,7 @@
                               <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                 <buttons>
                                   <Button fx:id="serviceNew" mnemonicParsing="false" onAction="#handleNewService" text="New..." />
-                                    <Button fx:id="serviceEdit" mnemonicParsing="false" text="Edit..." />
+                                    <Button fx:id="serviceEdit" mnemonicParsing="false" onAction="#handleEditService" text="Edit..." />
                                     <Button fx:id="serviceRemove" mnemonicParsing="false" onAction="#handleDeleteService" text="Remove" />
                                 </buttons>
                                  <BorderPane.margin>

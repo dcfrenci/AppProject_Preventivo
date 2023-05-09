@@ -1,6 +1,7 @@
 package com.preventivoapp.appproject_preventivo.classes;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableStringValue;
 
@@ -18,7 +19,7 @@ public class Service {
     }
 
     public Service(){
-        this.serviceName = null;
+        this.serviceName = new SimpleStringProperty("");
         this.servicePrice = 0;
         this.servicePriceForTooth = 0;
     }

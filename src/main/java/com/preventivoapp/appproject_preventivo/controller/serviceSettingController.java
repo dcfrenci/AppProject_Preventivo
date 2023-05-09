@@ -1,37 +1,41 @@
 package com.preventivoapp.appproject_preventivo.controller;
 
 import com.preventivoapp.appproject_preventivo.classes.Service;
-import com.preventivoapp.appproject_preventivo.classes.ServiceDetail;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-
-import java.util.List;
-import java.util.NoSuchElementException;
 
 public class serviceSettingController extends quoteMainController {
     @FXML private TextField serviceNameField;
     @FXML private TextField servicePriceField;
     @FXML private TextField servicePriceForToothField;
-
+    @FXML private Label windowName;
     private Service service;
-    private boolean toSave;
 
     @FXML
     public void initialize() {
         //Add listener for service property
         serviceNameField.textProperty().addListener(((observable, oldValue, newValue) -> service.setServiceName(newValue)));
-        servicePriceField.textProperty().addListener(((observable, oldValue, newValue) -> service.setServicePrice(Double.parseDouble(newValue))));
-        servicePriceForToothField.textProperty().addListener(((observable, oldValue, newValue) -> service.setServicePriceForTooth(Double.parseDouble(newValue))));
+        servicePriceField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() == 0 || containsAlphabetic(newValue)) {
+                service.setServicePrice(0);
+                return;
+            }
+            service.setServicePrice(Double.parseDouble(newValue));
+        });
+        servicePriceForToothField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() == 0 || containsAlphabetic(newValue)) {
+                service.setServicePriceForTooth(0);
+                return;
+            }
+            service.setServicePriceForTooth(Double.parseDouble(newValue));
+        });
     }
 
     public void setServiceSettingController(Service oldService){
-        setToSave(false);
         if (oldService != null){
+            windowName.setText("Edit Service");
             this.service = oldService;
             serviceNameField.setText(service.getServiceName());
             servicePriceField.setText(Double.toString(service.getServicePrice()));
@@ -45,52 +49,41 @@ public class serviceSettingController extends quoteMainController {
         return service;
     }
 
-    private void setToSave(boolean state){
-        this.toSave = state;
+    private boolean containsAlphabetic(String string){
+        for (char elem: string.toCharArray()){
+            if (Character.isAlphabetic(elem)) {
+                service.setServicePriceForTooth(0);
+                return true;
+            }
+        }
+        return false;
     }
 
-    private boolean getToSave(){
-        return toSave;
-    }
-
-    private void handleServiceSave(ActionEvent actionEvent){
+    public boolean handleServiceSave(){
+        System.out.println(service.getServiceName());
         if (service.getServiceName().length() == 0){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not all fields were inserted");
             alert.setContentText("Please insert the service's name.");
             alert.showAndWait();
-            return;
+            return false;
         }
         if (service.getServicePrice() != 0 && service.getServicePriceForTooth() != 0){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not all fields were inserted correctly");
             alert.setContentText("Please choose between \"Price\" and \"Price For Tooth\".");
             alert.showAndWait();
-            return;
+            return false;
         }
-        if (service.getServicePrice() <= 0 || service.getServicePriceForTooth() <= 0){
+        if ((service.getServicePrice() <= 0 && service.getServicePriceForTooth() <= 0) || (containsAlphabetic(servicePriceField.getText()) || containsAlphabetic(servicePriceForToothField.getText()))){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not all fields were inserted correctly");
-            alert.setContentText("Please choose a positive \"Price\" or \"Price For Tooth\".");
+            alert.setContentText("Please choose a positive number for \"Price\" or \"Price For Tooth\".");
             alert.showAndWait();
-            return;
+            return false;
         }
-        setToSave(true);
-        Stage thisWindow = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        thisWindow.close();
+        return true;
     }
-
-
-
-
-
-
-
-
-
-
-
-
     /*@FXML
     private Button newServiceCancel;
     @FXML
