@@ -10,43 +10,43 @@
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.preventivoapp.appproject_preventivo.controller.teethSelectionController">
    <children>
-      <CheckBox fx:id="tooth18" layoutX="184.0" layoutY="214.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth17" layoutX="189.0" layoutY="184.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth16" layoutX="198.0" layoutY="153.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth15" layoutX="208.0" layoutY="128.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth14" layoutX="217.0" layoutY="106.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth13" layoutX="231.0" layoutY="78.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth12" layoutX="256.0" layoutY="55.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth11" layoutX="295.0" layoutY="30.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth21" layoutX="369.0" layoutY="29.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth22" layoutX="404.0" layoutY="52.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth23" layoutX="433.0" layoutY="76.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth24" layoutX="448.0" layoutY="103.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth25" layoutX="462.0" layoutY="127.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth26" layoutX="473.0" layoutY="155.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth27" layoutX="481.0" layoutY="185.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth28" layoutX="481.0" layoutY="214.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth48" layoutX="184.0" layoutY="265.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth47" layoutX="189.0" layoutY="300.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth46" layoutX="195.0" layoutY="335.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth45" layoutX="209.0" layoutY="366.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth44" layoutX="223.0" layoutY="394.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth43" layoutX="247.0" layoutY="419.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth42" layoutX="275.0" layoutY="443.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth41" layoutX="320.0" layoutY="457.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth38" layoutX="481.0" layoutY="265.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth37" layoutX="481.0" layoutY="299.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth36" layoutX="477.0" layoutY="333.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth35" layoutX="459.0" layoutY="365.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth34" layoutX="441.0" layoutY="394.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth33" layoutX="421.0" layoutY="421.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth32" layoutX="387.0" layoutY="444.0" mnemonicParsing="false" />
-      <CheckBox fx:id="tooth31" layoutX="349.0" layoutY="457.0" mnemonicParsing="false" />
+      <CheckBox fx:id="tooth18" layoutX="184.0" layoutY="214.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth17" layoutX="189.0" layoutY="184.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth16" layoutX="198.0" layoutY="153.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth15" layoutX="208.0" layoutY="128.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth14" layoutX="217.0" layoutY="106.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth13" layoutX="231.0" layoutY="78.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth12" layoutX="256.0" layoutY="55.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth11" layoutX="295.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth21" layoutX="369.0" layoutY="29.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth22" layoutX="404.0" layoutY="52.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth23" layoutX="433.0" layoutY="76.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth24" layoutX="448.0" layoutY="103.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth25" layoutX="462.0" layoutY="127.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth26" layoutX="473.0" layoutY="155.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth27" layoutX="481.0" layoutY="185.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth28" layoutX="481.0" layoutY="214.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth48" layoutX="184.0" layoutY="265.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth47" layoutX="189.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth46" layoutX="195.0" layoutY="335.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth45" layoutX="209.0" layoutY="366.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth44" layoutX="223.0" layoutY="394.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth43" layoutX="247.0" layoutY="419.0" mnemonicParsing="false" onDragDetected="#handleChangeState" />
+      <CheckBox fx:id="tooth42" layoutX="275.0" layoutY="443.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth41" layoutX="320.0" layoutY="457.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth38" layoutX="481.0" layoutY="265.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth37" layoutX="481.0" layoutY="299.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth36" layoutX="477.0" layoutY="333.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth35" layoutX="459.0" layoutY="365.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth34" layoutX="441.0" layoutY="394.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth33" layoutX="421.0" layoutY="421.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth32" layoutX="387.0" layoutY="444.0" mnemonicParsing="false" onAction="#handleChangeState" />
+      <CheckBox fx:id="tooth31" layoutX="349.0" layoutY="457.0" mnemonicParsing="false" onAction="#handleChangeState" />
       <ButtonBar layoutX="473.0" layoutY="437.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="10.0">
         <buttons>
-          <Button mnemonicParsing="false" text="Save" />
-            <Button mnemonicParsing="false" text="Reset" />
-            <Button mnemonicParsing="false" text="Cancel" />
+          <Button mnemonicParsing="false" onAction="#handleSaveButton" text="Save" />
+            <Button mnemonicParsing="false" onAction="#handleResetButton" text="Reset" />
+            <Button mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel" />
         </buttons>
       </ButtonBar>
       <Label layoutX="10.0" layoutY="21.0" stylesheets="@../../../../CSS/quoteMainHeader-view.css" text="Teeth Selection" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />

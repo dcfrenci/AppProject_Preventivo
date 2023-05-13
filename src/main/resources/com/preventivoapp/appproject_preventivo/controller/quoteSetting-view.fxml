@@ -80,7 +80,7 @@
                   <Label stylesheets="@../../../../CSS/ParagraphTitle-view.css" text="Chosen services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
                </children>
             </AnchorPane>
-            <TableView fx:id="quoteSelectedService">
+            <TableView fx:id="quoteSelectedService" onMouseClicked="#handleTeethSelected">
               <columns>
                 <TableColumn fx:id="newQuoteNameChosenColumn" prefWidth="75.0" text="Name" />
                   <TableColumn fx:id="newQuoteNumberColumn" maxWidth="200.0" prefWidth="-1.0" text="N°" />

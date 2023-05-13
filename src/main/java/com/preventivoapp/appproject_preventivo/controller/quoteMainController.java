@@ -6,6 +6,7 @@ import com.preventivoapp.appproject_preventivo.classes.Service;
 import com.preventivoapp.appproject_preventivo.classes.ServiceDetail;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -18,6 +19,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -47,16 +50,22 @@ public class quoteMainController {
      */
     @FXML
     public void initialize() {
-        //Load quote table
+        //Load QUOTE table
         quoteNameColumn.setCellValueFactory(param -> param.getValue().getPerson().firstNameProperty());
         quoteLastNameColumn.setCellValueFactory(param -> param.getValue().getPerson().lastNameProperty());
         quoteDateColumn.setCellValueFactory(new PropertyValueFactory<>("quoteDate"));
 
-        //Load price list table
+        //Load PRICE LIST table
         serviceNameColumn.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
-        servicePriceColumn.setCellValueFactory(new PropertyValueFactory<>("servicePrice"));
+        servicePriceColumn.setCellValueFactory(param -> {
+            if (param.getValue().getServicePrice() == 0) return null;
+            return new SimpleObjectProperty<>(param.getValue().getServicePrice());
+        });
         servicePriceForToothColumn.setCellValueFactory(new PropertyValueFactory<>("servicePriceForTooth"));
-
+        servicePriceForToothColumn.setCellValueFactory(param -> {
+            if (param.getValue().getServicePriceForTooth() == 0) return null;
+            return new SimpleObjectProperty<>(param.getValue().getServicePriceForTooth());
+        });
 
         //Load QUOTE and SERVICE table
         loadQuotes();
@@ -323,11 +332,11 @@ public class quoteMainController {
     public ObservableList<Service> getServiceListTemp() {
         ObservableList<Service> observableList = FXCollections.observableArrayList();
         observableList.add(new Service(new SimpleStringProperty("Dent 1"), 120, 0));
-        observableList.add(new Service(new SimpleStringProperty("Dent 2"), 5146, 12));
-        observableList.add(new Service(new SimpleStringProperty("Dent 3"), 451, 1));
-        observableList.add(new Service(new SimpleStringProperty("Dent 4"), 615.45, 345));
-        observableList.add(new Service(new SimpleStringProperty("Dent 5"), 1598,   1818));
-        observableList.add(new Service(new SimpleStringProperty("Dent 6"), 156, 156));
+        observableList.add(new Service(new SimpleStringProperty("Dent 2"), 0, 12));
+        observableList.add(new Service(new SimpleStringProperty("Dent 3"), 451, 0));
+        observableList.add(new Service(new SimpleStringProperty("Dent 4"), 615.45, 0));
+        observableList.add(new Service(new SimpleStringProperty("Dent 5"), 0,   1818));
+        observableList.add(new Service(new SimpleStringProperty("Dent 6"), 0, 156));
         return observableList;
     }
 

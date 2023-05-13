@@ -39,11 +39,11 @@ public class ServiceDetail {
     public String showTeeth(){
         StringBuilder string = new StringBuilder();
         for(Integer elem: getChosenTeeth()){
-            string.append(elem).append(", ");
+            if (!string.isEmpty()) string.append(", ");
+            string.append(elem);
         }
         return string.toString();
     }
-
     @Override
     public String toString() {
         return "ServiceDetail{" +

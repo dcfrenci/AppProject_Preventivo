@@ -50,7 +50,9 @@ public class teethSelectionController {
     public void initialize(){
 
     }
-
+    public boolean getToSave(){
+        return toSave;
+    }
     public void setTeethSelectionController(List<Integer> teethSelected){
         toSave = false;
         if (teethSelected != null) {
@@ -87,93 +89,111 @@ public class teethSelectionController {
                 i++;
                 continue;
             }
-            map.replace("tooth" + i, false);
+            map.put("tooth" + i, false);
             setSelectedCheckBox("tooth" + i, false);
         }
         return map;
     }
-    private void setSelectedCheckBox(String string, boolean state){
-        switch (string){
-            case "tooth11":
-                tooth11.setSelected(state);
-            case "tooth12":
-                tooth12.setSelected(state);
-            case "tooth13":
-                tooth13.setSelected(state);
-            case "tooth14":
-                tooth14.setSelected(state);
-            case "tooth15":
-                tooth15.setSelected(state);
-            case "tooth16":
-                tooth16.setSelected(state);
-            case "tooth17":
-                tooth17.setSelected(state);
-            case "tooth18":
-                tooth18.setSelected(state);
-            case "tooth21":
-                tooth21.setSelected(state);
-            case "tooth22":
-                tooth22.setSelected(state);
-            case "tooth23":
-                tooth23.setSelected(state);
-            case "tooth24":
-                tooth24.setSelected(state);
-            case "tooth25":
-                tooth25.setSelected(state);
-            case "tooth26":
-                tooth26.setSelected(state);
-            case "tooth27":
-                tooth27.setSelected(state);
-            case "tooth28":
-                tooth28.setSelected(state);
-            case "tooth31":
-                tooth31.setSelected(state);
-            case "tooth32":
-                tooth32.setSelected(state);
-            case "tooth33":
-                tooth33.setSelected(state);
-            case "tooth34":
-                tooth34.setSelected(state);
-            case "tooth35":
-                tooth35.setSelected(state);
-            case "tooth36":
-                tooth36.setSelected(state);
-            case "tooth37":
-                tooth37.setSelected(state);
-            case "tooth38":
-                tooth38.setSelected(state);
-            case "tooth41":
-                tooth41.setSelected(state);
-            case "tooth42":
-                tooth42.setSelected(state);
-            case "tooth43":
-                tooth43.setSelected(state);
-            case "tooth44":
-                tooth44.setSelected(state);
-            case "tooth45":
-                tooth45.setSelected(state);
-            case "tooth46":
-                tooth46.setSelected(state);
-            case "tooth47":
-                tooth47.setSelected(state);
-            case "tooth48":
-                tooth48.setSelected(state);
+    private String getCheckBoxName(String string){
+        StringBuilder toothName = new StringBuilder();
+        boolean copy = false;
+        for (char elem: string.toCharArray()){
+            if (elem == ',')    break;
+            if (copy)           toothName.append(elem);
+            if (elem == '=')    copy = true;
         }
+        return toothName.toString();
+    }
+    private void setSelectedCheckBox(String string, boolean state){
+        switch (string) {
+            case "tooth11" -> tooth11.setSelected(state);
+            case "tooth12" -> tooth12.setSelected(state);
+            case "tooth13" -> tooth13.setSelected(state);
+            case "tooth14" -> tooth14.setSelected(state);
+            case "tooth15" -> tooth15.setSelected(state);
+            case "tooth16" -> tooth16.setSelected(state);
+            case "tooth17" -> tooth17.setSelected(state);
+            case "tooth18" -> tooth18.setSelected(state);
+            case "tooth21" -> tooth21.setSelected(state);
+            case "tooth22" -> tooth22.setSelected(state);
+            case "tooth23" -> tooth23.setSelected(state);
+            case "tooth24" -> tooth24.setSelected(state);
+            case "tooth25" -> tooth25.setSelected(state);
+            case "tooth26" -> tooth26.setSelected(state);
+            case "tooth27" -> tooth27.setSelected(state);
+            case "tooth28" -> tooth28.setSelected(state);
+            case "tooth31" -> tooth31.setSelected(state);
+            case "tooth32" -> tooth32.setSelected(state);
+            case "tooth33" -> tooth33.setSelected(state);
+            case "tooth34" -> tooth34.setSelected(state);
+            case "tooth35" -> tooth35.setSelected(state);
+            case "tooth36" -> tooth36.setSelected(state);
+            case "tooth37" -> tooth37.setSelected(state);
+            case "tooth38" -> tooth38.setSelected(state);
+            case "tooth41" -> tooth41.setSelected(state);
+            case "tooth42" -> tooth42.setSelected(state);
+            case "tooth43" -> tooth43.setSelected(state);
+            case "tooth44" -> tooth44.setSelected(state);
+            case "tooth45" -> tooth45.setSelected(state);
+            case "tooth46" -> tooth46.setSelected(state);
+            case "tooth47" -> tooth47.setSelected(state);
+            case "tooth48" -> tooth48.setSelected(state);
+        }
+    }
+    private boolean getSelectedCheckBox(String string){
+        return switch (string) {
+            case "tooth11" -> tooth11.isSelected();
+            case "tooth12" -> tooth12.isSelected();
+            case "tooth13" -> tooth13.isSelected();
+            case "tooth14" -> tooth14.isSelected();
+            case "tooth15" -> tooth15.isSelected();
+            case "tooth16" -> tooth16.isSelected();
+            case "tooth17" -> tooth17.isSelected();
+            case "tooth18" -> tooth18.isSelected();
+            case "tooth21" -> tooth21.isSelected();
+            case "tooth22" -> tooth22.isSelected();
+            case "tooth23" -> tooth23.isSelected();
+            case "tooth24" -> tooth24.isSelected();
+            case "tooth25" -> tooth25.isSelected();
+            case "tooth26" -> tooth26.isSelected();
+            case "tooth27" -> tooth27.isSelected();
+            case "tooth28" -> tooth28.isSelected();
+            case "tooth31" -> tooth31.isSelected();
+            case "tooth32" -> tooth32.isSelected();
+            case "tooth33" -> tooth33.isSelected();
+            case "tooth34" -> tooth34.isSelected();
+            case "tooth35" -> tooth35.isSelected();
+            case "tooth36" -> tooth36.isSelected();
+            case "tooth37" -> tooth37.isSelected();
+            case "tooth38" -> tooth38.isSelected();
+            case "tooth41" -> tooth41.isSelected();
+            case "tooth42" -> tooth42.isSelected();
+            case "tooth43" -> tooth43.isSelected();
+            case "tooth44" -> tooth44.isSelected();
+            case "tooth45" -> tooth45.isSelected();
+            case "tooth46" -> tooth46.isSelected();
+            case "tooth47" -> tooth47.isSelected();
+            case "tooth48" -> tooth48.isSelected();
+            default -> false;
+        };
     }
 
     /*
      * HANDLER of BUTTONS
      */
-    private void handleSaveButton(ActionEvent actionEvent){
+    public void handleSaveButton(ActionEvent actionEvent){
         toSave = true;
         Stage thisWindow = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         thisWindow.close();
     }
-    private void handleResetButton(){
+    public void handleResetButton(){
         this.teeth = voidMap();
     }
-    private void handleCancelButton(ActionEvent actionEvent){
+    public void handleCancelButton(ActionEvent actionEvent){
         Stage thisWindow = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         thisWindow.close();
+    }
+    public void handleChangeState(ActionEvent actionEvent){
+        teeth.put(getCheckBoxName(actionEvent.getSource().toString()), getSelectedCheckBox(getCheckBoxName(actionEvent.getSource().toString())));
     }
 }
