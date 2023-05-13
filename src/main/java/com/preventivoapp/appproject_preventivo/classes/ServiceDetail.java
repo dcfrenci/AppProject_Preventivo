@@ -5,7 +5,7 @@ import java.util.List;
 public class ServiceDetail {
     private Service chosenService;
     private List<Integer> chosenTeeth;
-    private int timeSelected = 0;
+    private int timeSelected;
 
     public ServiceDetail(Service chosenService) {
         this.chosenService = chosenService;

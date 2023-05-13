@@ -53,14 +53,6 @@ public class Quote {
         this.quoteDate.set(quoteDate);
     }
 
-    public int getTimeSelected(Service service) {
-        int times = 0;
-        for(ServiceDetail elem: getServicesChosen()){
-            if (elem.getChosenService().getServiceName().compareTo(service.getServiceName()) == 0) times++;
-        }
-        return times;
-    }
-
     public List<Integer> getTeethSelected(Service service){
         for(ServiceDetail elem: getServicesChosen()){
             if(elem.getChosenService().getServiceName().compareTo(service.getServiceName()) == 0) return elem.getChosenTeeth();
