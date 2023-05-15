@@ -25,6 +25,12 @@ public class Quote {
         this.quoteDate = new SimpleObjectProperty<>(LocalDate.of(0, 1,1));
     }
 
+    public Quote(Quote copyOf){
+        this.person = copyOf.getPerson();
+        this.servicesChosen = copyOf.getServicesChosen();
+        this.quoteDate = copyOf.quoteDateProperty();
+    }
+
     public Person getPerson() {
         return person;
     }
@@ -62,10 +68,10 @@ public class Quote {
 
     @Override
     public String toString() {
-        return "Quote{" +
-                "person=" + person +
-                ", servicesChosen=" + servicesChosen +
-                ", quoteDate=" + quoteDate +
-                '}';
+        return "Quote={\n" +
+                "\tPerson: " + getPerson().getFirstName() + " (name), " + getPerson().getLastName() + " (lastname)\n" +
+                "\tLocalDate: " + getQuoteDate() + "\n" +
+                "\tChosenServices:\n" +
+                servicesChosen + "}";
     }
 }

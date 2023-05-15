@@ -43,6 +43,7 @@ public class quoteSettingController extends quoteMainController{
     private boolean toSave;
     @FXML
     public void initialize() {
+        setToSave(false);
         //Add listener for PERSON and DATE of the new quote
         newQuoteName.textProperty().addListener(((observable, oldValue, newValue) -> quote.getPerson().setFirstName(newValue)));
         newQuoteLastName.textProperty().addListener(((observable, oldValue, newValue) -> quote.getPerson().setLastName(newValue)));
@@ -106,7 +107,6 @@ public class quoteSettingController extends quoteMainController{
             this.quote = new Quote();
         }
         quoteAllService.setItems(serviceSearchedToSelect);
-        setToSave(false);
     }
     /**
      * Method to handle ADD SERVICE TO QUOTE
@@ -125,7 +125,7 @@ public class quoteSettingController extends quoteMainController{
                 }
             }
             quote.getServicesChosen().add(serviceDetail);
-            quoteSelectedService.getItems().add(serviceDetail);
+            quoteSelectedService.refresh();
         } catch (NoSuchElementException e){
             showNoElementSelected();
         }

@@ -184,22 +184,21 @@ public class quoteMainController {
             showNoElementSelected();
             return;
         }
+        Service serviceBackup = new Service(serviceTable.getItems().get(indexSelected));
         serviceSettingController.setServiceSettingController(serviceTable.getItems().get(indexSelected));
         //Create a new dialog pane
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("New Service");
         dialog.initModality(Modality.WINDOW_MODAL);
         dialog.setDialogPane(parent);
-        dialog.show();
-        Button save = (Button) dialog.getDialogPane().lookupButton(ButtonType.APPLY);
-        save.addEventFilter(ActionEvent.ACTION, event -> {
-            if (!serviceSettingController.handleServiceSave()){
-                event.consume();
-            } else {
-                dialog.show();
+        Optional<ButtonType> clickedButton = dialog.showAndWait();
+        if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.APPLY){
+            if (serviceSettingController.handleServiceSave()){
                 addServiceToList(serviceSettingController.getService(), indexSelected);
             }
-        });
+        } else {
+            addServiceToList(serviceBackup, indexSelected);
+        }
     }
     public void handleEditQuote() throws IOException{
         //Load the .fxml file
@@ -214,6 +213,9 @@ public class quoteMainController {
             showNoElementSelected();
             return;
         }
+        //System.out.println("---TABLE---\n" + quoteTable.getItems().get(indexSelected));
+        System.out.println("---LISTA---\n" + quoteList.get(indexSelected));
+        Quote quoteBackup = new Quote(quoteTable.getItems().get(indexSelected));
         quoteSettingController.setQuoteSettingController(getServicesList(), quoteTable.getItems().get(indexSelected));
         //Create a new stage = new window with all its properties
         Stage stage = new Stage();
@@ -225,7 +227,12 @@ public class quoteMainController {
         stage.showAndWait();
         if (quoteSettingController.getToSave()){
             addQuoteToList(quoteSettingController.getQuote(), indexSelected);
+        } else {
+            addQuoteToList(quoteBackup, indexSelected);
+            System.out.println("---BACKUP---\n" + quoteBackup);
         }
+        System.out.println("---LISTA AFTER---\n" + quoteList.get(indexSelected));
+        //System.out.println("---TABLE AFTER---\n" + quoteTable.getItems().get(indexSelected));
     }
 
     /*

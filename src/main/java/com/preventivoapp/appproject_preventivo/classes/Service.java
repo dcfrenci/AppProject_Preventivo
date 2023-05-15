@@ -21,6 +21,11 @@ public class Service {
         this.servicePriceForTooth = 0;
     }
 
+    public Service(Service copyOf){
+        this.serviceName = new SimpleStringProperty(copyOf.getServiceName());
+        this.servicePrice = copyOf.getServicePrice();
+        this.servicePriceForTooth = copyOf.getServicePriceForTooth();
+    }
     public String getServiceName() {
         return serviceName.get();
     }
@@ -51,9 +56,9 @@ public class Service {
 
     @Override
     public String toString() {
-        return  "serviceName=" + serviceName +
-                ", servicePrice=" + servicePrice +
-                ", servicePriceForTooth=" + servicePriceForTooth
-                ;
+        return  "Service:\n" +
+                "\tserviceName=" + getServiceName() +
+                "\n\tservicePrice=" + servicePrice +
+                "\n\tservicePriceForTooth=" + servicePriceForTooth;
     }
 }

@@ -48,13 +48,16 @@ public class teethSelectionController {
     private boolean toSave;
     @FXML
     public void initialize(){
-
+        setToSave(false);
     }
+
     public boolean getToSave(){
         return toSave;
     }
+    private void setToSave(boolean status){
+        this.toSave = status;
+    }
     public void setTeethSelectionController(List<Integer> teethSelected){
-        toSave = false;
         if (teethSelected != null) {
             this.teeth = listToMap(teethSelected);
         } else {

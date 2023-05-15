@@ -46,9 +46,8 @@ public class ServiceDetail {
     }
     @Override
     public String toString() {
-        return "ServiceDetail{" +
-                "chosenService=" + chosenService +
-                ", chosenTeeth=" + chosenTeeth +
-                '}';
+        return "\t\tService: " + getChosenService().getServiceName() + " (name), " + getChosenService().getServicePrice() + " (price), " + getChosenService().getServicePriceForTooth() + " (toothPrice)\n" +
+                "\t\t\t" + getTimeSelected() + " (time selected)\n" +
+                "\t\t\t" + getChosenTeeth() + " (chosen teeth)\n";
     }
 }
