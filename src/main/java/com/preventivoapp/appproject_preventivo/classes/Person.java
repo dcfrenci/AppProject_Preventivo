@@ -41,4 +41,15 @@ public class Person {
                 ", lastName=" + lastName
                 ;
     }
+
+    @Override
+    public Object clone(){
+        Person person;
+        try {
+            person = (Person) super.clone();
+        } catch (CloneNotSupportedException e){
+            person = new Person(this.firstNameProperty(), this.lastNameProperty());
+        }
+        return person;
+    }
 }

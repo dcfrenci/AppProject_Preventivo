@@ -11,6 +11,11 @@ public class ServiceDetail {
         this.chosenService = chosenService;
         this.timeSelected = 1;
     }
+    public ServiceDetail(Service chosenService, List<Integer> chosenTeeth, int timeSelected){
+        this.chosenService = chosenService;
+        this.chosenTeeth = chosenTeeth;
+        this.timeSelected = timeSelected;
+    }
 
     public Service getChosenService() {
         return chosenService;
@@ -49,5 +54,17 @@ public class ServiceDetail {
         return "\t\tService: " + getChosenService().getServiceName() + " (name), " + getChosenService().getServicePrice() + " (price), " + getChosenService().getServicePriceForTooth() + " (toothPrice)\n" +
                 "\t\t\t" + getTimeSelected() + " (time selected)\n" +
                 "\t\t\t" + getChosenTeeth() + " (chosen teeth)\n";
+    }
+
+    @Override
+    public Object clone(){
+        ServiceDetail serviceDetail;
+        try {
+            serviceDetail = (ServiceDetail) super.clone();
+        } catch (CloneNotSupportedException e){
+            serviceDetail = new ServiceDetail(this.getChosenService(), this.getChosenTeeth(), this.getTimeSelected());
+        }
+        serviceDetail.chosenService = (Service) this.chosenService.clone();
+        return serviceDetail;
     }
 }

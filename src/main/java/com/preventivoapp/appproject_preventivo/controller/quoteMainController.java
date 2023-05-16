@@ -184,8 +184,7 @@ public class quoteMainController {
             showNoElementSelected();
             return;
         }
-        Service serviceBackup = new Service(serviceTable.getItems().get(indexSelected));
-        serviceSettingController.setServiceSettingController(serviceTable.getItems().get(indexSelected));
+        serviceSettingController.setServiceSettingController((Service) serviceTable.getItems().get(indexSelected).clone());
         //Create a new dialog pane
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("New Service");
@@ -196,8 +195,6 @@ public class quoteMainController {
             if (serviceSettingController.handleServiceSave()){
                 addServiceToList(serviceSettingController.getService(), indexSelected);
             }
-        } else {
-            addServiceToList(serviceBackup, indexSelected);
         }
     }
     public void handleEditQuote() throws IOException{
@@ -213,10 +210,7 @@ public class quoteMainController {
             showNoElementSelected();
             return;
         }
-        //System.out.println("---TABLE---\n" + quoteTable.getItems().get(indexSelected));
-        System.out.println("---LISTA---\n" + quoteList.get(indexSelected));
-        Quote quoteBackup = new Quote(quoteTable.getItems().get(indexSelected));
-        quoteSettingController.setQuoteSettingController(getServicesList(), quoteTable.getItems().get(indexSelected));
+        quoteSettingController.setQuoteSettingController(getServicesList(), (Quote) quoteTable.getItems().get(indexSelected).clone());
         //Create a new stage = new window with all its properties
         Stage stage = new Stage();
         stage.setMaximized(true);
@@ -227,12 +221,7 @@ public class quoteMainController {
         stage.showAndWait();
         if (quoteSettingController.getToSave()){
             addQuoteToList(quoteSettingController.getQuote(), indexSelected);
-        } else {
-            addQuoteToList(quoteBackup, indexSelected);
-            System.out.println("---BACKUP---\n" + quoteBackup);
         }
-        System.out.println("---LISTA AFTER---\n" + quoteList.get(indexSelected));
-        //System.out.println("---TABLE AFTER---\n" + quoteTable.getItems().get(indexSelected));
     }
 
     /*
@@ -286,7 +275,6 @@ public class quoteMainController {
         filteredQuoteList();
         quoteTable.refresh();
     }
-
     public void removeServiceToList(int index){
         serviceList.remove(index);
         filteredServiceList();
@@ -334,6 +322,9 @@ public class quoteMainController {
         return selectedIndex;
     }
 
+    /*
+     * MUST BE REMOVED !!!!
+     */
     public ObservableList<Service> getServiceListTemp() {
         ObservableList<Service> observableList = FXCollections.observableArrayList();
         observableList.add(new Service(new SimpleStringProperty("Dent 1"), 120, 0));

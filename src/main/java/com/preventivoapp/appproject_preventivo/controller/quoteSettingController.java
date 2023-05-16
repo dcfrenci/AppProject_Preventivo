@@ -89,24 +89,29 @@ public class quoteSettingController extends quoteMainController{
     public void setToSave(boolean status){
         this.toSave = status;
     }
+    private void setObservableChosenService(){
+        ObservableList<ServiceDetail> observableChosenService = FXCollections.observableArrayList(quote.getServicesChosen());
+        quoteSelectedService.setItems(observableChosenService);
+        quoteSelectedService.refresh();
+    }
     /**
      * Load the serviceList of the controller with the ObservableList and create the filteredList used to show services in the table
      * @param setterServiceList to set the list of ALL services
      */
     public void setQuoteSettingController(ObservableList<Service> setterServiceList, Quote oldQuote) {
         this.serviceSearchedToSelect = new FilteredList<>(setterServiceList, service -> true);
+        quoteAllService.setItems(serviceSearchedToSelect);
         if (oldQuote != null){
             windowName.setText("Edit Quote");
             this.quote = oldQuote;
             newQuoteName.setText(quote.getPerson().getFirstName());
             newQuoteLastName.setText(quote.getPerson().getLastName());
             newQuoteDate.setValue(quote.getQuoteDate());
-            quoteSelectedService.setItems(FXCollections.observableList(quote.getServicesChosen()));
-            quoteSelectedService.refresh();
+            setObservableChosenService();
         } else {
             this.quote = new Quote();
+            setObservableChosenService();
         }
-        quoteAllService.setItems(serviceSearchedToSelect);
     }
     /**
      * Method to handle ADD SERVICE TO QUOTE
@@ -120,12 +125,12 @@ public class quoteSettingController extends quoteMainController{
             for(ServiceDetail service: quote.getServicesChosen()){
                 if(service.getChosenService().getServiceName().compareTo(serviceDetail.getChosenService().getServiceName()) == 0){
                     service.setTimeSelected(service.getTimeSelected() + 1);
-                    quoteSelectedService.refresh();
+                    setObservableChosenService();
                     return;
                 }
             }
             quote.getServicesChosen().add(serviceDetail);
-            quoteSelectedService.refresh();
+            setObservableChosenService();
         } catch (NoSuchElementException e){
             showNoElementSelected();
         }

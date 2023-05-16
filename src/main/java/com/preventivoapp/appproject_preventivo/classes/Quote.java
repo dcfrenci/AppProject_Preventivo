@@ -26,7 +26,7 @@ public class Quote {
     }
 
     public Quote(Quote copyOf){
-        this.person = copyOf.getPerson();
+        this.person = new Person(copyOf.getPerson().firstNameProperty(), copyOf.getPerson().lastNameProperty());
         this.servicesChosen = copyOf.getServicesChosen();
         this.quoteDate = copyOf.quoteDateProperty();
     }
@@ -73,5 +73,27 @@ public class Quote {
                 "\tLocalDate: " + getQuoteDate() + "\n" +
                 "\tChosenServices:\n" +
                 servicesChosen + "}";
+    }
+
+    @Override
+    public Object clone(){
+        Quote quote;
+        try {
+            quote = (Quote) super.clone();
+        } catch (CloneNotSupportedException e){
+            quote = new Quote(this.getPerson(), this.getServicesChosen(), this.quoteDateProperty());
+        }
+        quote.person = (Person) this.person.clone();
+        quote.servicesChosen = cloneServiceChosen();
+        quote.quoteDate = this.quoteDateProperty();
+        //quote.servicesChosen = (List<ServiceDetail>) this.servicesChosen.clone();
+        return quote;
+    }
+    private List<ServiceDetail> cloneServiceChosen(){
+        List<ServiceDetail> list = new ArrayList<>();
+        for(ServiceDetail serviceDetail: this.getServicesChosen()){
+            list.add((ServiceDetail) serviceDetail.clone());
+        }
+        return list;
     }
 }

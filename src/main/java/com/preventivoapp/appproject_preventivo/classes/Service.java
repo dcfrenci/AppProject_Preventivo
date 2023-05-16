@@ -33,6 +33,9 @@ public class Service {
     public ObservableStringValue serviceNameProperty() {
         return serviceName;
     }
+    public StringProperty getServiceNameProperty(){
+        return serviceName;
+    }
 
     public void setServiceName(String serviceName) {
         this.serviceName.set(serviceName);
@@ -60,5 +63,16 @@ public class Service {
                 "\tserviceName=" + getServiceName() +
                 "\n\tservicePrice=" + servicePrice +
                 "\n\tservicePriceForTooth=" + servicePriceForTooth;
+    }
+
+    @Override
+    public Object clone(){
+        Service service;
+        try {
+            service = (Service) super.clone();
+        } catch (CloneNotSupportedException e){
+            service = new Service(this.getServiceNameProperty(), this.getServicePrice(), this.getServicePriceForTooth());
+        }
+        return service;
     }
 }
