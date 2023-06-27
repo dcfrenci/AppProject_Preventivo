@@ -23,7 +23,7 @@
             <items>
               <MenuItem mnemonicParsing="false" text="Import price list" />
                   <MenuItem mnemonicParsing="false" text="Export price list" />
-                  <MenuItem mnemonicParsing="false" text="Settings" />
+                  <MenuItem fx:id="settingMenu" mnemonicParsing="false" onAction="#handleSaveQuotePath" text="Settings" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">

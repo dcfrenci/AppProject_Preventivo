@@ -1,9 +1,10 @@
 package com.preventivoapp.appproject_preventivo.controller;
 
-import com.preventivoapp.appproject_preventivo.classes.Person;
-import com.preventivoapp.appproject_preventivo.classes.Quote;
-import com.preventivoapp.appproject_preventivo.classes.Service;
-import com.preventivoapp.appproject_preventivo.classes.ServiceDetail;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.preventivoapp.appproject_preventivo.classes.*;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -16,9 +17,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.stage.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -38,10 +39,13 @@ public class quoteMainController {
     @FXML private TableColumn<Service, Double> servicePriceForToothColumn;
     @FXML private TextField serviceSearchField;
     @FXML private TableView<Service> serviceTable;
+
+    //VARIABLES -->
     private ObservableList<Service> serviceList;
     private ObservableList<Quote> quoteList;
     private FilteredList<Quote> quoteSearched;
     private FilteredList<Service> serviceSearched;
+    private Setting setting ;//= new Setting(System.getProperty("user.dir"));
 
     /*
      * Initializes the controller class. This method is automatically called after the fxml file has been loaded.
@@ -65,18 +69,66 @@ public class quoteMainController {
             return new SimpleObjectProperty<>(param.getValue().getServicePriceForTooth());
         });
 
+        handleSetting();
         //Load QUOTE and SERVICE table
         loadQuotes();
         loadServices();
     }
+
+    /*
+     * SETTING
+     */
+    public void handleSetting() {
+        setting = new Setting(System.getProperty("user.dir"));
+        try {
+            //check if the directory exists
+            File dir = new File(setting.getPathSetting());
+            if (!dir.exists()){
+                if (new File(setting.getPathSetting()).mkdir()) new Alert(Alert.AlertType.ERROR, "Could not create setting directory").showAndWait();
+                if (new File(setting.getPathSetting() + "\\setting.json").createNewFile()) new Alert(Alert.AlertType.ERROR, "Could not create setting file").showAndWait();
+                if (new File(setting.getPathSetting() + "\\quoteList.json").createNewFile()) new Alert(Alert.AlertType.ERROR, "Could not create quoteList file").showAndWait();
+                if (new File(setting.getPathSetting() + "\\serviceList.json").createNewFile()) new Alert(Alert.AlertType.ERROR, "Could not create serviceList file").showAndWait();
+                //set the quote directory
+                handleSaveQuotePath();
+            } else {
+                //check if the file already exists
+                if (!new File(setting.getPathSetting() + "\\setting.json").exists()) {
+                    new Alert(Alert.AlertType.ERROR, "Could not find setting file").showAndWait();
+                    return;
+                }
+                File file = new File(setting.getPathSetting() + "\\setting.json");
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                mapper.registerModule(new JavaTimeModule());
+                String quoteSavePath = mapper.readValue(file, new TypeReference<>(){});
+                setting.setPathQuote(quoteSavePath);
+            }
+        } catch (IOException e){
+            new Alert(Alert.AlertType.ERROR, "Could not load data").showAndWait();
+            e.printStackTrace();
+        }
+    }
+
+    public void handleSaveQuotePath() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File previousDir = new File(setting.getPathQuote());
+        directoryChooser.setInitialDirectory(previousDir);
+        File file = directoryChooser.showDialog(null);
+        if (file != null) {
+            if (file.toString().contains(" ")) {
+                new Alert(Alert.AlertType.ERROR, "The directory name could not contain space character").showAndWait();
+                return;
+            }
+            if (new File(file + "\\quote").mkdir()) new Alert(Alert.AlertType.ERROR, "Could not create quote directory").showAndWait();
+            setting.setPathQuote(file + "\\quote");
+        }
+    }
+    /*
+     * LOADING AND SAVING
+     */
     private void loadQuotes(){
-        //Permanent
         quoteList = FXCollections.observableArrayList();
-
-        //temporary (must be implemented through SQLite
-        quoteList.addAll(getQuoteListTemp());
-
-        //Permanent
+        handleLoadQuote();
         filteredQuoteList();
         quoteSearchField.textProperty().addListener(observable -> {
             String string = quoteSearchField.getText();
@@ -99,11 +151,7 @@ public class quoteMainController {
     private void loadServices(){
         //Permanent
         serviceList  = FXCollections.observableArrayList();
-
-        //temporary (must be implemented through SQLite
-        serviceList.addAll(getServiceListTemp());
-
-        //Permanent
+        handleLoadService();
         filteredServiceList();
         serviceSearchField.textProperty().addListener(observable -> {
             String string = serviceSearchField.getText();
@@ -118,6 +166,57 @@ public class quoteMainController {
     private void filteredServiceList(){
         serviceSearched = new FilteredList<>(getServicesList(), service -> true);
         serviceTable.setItems(serviceSearched);
+    }
+
+    /*
+     * CONNECTION WITH FILES (loading, saving)
+     */
+    public void handleLoadQuote() {
+        //load quoteList with preexisting element
+        try {
+            File file = new File(setting.getPathSetting() + "\\quoteList.json");
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            mapper.registerModule(new JavaTimeModule());
+            List<Quote> loadedQuote = mapper.readValue(file, new TypeReference<>() {});
+            quoteList.addAll(loadedQuote);
+        } catch (IOException e){
+            new Alert(Alert.AlertType.ERROR, "Could not load data").showAndWait();
+            e.printStackTrace();
+        }
+    }
+
+    public void handleLoadService() {
+        //load serviceList with preexisting element
+        try {
+            File file = new File(setting.getPathSetting() + "\\serviceList.json");
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            mapper.registerModule(new JavaTimeModule());
+            List<Service> loadedService = mapper.readValue(file, new TypeReference<>() {});
+            serviceList.addAll(loadedService);
+        } catch (IOException e){
+            new Alert(Alert.AlertType.ERROR, "Could not load data").showAndWait();
+            e.printStackTrace();
+        }
+    }
+
+    public void handleSaveData() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            //save quote
+            File file = new File(setting.getPathSetting() + "\\quoteList.json");
+            mapper.writerWithDefaultPrettyPrinter().writeValue(file, quoteTable.getItems());
+            //save service
+            file = new File(setting.getPathSetting() + "\\serviceList.json");
+            mapper.writerWithDefaultPrettyPrinter().writeValue(file, serviceTable.getItems());
+            //save setting
+            file = new File(setting.getPathSetting() + "\\setting.json");
+            mapper.writerWithDefaultPrettyPrinter().writeValue(file, setting.getPath());
+        } catch (IOException e){
+            new Alert(Alert.AlertType.ERROR, "Could not save data").showAndWait();
+        }
     }
 
     /*

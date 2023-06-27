@@ -1,11 +1,16 @@
 package com.preventivoapp.appproject_preventivo.classes;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Person {
     private final StringProperty firstName;
     private final StringProperty lastName;
 
+    public Person() {
+        this.firstName = new SimpleStringProperty("");
+        this.lastName = new SimpleStringProperty("");
+    }
     public Person(StringProperty firstName, StringProperty lastName) {
         this.firstName = firstName;
         this.lastName = lastName;

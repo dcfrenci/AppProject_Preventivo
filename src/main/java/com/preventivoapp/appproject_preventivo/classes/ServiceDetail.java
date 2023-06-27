@@ -7,6 +7,11 @@ public class ServiceDetail {
     private List<Integer> chosenTeeth;
     private int timeSelected;
 
+    public ServiceDetail() {
+        this.chosenService = null;
+        this.timeSelected = 0;
+    }
+
     public ServiceDetail(Service chosenService) {
         this.chosenService = chosenService;
         this.timeSelected = 1;

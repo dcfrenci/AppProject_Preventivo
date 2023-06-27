@@ -3,7 +3,9 @@ module com.preventivoapp.appproject_preventivo {
     requires javafx.fxml;
 
     requires org.controlsfx.controls;
-
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.datatype.jsr310;
     opens com.preventivoapp.appproject_preventivo to javafx.fxml;
     exports com.preventivoapp.appproject_preventivo;
     exports com.preventivoapp.appproject_preventivo.controller;
