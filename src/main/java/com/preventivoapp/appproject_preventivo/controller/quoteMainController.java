@@ -19,8 +19,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.*;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -45,7 +47,7 @@ public class quoteMainController {
     private ObservableList<Quote> quoteList;
     private FilteredList<Quote> quoteSearched;
     private FilteredList<Service> serviceSearched;
-    private Setting setting ;//= new Setting(System.getProperty("user.dir"));
+    private Setting setting;
 
     /*
      * Initializes the controller class. This method is automatically called after the fxml file has been loaded.
@@ -68,7 +70,7 @@ public class quoteMainController {
             if (param.getValue().getServicePriceForTooth() == 0) return null;
             return new SimpleObjectProperty<>(param.getValue().getServicePriceForTooth());
         });
-
+        //Load
         handleSetting();
         //Load QUOTE and SERVICE table
         loadQuotes();
@@ -76,7 +78,7 @@ public class quoteMainController {
     }
 
     /*
-     * SETTING
+     * MENU BAR
      */
     public void handleSetting() {
         setting = new Setting(System.getProperty("user.dir"));
@@ -123,6 +125,68 @@ public class quoteMainController {
             setting.setPathQuote(file + "\\quote");
         }
     }
+
+    public void handleImportServiceList() {
+        //Select the file to import
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+        File file = fileChooser.showOpenDialog(null);
+        //Scan the file
+        if (file != null) {
+            try (Scanner scanner = new Scanner(file)) {
+                ObservableList<Service> importServiceList = FXCollections.observableArrayList();
+                while (scanner.hasNext()){
+                    String serviceScan = scanner.nextLine();
+                    if (serviceScan.startsWith("priceForTooth")){
+                        //priceForTooth service -->
+                        String substring = serviceScan.substring("priceForTooth_".length());
+                        String serviceName = substring.substring(0, substring.indexOf("_"));
+                        double servicePrice = Double.parseDouble(substring.substring(substring.indexOf("_") + 1));
+                        if (servicePrice != 0){
+                            Service service = new Service(new SimpleStringProperty(serviceName), 0, servicePrice);
+                            importServiceList.add(service);
+                        }
+                    } else {
+                        //price service -->
+                        String substring = serviceScan.substring("price_".length());
+                        String serviceName = substring.substring(0, substring.indexOf("_"));
+                        double servicePrice = Double.parseDouble(substring.substring(substring.indexOf("_") + 1));
+                        if (servicePrice != 0){
+                            Service service = new Service(new SimpleStringProperty(serviceName), servicePrice, 0);
+                            importServiceList.add(service);
+                        }
+                    }
+                }
+                //Refresh the serviceList
+                serviceList.removeAll(getServicesList());
+                serviceList.addAll(importServiceList);
+                filteredServiceList();
+                serviceTable.refresh();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void handleExportServiceList() {
+        //Select name and position to Export .txt file
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null){
+            try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(file.toString()), StandardCharsets.UTF_8)) {
+                for (Service service : serviceList) {
+                    if (service.getServicePriceForTooth() == 0) writer.write("price_" + service.getServiceName() + "_" + service.getServicePrice() + "\n");
+                    if (service.getServicePrice() == 0) writer.write("priceForTooth_" + service.getServiceName() + "_" + service.getServicePriceForTooth() + "\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /*
      * LOADING AND SAVING
      */
@@ -146,6 +210,7 @@ public class quoteMainController {
     private void filteredQuoteList(){
         quoteSearched = new FilteredList<>(getQuoteList(), quote -> true);
         quoteTable.setItems(quoteSearched);
+        quoteTable.refresh();
     }
 
     private void loadServices(){
@@ -424,26 +489,4 @@ public class quoteMainController {
     /*
      * MUST BE REMOVED !!!!
      */
-    public ObservableList<Service> getServiceListTemp() {
-        ObservableList<Service> observableList = FXCollections.observableArrayList();
-        observableList.add(new Service(new SimpleStringProperty("Dent 1"), 120, 0));
-        observableList.add(new Service(new SimpleStringProperty("Dent 2"), 0, 12));
-        observableList.add(new Service(new SimpleStringProperty("Dent 3"), 451, 0));
-        observableList.add(new Service(new SimpleStringProperty("Dent 4"), 615.45, 0));
-        observableList.add(new Service(new SimpleStringProperty("Dent 5"), 0,   1818));
-        observableList.add(new Service(new SimpleStringProperty("Dent 6"), 0, 156));
-        return observableList;
-    }
-
-    public ObservableList<Quote> getQuoteListTemp() {
-        ObservableList<Quote> observableList = FXCollections.observableArrayList();
-        observableList.add(new Quote(new Person(new SimpleStringProperty("This me"), new SimpleStringProperty("Mario")), temp(), new SimpleObjectProperty<>(LocalDate.now())));
-        return observableList;
-    }
-
-    public List<ServiceDetail> temp(){
-        List<ServiceDetail> list = new ArrayList<>();
-        list.add(new ServiceDetail(new Service(new SimpleStringProperty("Dent 1"), 120, 0)));
-        return list;
-    }
 }
