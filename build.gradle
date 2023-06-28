@@ -43,6 +43,18 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.15.0'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.15.0'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.15.0'
+
+    //implementation group: 'com.itextpdf', name: 'itext7-core', version: '8.0.0', ext: 'pom'
+    /*implementation group: 'com.itextpdf', name: 'barcodes', version: '8.0.0'
+    implementation group: 'com.itextpdf', name: 'forms', version: '8.0.0'
+    implementation group: 'com.itextpdf', name: 'io', version: '8.0.0'
+    implementation group: 'com.itextpdf', name: 'kernel', version: '8.0.0'
+    implementation group: 'com.itextpdf', name: 'layout', version: '8.0.0'
+    implementation group: 'com.itextpdf', name: 'pdfa', version: '8.0.0'
+    implementation group: 'com.itextpdf', name: 'sign', version: '8.0.0'
+    implementation group: 'com.itextpdf', name: 'styled-xml-parser', version: '8.0.0'
+    implementation group: 'com.itextpdf', name: 'svg', version: '8.0.0'
+    implementation group: 'com.itextpdf', name: 'bouncy-castle-connector', version: '8.0.0'*/
 }
 
 test {

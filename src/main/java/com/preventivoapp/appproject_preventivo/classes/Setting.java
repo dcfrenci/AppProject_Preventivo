@@ -8,6 +8,7 @@ public class Setting {
     public Setting(String path) {
         this.path = path;
         this.pathSettingJson = path + "\\setting";
+        this.pathQuote = "";
     }
 
     public String getPath() {

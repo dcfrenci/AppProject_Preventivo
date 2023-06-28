@@ -70,11 +70,8 @@ public class quoteMainController {
             if (param.getValue().getServicePriceForTooth() == 0) return null;
             return new SimpleObjectProperty<>(param.getValue().getServicePriceForTooth());
         });
-        //Load
+        //Load PROGRAM
         handleSetting();
-        //Load QUOTE and SERVICE table
-        loadQuotes();
-        loadServices();
     }
 
     /*
@@ -86,12 +83,15 @@ public class quoteMainController {
             //check if the directory exists
             File dir = new File(setting.getPathSetting());
             if (!dir.exists()){
-                if (new File(setting.getPathSetting()).mkdir()) new Alert(Alert.AlertType.ERROR, "Could not create setting directory").showAndWait();
-                if (new File(setting.getPathSetting() + "\\setting.json").createNewFile()) new Alert(Alert.AlertType.ERROR, "Could not create setting file").showAndWait();
-                if (new File(setting.getPathSetting() + "\\quoteList.json").createNewFile()) new Alert(Alert.AlertType.ERROR, "Could not create quoteList file").showAndWait();
-                if (new File(setting.getPathSetting() + "\\serviceList.json").createNewFile()) new Alert(Alert.AlertType.ERROR, "Could not create serviceList file").showAndWait();
+                if (!new File(setting.getPathSetting()).mkdir()) new Alert(Alert.AlertType.ERROR, "Could not create setting directory").showAndWait();
+                if (!new File(setting.getPathSetting() + "\\setting.json").createNewFile()) new Alert(Alert.AlertType.ERROR, "Could not create setting file").showAndWait();
+                if (!new File(setting.getPathSetting() + "\\quoteList.json").createNewFile()) new Alert(Alert.AlertType.ERROR, "Could not create quoteList file").showAndWait();
+                if (!new File(setting.getPathSetting() + "\\serviceList.json").createNewFile()) new Alert(Alert.AlertType.ERROR, "Could not create serviceList file").showAndWait();
                 //set the quote directory
                 handleSaveQuotePath();
+                //load QUOTE and SERVICE table
+                loadQuotes(false);
+                loadServices(false);
             } else {
                 //check if the file already exists
                 if (!new File(setting.getPathSetting() + "\\setting.json").exists()) {
@@ -104,6 +104,9 @@ public class quoteMainController {
                 mapper.registerModule(new JavaTimeModule());
                 String quoteSavePath = mapper.readValue(file, new TypeReference<>(){});
                 setting.setPathQuote(quoteSavePath);
+                //load QUOTE and SERVICE table
+                loadQuotes(true);
+                loadServices(true);
             }
         } catch (IOException e){
             new Alert(Alert.AlertType.ERROR, "Could not load data").showAndWait();
@@ -114,14 +117,14 @@ public class quoteMainController {
     public void handleSaveQuotePath() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File previousDir = new File(setting.getPathQuote());
-        directoryChooser.setInitialDirectory(previousDir);
+        if (!setting.getPathQuote().equals("")) directoryChooser.setInitialDirectory(previousDir);
         File file = directoryChooser.showDialog(null);
         if (file != null) {
             if (file.toString().contains(" ")) {
                 new Alert(Alert.AlertType.ERROR, "The directory name could not contain space character").showAndWait();
                 return;
             }
-            if (new File(file + "\\quote").mkdir()) new Alert(Alert.AlertType.ERROR, "Could not create quote directory").showAndWait();
+            if (!new File(file + "\\quote").mkdir()) new Alert(Alert.AlertType.ERROR, "Could not create quote directory").showAndWait();
             setting.setPathQuote(file + "\\quote");
         }
     }
@@ -190,9 +193,9 @@ public class quoteMainController {
     /*
      * LOADING AND SAVING
      */
-    private void loadQuotes(){
+    private void loadQuotes(boolean load){
         quoteList = FXCollections.observableArrayList();
-        handleLoadQuote();
+        if (load) handleLoadQuote();
         filteredQuoteList();
         quoteSearchField.textProperty().addListener(observable -> {
             String string = quoteSearchField.getText();
@@ -213,10 +216,9 @@ public class quoteMainController {
         quoteTable.refresh();
     }
 
-    private void loadServices(){
-        //Permanent
+    private void loadServices(boolean load){
         serviceList  = FXCollections.observableArrayList();
-        handleLoadService();
+        if (load) handleLoadService();
         filteredServiceList();
         serviceSearchField.textProperty().addListener(observable -> {
             String string = serviceSearchField.getText();
@@ -489,4 +491,7 @@ public class quoteMainController {
     /*
      * MUST BE REMOVED !!!!
      */
+    private void temp(){
+
+    }
 }
