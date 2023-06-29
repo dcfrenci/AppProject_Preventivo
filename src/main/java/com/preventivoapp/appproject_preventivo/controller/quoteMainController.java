@@ -424,7 +424,7 @@ public class quoteMainController {
         try{
             int selectedIndex = selectedIndexInQuoteTable(quoteTable);
             Quote quote = getQuoteList().get(selectedIndex);
-            Pdf pdf = new Pdf(setting.getPathQuote() + "\\" + quote.getPerson().getFirstName() + "_" + quote.getPerson().getLastName() + "_" + LocalDate.now().toString() + ".pdf", true);
+            Pdf pdf = new Pdf(setting.getPathQuote() + "\\" + quote.getPerson().getFirstName() + "_" + quote.getPerson().getLastName() + "_" + LocalDate.now() + ".pdf", true);
             pdf.createQuote(quote);
         } catch (NoSuchElementException e){
             showNoElementSelected();

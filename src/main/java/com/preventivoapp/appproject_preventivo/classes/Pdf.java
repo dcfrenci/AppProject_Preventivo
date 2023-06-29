@@ -19,6 +19,7 @@ public class Pdf {
     private float spaceSideShort;
     private float spaceSideLong;
     private float spaceTop;
+    private float leading;
     private PDFont font;
     private final String pathFile;
 
@@ -30,6 +31,7 @@ public class Pdf {
             this.spaceSideShort = 25;
             this.spaceSideLong = 40;
             this.spaceTop = 42;
+            this.leading = 1;
             this.font = PDType1Font.HELVETICA;
         }
     }
@@ -64,6 +66,10 @@ public class Pdf {
         return spaceTop;
     }
 
+    public float getLeading() {
+        return leading;
+    }
+
     public PDFont getFont() {
         return font;
     }
@@ -80,18 +86,18 @@ public class Pdf {
             float height = newPage.getCropBox().getHeight();
             float width = newPage.getCropBox().getWidth();
             //heading
-            float yHead = addHead(contentStream, quote.getPerson(), quote.getQuoteDate(), getSpaceSideShort(), height - getSpaceTop(), 1, getCharacterDimension(), width) + getSpaceTop();
+            float yHead = addHead(contentStream, quote.getPerson(), quote.getQuoteDate(), getSpaceSideShort(), height - getSpaceTop(), getLeading(), getCharacterDimension(), width) + getSpaceTop();
             //price table
                 //description
             String headTable = "Sottoponiamo alla vostra cortese attenzione il seguente preventivo e piano di cura";
             float yDescription = addParagraph(contentStream, headTable, getSpaceSideLong(), height - yHead - getCharacterDimension() * 3, width - getSpaceSideLong(), 1, getCharacterDimension()) + getCharacterDimension() * 3;
                 //table
-            float yTable = addTable(quote, contentStream, getSpaceSideShort(), height - yHead - yDescription - getCharacterDimension() * 2, 1, getCharacterDimension(), width) + getCharacterDimension() * 2;
+            float yTable = addTable(quote, contentStream, getSpaceSideShort(), height - yHead - yDescription - getCharacterDimension() * 2, getLeading(), getCharacterDimension(), width) + getCharacterDimension() * 2;
             //bottom page
                 //payment
-            float yPayment = addPaymentDescription(contentStream, getSpaceSideLong(), height - yHead - yDescription - yTable - getCharacterDimension() * 3, 1, getCharacterDimension(), width) + getCharacterDimension() * 3;
+            float yPayment = addPaymentDescription(contentStream, getSpaceSideLong(), height - yHead - yDescription - yTable - getCharacterDimension() * 3, getLeading(), getCharacterDimension(), width) + getCharacterDimension() * 3;
                 //sign
-            float ySign = addSign(contentStream, getSpaceSideLong(), height - yHead - yDescription - yTable - yPayment - getCharacterDimension() * 3, 1, getCharacterDimension(), width);
+            float ySign = addSign(contentStream, getSpaceSideLong(), height - yHead - yDescription - yTable - yPayment - getCharacterDimension() * 3, getLeading(), getCharacterDimension(), width);
             //save PDF
             contentStream.close();
             document.addPage(newPage);
@@ -212,7 +218,7 @@ public class Pdf {
     private double round(double price){
         price *= 100;
         price = Math.round(price);
-        return price /= 100;
+        return price / 100;
     }
     private float addPaymentDescription(PDPageContentStream contentStream, float x, float y, float leading, float characterDimension, float width) throws IOException {
         float writtenLines = 0;
