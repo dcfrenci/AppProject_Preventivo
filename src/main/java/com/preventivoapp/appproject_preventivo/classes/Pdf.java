@@ -6,14 +6,11 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.*;
-import org.apache.pdfbox.pdmodel.graphics.color.PDCalGray;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Pdf {
@@ -23,7 +20,7 @@ public class Pdf {
     private float spaceSideLong;
     private float spaceTop;
     private PDFont font;
-    private String pathFile;
+    private final String pathFile;
 
     public Pdf(String pathFile, boolean standard) {
         this.pathFile = pathFile;
@@ -168,7 +165,7 @@ public class Pdf {
         addLine(contentStream, "Novi di Modena tel. 059-677050", x, y - writtenLines * 3, leading, characterDimension, true);
         //dx
         addLine(contentStream, date.toString(), width - getSpaceSideShort(), y, leading, characterDimension, false);
-        addLine(contentStream, "Sig. " + person.getFirstName() + person.getLastName(), width - getSpaceSideShort(), y - writtenLines * 3, leading, characterDimension, false);
+        addLine(contentStream, "Sig. " + person.getFirstName()+ " " + person.getLastName(), width - getSpaceSideShort(), y - writtenLines * 3, leading, characterDimension, false);
         return writtenLines * 3;
     }
 
@@ -193,13 +190,16 @@ public class Pdf {
             addLine(contentStream, Double.toString(price), (width / 2) + (width / 4) - x, y - writtenLines, leading, characterDimension, false);
             if (service.getChosenService().getServicePriceForTooth() != 0){
                 price *= service.getChosenTeeth().size();
+                price = round(price);
                 addLine(contentStream, Double.toString(price), width - x, y - writtenLines, leading, characterDimension, false);
             } else {
                 price *= service.getTimeSelected();
+                price = round(price);
                 addLine(contentStream, Double.toString(price), width - x, y - writtenLines, leading, characterDimension, false);
             }
             writtenLines += characterDimension + leading;
             total += price;
+            System.out.println(price);
         }
         contentStream.setNonStrokingColor(Color.BLACK);
         contentStream.addRect(getSpaceSideShort(), y - writtenLines + 5, width - getSpaceSideShort() * 2, 1f);
@@ -209,7 +209,11 @@ public class Pdf {
         addLine(contentStream, Double.toString(total), width - x, y - writtenLines, leading, characterDimension, false);
         return writtenLines;
     }
-
+    private double round(double price){
+        price *= 100;
+        price = Math.round(price);
+        return price /= 100;
+    }
     private float addPaymentDescription(PDPageContentStream contentStream, float x, float y, float leading, float characterDimension, float width) throws IOException {
         float writtenLines = 0;
         String string = "Pagamento:";

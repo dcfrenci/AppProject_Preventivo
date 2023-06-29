@@ -117,15 +117,14 @@ public class quoteMainController {
     public void handleSaveQuotePath() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File previousDir = new File(setting.getPathQuote());
-        if (!setting.getPathQuote().equals("")) directoryChooser.setInitialDirectory(previousDir);
+        if (!setting.getPathQuote().equals("") && previousDir.exists()) directoryChooser.setInitialDirectory(previousDir);
         File file = directoryChooser.showDialog(null);
         if (file != null) {
             if (file.toString().contains(" ")) {
                 new Alert(Alert.AlertType.ERROR, "The directory name could not contain space character").showAndWait();
                 return;
             }
-            if (!new File(file + "\\quote").mkdir()) new Alert(Alert.AlertType.ERROR, "Could not create quote directory").showAndWait();
-            setting.setPathQuote(file + "\\quote");
+            setting.setPathQuote(file.toString());
         }
     }
 
@@ -280,7 +279,7 @@ public class quoteMainController {
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, serviceTable.getItems());
             //save setting
             file = new File(setting.getPathSetting() + "\\setting.json");
-            mapper.writerWithDefaultPrettyPrinter().writeValue(file, setting.getPath());
+            mapper.writerWithDefaultPrettyPrinter().writeValue(file, setting.getPathQuote());
         } catch (IOException e){
             new Alert(Alert.AlertType.ERROR, "Could not save data").showAndWait();
         }
@@ -418,6 +417,19 @@ public class quoteMainController {
         alert.showAndWait();
     }
 
+    /*
+     * Handler of EXPORT AS PDF BUTTON in the quote tab page
+     */
+    public void handleExportAsPdf() {
+        try{
+            int selectedIndex = selectedIndexInQuoteTable(quoteTable);
+            Quote quote = getQuoteList().get(selectedIndex);
+            Pdf pdf = new Pdf(setting.getPathQuote() + "\\" + quote.getPerson().getFirstName() + "_" + quote.getPerson().getLastName() + "_" + LocalDate.now().toString() + ".pdf", true);
+            pdf.createQuote(quote);
+        } catch (NoSuchElementException e){
+            showNoElementSelected();
+        }
+    }
     /*
      * QUOTE-LIST SERVICE-LIST METHODS: -------------------------------------------
      */

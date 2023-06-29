@@ -57,6 +57,11 @@
                            <bottom>
                               <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                 <buttons>
+                                    <Button mnemonicParsing="false" onAction="#handleExportAsPdf" text="Export as PDF">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </Button>
                                   <Button fx:id="quoteNew" mnemonicParsing="false" onAction="#handleNewQuote" text="New..." />
                                     <Button fx:id="quoteEdit" mnemonicParsing="false" onAction="#handleEditQuote" text="Edit..." />
                                     <Button fx:id="quoteRemove" mnemonicParsing="false" onAction="#handleDeleteQuote" text="Remove" />
