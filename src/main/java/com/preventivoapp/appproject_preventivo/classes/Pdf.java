@@ -8,6 +8,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.*;
 import org.apache.pdfbox.pdmodel.graphics.color.PDCalGray;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -79,41 +80,22 @@ public class Pdf {
         PDPage newPage = new PDPage();
         try {
             PDPageContentStream contentStream = new PDPageContentStream(document, newPage);
-            float position = 0;
             float height = newPage.getCropBox().getHeight();
             float width = newPage.getCropBox().getWidth();
             //heading
-            contentStream.setFont(getFont(), getCharacterDimension());
-            contentStream.setLeading(getCharacterDimension() + 1);
-                //sx
-            contentStream.beginText();
-            contentStream.newLineAtOffset(getSpaceSideShort(), height - getSpaceTop());
-            contentStream.showText("Studio dentistico associato");
-            contentStream.newLine();
-            contentStream.showText("Dott. Della Bella A. - Dott. Scarfone M.");
-            contentStream.newLine();
-            contentStream.showText("Via Martiri della Libertà n.21");
-            contentStream.newLine();
-            contentStream.showText("Novi di Modena tel. 059-677050");
-            contentStream.endText();
-                //dx
-            contentStream.beginText();
-            contentStream.newLineAtOffset(width - getSpaceSideShort() - getFont().getStringWidth("Preventivo del: " + quote.getQuoteDate().toString()) / 1000 * characterDimension, height - getSpaceTop());
-            contentStream.showText("Preventivo del: " + quote.getQuoteDate().toString());
-            contentStream.endText();
-            contentStream.beginText();
-            contentStream.newLineAtOffset(width - getSpaceSideShort() - getFont().getStringWidth("Sig. " + quote.getPerson().getLastName() + quote.getPerson().getFirstName() + 1) / 1000 * getCharacterDimension(), height - getSpaceTop() - getCharacterDimension() * 3 + 2);
-            contentStream.showText("Sig. " + quote.getPerson().getFirstName() + " " + quote.getPerson().getLastName());
-            contentStream.endText();
+            float yHead = addHead(contentStream, quote.getPerson(), quote.getQuoteDate(), getSpaceSideShort(), height - getSpaceTop(), 1, getCharacterDimension(), width) + getSpaceTop();
             //price table
+                //description
             String headTable = "Sottoponiamo alla vostra cortese attenzione il seguente preventivo e piano di cura";
-            float x = height - getSpaceTop() - 3 - getCharacterDimension() * 6;
-            int n = addParagraph(contentStream, headTable, x, getSpaceSideLong(), width - getSpaceSideLong(), 1, getCharacterDimension());
-            n = addParagraph(contentStream, "ciao", height - getSpaceTop(), getSpaceSideLong(), width, 1, getCharacterDimension());
+            float yDescription = addParagraph(contentStream, headTable, getSpaceSideLong(), height - yHead - getCharacterDimension() * 3, width - getSpaceSideLong(), 1, getCharacterDimension()) + getCharacterDimension() * 3;
+                //table
+            float yTable = addTable(quote, contentStream, getSpaceSideShort(), height - yHead - yDescription - getCharacterDimension() * 2, 1, getCharacterDimension(), width) + getCharacterDimension() * 2;
             //bottom page
-
+                //payment
+            float yPayment = addPaymentDescription(contentStream, getSpaceSideLong(), height - yHead - yDescription - yTable - getCharacterDimension() * 3, 1, getCharacterDimension(), width) + getCharacterDimension() * 3;
+                //sign
+            float ySign = addSign(contentStream, getSpaceSideLong(), height - yHead - yDescription - yTable - yPayment - getCharacterDimension() * 3, 1, getCharacterDimension(), width);
             //save PDF
-            //contentStream.endText();
             contentStream.close();
             document.addPage(newPage);
             document.save(getPathFile());
@@ -123,20 +105,24 @@ public class Pdf {
         }
     }
 
-    private void addLine(PDPageContentStream contentStream, ArrayList<String> lines, float x, float y, float leading, float fontDimension) throws IOException {
+    private float stringWidth(String string, float characterDimension, PDFont font) throws IOException{
+        return font.getStringWidth(string) / 1000 * characterDimension;
+    }
+
+    private void addLine(PDPageContentStream contentStream, String line, float x, float y, float leading, float fontDimension, boolean alignment) throws IOException {
         contentStream.beginText();
         contentStream.setFont(getFont(), fontDimension);
-        contentStream.setLeading(leading);
-        contentStream.newLineAtOffset(x, y);
-        for (String line: lines){
-            contentStream.showText(line);
-            contentStream.newLine();
+        contentStream.setLeading(fontDimension + leading);
+        if (!alignment) {
+            x -= stringWidth(line, fontDimension, getFont());
         }
+        contentStream.newLineAtOffset(x, y);
+        contentStream.showText(line);
         contentStream.endText();
     }
 
-    private int addParagraph(PDPageContentStream contentStream, String string, float x, float y, float yMax, float leading, float fontDimension) throws  IOException {
-        int writtenLines = 0;
+    private float addParagraph(PDPageContentStream contentStream, String string, float x, float y, float xMax, float leading, float fontDimension) throws  IOException {
+        float writtenLines = 0;
         //create the array list of words from the string
         ArrayList<String> words = new ArrayList<>();
         while (string.length() > 0){
@@ -153,50 +139,103 @@ public class Pdf {
         //write
         contentStream.beginText();
         contentStream.setFont(getFont(), fontDimension);
-        contentStream.setLeading(leading);
+        contentStream.setLeading(fontDimension + leading);
         contentStream.newLineAtOffset(x, y);
-        float lineDimension = 0;
+        float lineDimension = x;
         for (String word: words){
-            if (lineDimension + getFont().getStringWidth(word + 1) / 1000 * fontDimension < yMax - y){
-                lineDimension += getFont().getStringWidth(word + 1) / 1000 * fontDimension;
-                contentStream.showText(word);
+            if (lineDimension + stringWidth(word + " ", fontDimension, getFont()) < xMax){
+                lineDimension += stringWidth(word + " ", fontDimension, getFont());
+                contentStream.showText(word + " ");
             } else {
                 contentStream.newLine();
                 contentStream.showText(word + " ");
-                lineDimension = 0;
+                lineDimension = x + stringWidth(word + " ", fontDimension, getFont());
                 writtenLines++;
             }
         }
         contentStream.endText();
         contentStream.moveTo(0, 0);
+        return writtenLines * (fontDimension + leading);
+    }
+
+    private float addHead(PDPageContentStream contentStream, Person person, LocalDate date, float x, float y, float leading, float characterDimension, float width) throws IOException {
+        float writtenLines = 0;
+        //sx
+        addLine(contentStream, "Studio dentistico associato", x, y, leading, characterDimension, true);
+        writtenLines += characterDimension + leading;
+        addLine(contentStream, "Dott. Della Bella A. - Dott. Scarfone M.", x, y - writtenLines * 1, leading, characterDimension, true);
+        addLine(contentStream, "Via Martiri della Libertà n.21", x, y - writtenLines * 2, leading, characterDimension, true);
+        addLine(contentStream, "Novi di Modena tel. 059-677050", x, y - writtenLines * 3, leading, characterDimension, true);
+        //dx
+        addLine(contentStream, date.toString(), width - getSpaceSideShort(), y, leading, characterDimension, false);
+        addLine(contentStream, "Sig. " + person.getFirstName() + person.getLastName(), width - getSpaceSideShort(), y - writtenLines * 3, leading, characterDimension, false);
+        return writtenLines * 3;
+    }
+
+    private float addTable(Quote quote, PDPageContentStream contentStream, float x, float y, float leading, float characterDimension, float width) throws IOException{
+        float writtenLines = 0;
+        //column name
+        addLine(contentStream, "Descrizione", x, y, leading, characterDimension, true);
+        addLine(contentStream, "Prezzo", width / 2, y, leading, characterDimension, true);
+        addLine(contentStream, "Importo", (width / 2) + (width / 4), y, leading, characterDimension, true);
+        writtenLines += characterDimension + leading;
+        //fill columns
+        double total = 0;
+        for (ServiceDetail service: quote.getServicesChosen()){
+            StringBuilder description = new StringBuilder();
+            double price = service.getChosenService().getServicePrice();
+            description.append(service.getChosenService().getServiceName());
+            if (service.getChosenService().getServicePriceForTooth() != 0) {
+                description.append(" (").append(service.showTeeth()).append(")");
+                price = service.getChosenService().getServicePriceForTooth();
+            }
+            addParagraph(contentStream, description.toString(), x, y - writtenLines, width / 2, leading, characterDimension);
+            addLine(contentStream, Double.toString(price), (width / 2) + (width / 4) - x, y - writtenLines, leading, characterDimension, false);
+            if (service.getChosenService().getServicePriceForTooth() != 0){
+                price *= service.getChosenTeeth().size();
+                addLine(contentStream, Double.toString(price), width - x, y - writtenLines, leading, characterDimension, false);
+            } else {
+                price *= service.getTimeSelected();
+                addLine(contentStream, Double.toString(price), width - x, y - writtenLines, leading, characterDimension, false);
+            }
+            writtenLines += characterDimension + leading;
+            total += price;
+        }
+        contentStream.setNonStrokingColor(Color.BLACK);
+        contentStream.addRect(getSpaceSideShort(), y - writtenLines + 5, width - getSpaceSideShort() * 2, 1f);
+        contentStream.fill();
+        writtenLines += 11;
+        addLine(contentStream, "Totale:", (width / 2) + (width / 4), y - writtenLines, leading, characterDimension, true);
+        addLine(contentStream, Double.toString(total), width - x, y - writtenLines, leading, characterDimension, false);
         return writtenLines;
     }
-/*
-    public static void main(String[] args){
-        PDDocument document = new PDDocument();
-        PDPage newPage = new PDPage();
-        try {
-            float f = newPage.getCropBox().getHeight();
-            System.out.println("height =" + f);
-            PDPageContentStream contentStream = new PDPageContentStream(document, newPage);
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.HELVETICA, 15);
-            contentStream.newLineAtOffset(25, 750);
-            contentStream.showText("Studio dentistico associato");
-            contentStream.newLineAtOffset(0, - 20);
-            contentStream.showText("Dott. Della Bella A. - Dott. Scarfone M.");
-            contentStream.newLineAtOffset(0, - 20);
-            contentStream.showText("Via Martiri della Libertà n.21");
-            contentStream.newLineAtOffset(0, - 20);
-            contentStream.showText("Novi di Modena tel. 059-677050");
-            contentStream.endText();
-            contentStream.close();
-            document.addPage(newPage);
-            document.save(new File("C:\\Users\\Studi\\Desktop\\Product_Quote\\quote\\quote\\new.pdf"));
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-    }*/
+
+    private float addPaymentDescription(PDPageContentStream contentStream, float x, float y, float leading, float characterDimension, float width) throws IOException {
+        float writtenLines = 0;
+        String string = "Pagamento:";
+        addLine(contentStream, string, x, y, leading, characterDimension, true);
+        addParagraph(contentStream, "50% inizio lavori", x + stringWidth(string + "    ", characterDimension, getFont()), y - writtenLines, width - x, leading, characterDimension);
+        writtenLines += characterDimension + leading;
+        addParagraph(contentStream, "25% metà lavori", x + stringWidth(string + "    ", characterDimension, getFont()), y - writtenLines, width - x, leading, characterDimension);
+        writtenLines += characterDimension + leading;
+        addParagraph(contentStream, "25% fine lavori", x + stringWidth(string + "    ", characterDimension, getFont()), y - writtenLines, width - x, leading, characterDimension);
+        writtenLines += characterDimension + leading;
+        addParagraph(contentStream, "Pianificazione pagamenti condivisa con il paziente", x + stringWidth(string + "    ", characterDimension, getFont()), y - writtenLines, width - x, leading, characterDimension);
+        writtenLines += characterDimension + leading;
+        return writtenLines;
+    }
+
+    private float addSign(PDPageContentStream contentStream, float x, float y, float leading, float characterDimension, float width) throws IOException {
+        float writtenLines = 0;
+        addLine(contentStream, "Firma per accettazione", x, y, leading, characterDimension, true);
+        writtenLines += characterDimension + leading;
+        contentStream.setNonStrokingColor(Color.BLACK);
+        contentStream.addRect(getSpaceSideLong(), y - writtenLines - characterDimension * 2, width / 2 - x, 1f);
+        contentStream.fill();
+        writtenLines += 1 + characterDimension * 2;
+        return writtenLines;
+    }
+
     public static void main(String [] args){
         List<ServiceDetail> serviceDetails = new ArrayList<>();
         serviceDetails.add(new ServiceDetail(new Service(new SimpleStringProperty("Service 1"), 0.0, 175.0), List.of(18, 19, 20), 1));

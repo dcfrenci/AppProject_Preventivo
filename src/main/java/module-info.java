@@ -8,6 +8,7 @@ module com.preventivoapp.appproject_preventivo {
     requires com.fasterxml.jackson.datatype.jsr310;
     requires org.apache.fontbox;
     requires org.apache.pdfbox;
+    requires java.desktop;
     opens com.preventivoapp.appproject_preventivo to javafx.fxml;
     exports com.preventivoapp.appproject_preventivo;
     exports com.preventivoapp.appproject_preventivo.controller;

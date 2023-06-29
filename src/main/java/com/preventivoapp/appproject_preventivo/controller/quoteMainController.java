@@ -487,11 +487,4 @@ public class quoteMainController {
         if(selectedIndex < 0) throw new NoSuchElementException();
         return selectedIndex;
     }
-
-    /*
-     * MUST BE REMOVED !!!!
-     */
-    private void temp(){
-
-    }
 }
