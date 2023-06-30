@@ -15,11 +15,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.preventivoapp.appproject_preventivo.controller.quoteSettingController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../../CSS/pageStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.preventivoapp.appproject_preventivo.controller.quoteSettingController">
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane>
+            <AnchorPane styleClass="anchorPane">
                <children>
                   <GridPane layoutX="75.0" layoutY="42.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                     <columnConstraints>
@@ -46,7 +46,7 @@
                   </GridPane>
                </children>
             </AnchorPane>
-            <AnchorPane>
+            <AnchorPane styleClass="anchorPane">
                <children>
                   <Label stylesheets="@../../../../CSS/ParagraphTitle-view.css" text="Select services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
                   <ButtonBar buttonMinWidth="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
@@ -75,7 +75,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <AnchorPane>
+            <AnchorPane styleClass="anchorPane">
                <children>
                   <Label stylesheets="@../../../../CSS/ParagraphTitle-view.css" text="Chosen services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
                </children>
@@ -106,9 +106,9 @@
       </ButtonBar>
    </bottom>
    <top>
-      <AnchorPane BorderPane.alignment="CENTER">
+      <AnchorPane styleClass="anchorPaneTitle" stylesheets="@../../../../CSS/pageStyle.css" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="windowName" stylesheets="@../../../../CSS/quoteMainHeader-view.css" text="Create New Quote" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+            <Label fx:id="windowName" styleClass="pageTitle" stylesheets="@../../../../CSS/pageStyle.css" text="Create New Quote" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
          </children>
       </AnchorPane>
    </top>

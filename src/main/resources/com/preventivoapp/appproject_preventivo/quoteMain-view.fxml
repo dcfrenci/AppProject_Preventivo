@@ -15,9 +15,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.preventivoapp.appproject_preventivo.controller.quoteMainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../CSS/pageStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.preventivoapp.appproject_preventivo.controller.quoteMainController">
    <top>
-      <MenuBar BorderPane.alignment="CENTER">
+      <MenuBar stylesheets="@../../../CSS/pageStyle.css" BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -35,13 +35,13 @@
       </MenuBar>
    </top>
    <center>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="blankSpaceBar" stylesheets="@../../../CSS/pageStyle.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
           <Tab text="Quote">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <BorderPane layoutX="213.0" layoutY="107.0" prefHeight="345.6" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <BorderPane layoutX="213.0" layoutY="107.0" prefHeight="345.6" prefWidth="600.0" styleClass="bottomButtonBar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <center>
                               <TableView fx:id="quoteTable" BorderPane.alignment="CENTER">
                                 <columns>
@@ -55,7 +55,7 @@
                               </TableView>
                            </center>
                            <bottom>
-                              <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                              <ButtonBar buttonMinWidth="95.0" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                 <buttons>
                                     <Button mnemonicParsing="false" onAction="#handleExportAsPdf" text="Export as PDF">
                                        <opaqueInsets>
@@ -72,14 +72,14 @@
                               </ButtonBar>
                            </bottom>
                            <top>
-                              <AnchorPane BorderPane.alignment="CENTER">
+                              <AnchorPane id="anchorPane" styleClass="anchorPane" BorderPane.alignment="CENTER">
                                  <children>
                                     <ButtonBar prefHeight="40.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
                                        <buttons>
                                           <TextField fx:id="quoteSearchField" prefWidth="250.0" promptText="Search by LastName, Name..." />
                                        </buttons>
                                     </ButtonBar>
-                                    <Label stylesheets="@../../../CSS/quoteMainHeader-view.css" text="Quotation" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                                    <Label styleClass="tabTitle" stylesheets="@../../../CSS/pageStyle.css" text="Quotation" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
                                  </children>
                               </AnchorPane>
                            </top>
@@ -106,7 +106,7 @@
                               </TableView>
                            </center>
                            <bottom>
-                              <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                              <ButtonBar buttonMinWidth="95.0" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                 <buttons>
                                   <Button fx:id="serviceNew" mnemonicParsing="false" onAction="#handleNewService" text="New..." />
                                     <Button fx:id="serviceEdit" mnemonicParsing="false" onAction="#handleEditService" text="Edit..." />
@@ -120,7 +120,7 @@
                            <top>
                               <AnchorPane BorderPane.alignment="CENTER">
                                  <children>
-                                    <Label stylesheets="@../../../CSS/quoteMainHeader-view.css" text="Services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                                    <Label styleClass="tabTitle" text="Services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
                                     <ButtonBar prefHeight="40.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
                                       <buttons>
                                           <TextField fx:id="serviceSearchField" prefWidth="250.0" promptText="Search by Name..." />
