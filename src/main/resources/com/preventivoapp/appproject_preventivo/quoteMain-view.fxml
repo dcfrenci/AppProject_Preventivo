@@ -15,9 +15,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../CSS/pageStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.preventivoapp.appproject_preventivo.controller.quoteMainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@CSS/pageStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.preventivoapp.appproject_preventivo.controller.quoteMainController">
    <top>
-      <MenuBar stylesheets="@../../../CSS/pageStyle.css" BorderPane.alignment="CENTER">
+      <MenuBar stylesheets="@CSS/pageStyle.css" BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -35,7 +35,7 @@
       </MenuBar>
    </top>
    <center>
-      <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="blankSpaceBar" stylesheets="@../../../CSS/pageStyle.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="blankSpaceBar" stylesheets="@CSS/pageStyle.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
           <Tab text="Quote">
             <content>
@@ -79,7 +79,7 @@
                                           <TextField fx:id="quoteSearchField" prefWidth="250.0" promptText="Search by LastName, Name..." />
                                        </buttons>
                                     </ButtonBar>
-                                    <Label styleClass="tabTitle" stylesheets="@../../../CSS/pageStyle.css" text="Quotation" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                                    <Label styleClass="tabTitle" stylesheets="@CSS/pageStyle.css" text="Quotation" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
                                  </children>
                               </AnchorPane>
                            </top>
@@ -120,7 +120,7 @@
                            <top>
                               <AnchorPane BorderPane.alignment="CENTER">
                                  <children>
-                                    <Label styleClass="tabTitle" text="Services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                                    <Label styleClass="tabTitle" stylesheets="@CSS/pageStyle.css" text="Services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
                                     <ButtonBar prefHeight="40.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
                                       <buttons>
                                           <TextField fx:id="serviceSearchField" prefWidth="250.0" promptText="Search by Name..." />

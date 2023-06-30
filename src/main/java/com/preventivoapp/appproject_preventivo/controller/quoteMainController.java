@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.preventivoapp.appproject_preventivo.QuoteMainApplication;
 import com.preventivoapp.appproject_preventivo.classes.*;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -17,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.*;
 
 import java.io.*;
@@ -41,6 +43,8 @@ public class quoteMainController {
     @FXML private TableColumn<Service, Double> servicePriceForToothColumn;
     @FXML private TextField serviceSearchField;
     @FXML private TableView<Service> serviceTable;
+    @FXML private Button serviceNew;
+    @FXML private Button serviceEdit;
 
     //VARIABLES -->
     private ObservableList<Service> serviceList;
@@ -83,10 +87,10 @@ public class quoteMainController {
             //check if the directory exists
             File dir = new File(setting.getPathSetting());
             if (!dir.exists()){
-                if (!new File(setting.getPathSetting()).mkdir()) new Alert(Alert.AlertType.ERROR, "Could not create setting directory").showAndWait();
-                if (!new File(setting.getPathSetting() + "\\setting.json").createNewFile()) new Alert(Alert.AlertType.ERROR, "Could not create setting file").showAndWait();
-                if (!new File(setting.getPathSetting() + "\\quoteList.json").createNewFile()) new Alert(Alert.AlertType.ERROR, "Could not create quoteList file").showAndWait();
-                if (!new File(setting.getPathSetting() + "\\serviceList.json").createNewFile()) new Alert(Alert.AlertType.ERROR, "Could not create serviceList file").showAndWait();
+                if (!new File(setting.getPathSetting()).mkdir()) createAlertError("Could not create setting directory");
+                if (!new File(setting.getPathSetting() + "\\setting.json").createNewFile()) createAlertError("Could not create setting file");
+                if (!new File(setting.getPathSetting() + "\\quoteList.json").createNewFile()) createAlertError("Could not create quoteList file");
+                if (!new File(setting.getPathSetting() + "\\serviceList.json").createNewFile()) createAlertError("Could not create serviceList file");
                 //set the quote directory
                 handleSaveQuotePath();
                 //load QUOTE and SERVICE table
@@ -95,7 +99,7 @@ public class quoteMainController {
             } else {
                 //check if the file already exists
                 if (!new File(setting.getPathSetting() + "\\setting.json").exists()) {
-                    new Alert(Alert.AlertType.ERROR, "Could not find setting file").showAndWait();
+                    createAlertError("Could not find setting file");
                     return;
                 }
                 File file = new File(setting.getPathSetting() + "\\setting.json");
@@ -109,7 +113,7 @@ public class quoteMainController {
                 loadServices(true);
             }
         } catch (IOException e){
-            new Alert(Alert.AlertType.ERROR, "Could not load data").showAndWait();
+            createAlertError("Could not load data");
             e.printStackTrace();
         }
     }
@@ -121,7 +125,7 @@ public class quoteMainController {
         File file = directoryChooser.showDialog(null);
         if (file != null) {
             if (file.toString().contains(" ")) {
-                new Alert(Alert.AlertType.ERROR, "The directory name could not contain space character").showAndWait();
+                createAlertError("The directory name could not contain space character");
                 return;
             }
             setting.setPathQuote(file.toString());
@@ -189,6 +193,14 @@ public class quoteMainController {
         }
     }
 
+    private void createAlertError(String string) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
+        alert.setContentText(string);
+        alert.showAndWait();
+    }
     /*
      * LOADING AND SAVING
      */
@@ -247,7 +259,7 @@ public class quoteMainController {
             List<Quote> loadedQuote = mapper.readValue(file, new TypeReference<>() {});
             quoteList.addAll(loadedQuote);
         } catch (IOException e){
-            new Alert(Alert.AlertType.ERROR, "Could not load data").showAndWait();
+            createAlertError("Could not load data");
             e.printStackTrace();
         }
     }
@@ -262,7 +274,7 @@ public class quoteMainController {
             List<Service> loadedService = mapper.readValue(file, new TypeReference<>() {});
             serviceList.addAll(loadedService);
         } catch (IOException e){
-            new Alert(Alert.AlertType.ERROR, "Could not load data").showAndWait();
+            createAlertError("Could not load data");
             e.printStackTrace();
         }
     }
@@ -281,7 +293,7 @@ public class quoteMainController {
             file = new File(setting.getPathSetting() + "\\setting.json");
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, setting.getPathQuote());
         } catch (IOException e){
-            new Alert(Alert.AlertType.ERROR, "Could not save data").showAndWait();
+            createAlertError("Could not load data");
         }
     }
 
@@ -300,6 +312,7 @@ public class quoteMainController {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("New Service");
         dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initOwner(serviceNew.getScene().getWindow());
         dialog.setDialogPane(parent);
         dialog.show();
         Button save = (Button) dialog.getDialogPane().lookupButton(ButtonType.APPLY);
@@ -324,6 +337,7 @@ public class quoteMainController {
         Stage stage = new Stage();
         stage.setMaximized(true);
         stage.setTitle("New Quote");
+        stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
         stage.setScene(new Scene(parent));
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(quoteNew.getScene().getWindow());
@@ -352,8 +366,9 @@ public class quoteMainController {
         serviceSettingController.setServiceSettingController((Service) serviceTable.getItems().get(indexSelected).clone());
         //Create a new dialog pane
         Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("New Service");
+        dialog.setTitle("Edit Service");
         dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initOwner(serviceEdit.getScene().getWindow());
         dialog.setDialogPane(parent);
         Optional<ButtonType> clickedButton = dialog.showAndWait();
         if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.APPLY){
@@ -380,6 +395,7 @@ public class quoteMainController {
         Stage stage = new Stage();
         stage.setMaximized(true);
         stage.setTitle("Edit Quote");
+        stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
         stage.setScene(new Scene(parent));
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(quoteNew.getScene().getWindow());
@@ -413,6 +429,9 @@ public class quoteMainController {
     public void showNoElementSelected(){
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("No element selected");
+        //alert.initOwner(quoteRemove.getScene().getWindow());
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
         alert.setContentText("Please select an element in the table.");
         alert.showAndWait();
     }

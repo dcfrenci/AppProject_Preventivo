@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../../CSS/pageStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.preventivoapp.appproject_preventivo.controller.quoteSettingController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../CSS/pageStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.preventivoapp.appproject_preventivo.controller.quoteSettingController">
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
@@ -35,11 +35,11 @@
                         <Label text="Name" />
                         <Label text="LastName" GridPane.rowIndex="1" />
                         <Label text="Date" GridPane.rowIndex="2" />
-                        <TextField fx:id="newQuoteName" GridPane.columnIndex="1" />
-                        <TextField fx:id="newQuoteLastName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="newQuoteName" promptText="Name" GridPane.columnIndex="1" />
+                        <TextField fx:id="newQuoteLastName" promptText="Last Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
-                              <DatePicker fx:id="newQuoteDate" layoutX="48.0" layoutY="4.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="2.0" />
+                              <DatePicker fx:id="newQuoteDate" layoutX="48.0" layoutY="4.0" promptText="Date" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="2.0" />
                            </children>
                         </AnchorPane>
                      </children>
@@ -48,7 +48,7 @@
             </AnchorPane>
             <AnchorPane styleClass="anchorPane">
                <children>
-                  <Label stylesheets="@../../../../CSS/ParagraphTitle-view.css" text="Select services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                  <Label styleClass="paragraphTitle" stylesheets="@../CSS/pageStyle.css" text="Select services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
                   <ButtonBar buttonMinWidth="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
                     <buttons>
                         <ButtonBar prefHeight="40.0">
@@ -77,7 +77,7 @@
             </TableView>
             <AnchorPane styleClass="anchorPane">
                <children>
-                  <Label stylesheets="@../../../../CSS/ParagraphTitle-view.css" text="Chosen services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                  <Label styleClass="paragraphTitle" stylesheets="@../CSS/pageStyle.css" text="Chosen services" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
                </children>
             </AnchorPane>
             <TableView fx:id="quoteSelectedService" onMouseClicked="#handleTeethSelected">
@@ -106,9 +106,9 @@
       </ButtonBar>
    </bottom>
    <top>
-      <AnchorPane styleClass="anchorPaneTitle" stylesheets="@../../../../CSS/pageStyle.css" BorderPane.alignment="CENTER">
+      <AnchorPane styleClass="anchorPaneTitle" stylesheets="@../CSS/pageStyle.css" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="windowName" styleClass="pageTitle" stylesheets="@../../../../CSS/pageStyle.css" text="Create New Quote" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+            <Label fx:id="windowName" styleClass="pageTitle" stylesheets="@../CSS/pageStyle.css" text="Create New Quote" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
          </children>
       </AnchorPane>
    </top>

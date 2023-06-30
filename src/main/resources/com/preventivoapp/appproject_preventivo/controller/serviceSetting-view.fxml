@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.preventivoapp.appproject_preventivo.controller.serviceSettingController">
+<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="480.0" styleClass="anchorPane" stylesheets="@../CSS/pageStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.preventivoapp.appproject_preventivo.controller.serviceSettingController">
     <header>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0">
          <children>
-            <Label fx:id="windowName" layoutX="60.0" layoutY="40.0" stylesheets="@../../../../CSS/quoteMainHeader-view.css" text="New Service" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+            <Label fx:id="windowName" layoutX="60.0" layoutY="40.0" styleClass="tabTitle" stylesheets="@../CSS/pageStyle.css" text="New Service" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
             <GridPane layoutX="23.0" layoutY="67.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="65.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

@@ -1,0 +1,91 @@
+.text {
+    -fx-font-size:  12 px;
+    -fx-font-family: Helvetica;
+}
+/*MENU*/
+.menu-bar {
+    -fx-background-color: #27374D;
+}
+.menu-item {
+    -fx-background-color: #27374D;
+    -fx-border-color: #27374D;
+}
+.menu-bar .label{
+    -fx-text-fill: white;
+    -fx-font-size:  12 px;
+}
+/*TAB*/
+.tab-pane {
+    -fx-tab-min-width: 70px;
+}
+.blankSpaceBar {
+    -fx-background-color: white;
+}
+.blankSpaceBar:top .tab-content-area{
+    -fx-border-color: #526D82 transparent transparent transparent;
+    -fx-border-width: 5 0 0 0;
+}/**/
+.tab-header-background {
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #526D82;
+}
+.tab {
+    -fx-background-color: white;
+}
+.table-view {
+    -fx-background-color: #DDE6ED;
+}
+.table-view .column-header{
+    -fx-background-color: white;
+}
+.tab-header-area .headers-region .tab:top{
+    -fx-background-color: white;
+    -fx-focus-color: transparent;
+}
+.tab-header-area .headers-region .tab:selected:top{
+    -fx-background-color: #526D82;
+}
+.tab-header-area .headers-region .tab:top .tab-container .tab-label{
+
+    -fx-text-fill: black;
+}
+.tab-header-area .headers-region .tab:selected:top .tab-container .tab-label{
+    -fx-text-fill: white;
+    -fx-focus-color: transparent;
+}
+/*BUTTON*/
+.bottomButtonBar {
+    -fx-background-color: white;
+}
+.button{
+    -fx-background-color: #27374D;
+    -fx-text-fill: white;
+    -fx-border-radius: 5 5 5 5;
+}
+.button:hover, .button:click{
+    -fx-background-color: white;
+    -fx-border-color: white;
+    -fx-text-fill: black;
+    -fx-border-radius: 5 5 5 5;
+}
+/*QUOTE SETTING*/
+.pageTitle .text{
+    -fx-font-size: 27 px;
+    -fx-fill: white;
+}
+.anchorPaneTitle{
+    -fx-background-color: #27374D;
+}
+
+/*GENERAL*/
+.paragraphTitle {
+    -fx-font-size:  20 px;
+    -fx-fond-weight: bold;
+}
+.tabTitle .text{
+    -fx-font-size: 23 px;
+    -fx-font-weight: bold;
+}
+.anchorPane{
+    -fx-background-color: white;
+}

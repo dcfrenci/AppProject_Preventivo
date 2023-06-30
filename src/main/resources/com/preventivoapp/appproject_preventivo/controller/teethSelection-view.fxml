@@ -8,7 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.preventivoapp.appproject_preventivo.controller.teethSelectionController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" styleClass="anchorPane" stylesheets="@../CSS/pageStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.preventivoapp.appproject_preventivo.controller.teethSelectionController">
    <children>
       <CheckBox fx:id="tooth18" layoutX="184.0" layoutY="214.0" mnemonicParsing="false" onAction="#handleChangeState" />
       <CheckBox fx:id="tooth17" layoutX="189.0" layoutY="184.0" mnemonicParsing="false" onAction="#handleChangeState" />
@@ -49,10 +49,10 @@
             <Button mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel" />
         </buttons>
       </ButtonBar>
-      <Label layoutX="10.0" layoutY="21.0" stylesheets="@../../../../CSS/quoteMainHeader-view.css" text="Teeth Selection" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+      <Label layoutX="10.0" layoutY="21.0" styleClass="tabTitle" stylesheets="@../CSS/pageStyle.css" text="Teeth Selection" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
       <ImageView fitHeight="455.0" fitWidth="314.0" layoutX="183.0" layoutY="17.0">
          <image>
-            <Image url="@../../../../Images/teeth-image.png" />
+            <Image url="@../Images/teeth-image.png" />
          </image>
       </ImageView>
    </children>

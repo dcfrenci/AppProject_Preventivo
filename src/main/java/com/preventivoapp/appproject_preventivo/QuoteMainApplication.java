@@ -18,8 +18,7 @@ public class QuoteMainApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(QuoteMainApplication.class.getResource("quoteMain-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         primaryStage.setTitle("Quote Maker");
-        //primaryStage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResource("icons8-documento-64.png")).openStream()));
-        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("icons8-documento-64.png"))));
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Images/program-icon.png"))));
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);
         primaryStage.show();

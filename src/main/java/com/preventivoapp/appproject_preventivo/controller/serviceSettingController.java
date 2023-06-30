@@ -1,10 +1,15 @@
 package com.preventivoapp.appproject_preventivo.controller;
 
+import com.preventivoapp.appproject_preventivo.QuoteMainApplication;
 import com.preventivoapp.appproject_preventivo.classes.Service;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
+import java.util.Objects;
 
 public class serviceSettingController extends quoteMainController {
     @FXML private TextField serviceNameField;
@@ -63,6 +68,8 @@ public class serviceSettingController extends quoteMainController {
         if (service.getServiceName().length() == 0){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not all fields were inserted");
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
             alert.setContentText("Please insert the service's name.");
             alert.showAndWait();
             return false;
@@ -70,6 +77,8 @@ public class serviceSettingController extends quoteMainController {
         if (service.getServicePrice() != 0 && service.getServicePriceForTooth() != 0){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not all fields were inserted correctly");
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
             alert.setContentText("Please choose between \"Price\" and \"Price For Tooth\".");
             alert.showAndWait();
             return false;
@@ -77,49 +86,12 @@ public class serviceSettingController extends quoteMainController {
         if ((service.getServicePrice() <= 0 && service.getServicePriceForTooth() <= 0) || (containsAlphabetic(servicePriceField.getText()) || containsAlphabetic(servicePriceForToothField.getText()))){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not all fields were inserted correctly");
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
             alert.setContentText("Please choose a positive number for \"Price\" or \"Price For Tooth\".");
             alert.showAndWait();
             return false;
         }
         return true;
     }
-    /*@FXML
-    private Button newServiceCancel;
-    @FXML
-    private TextField newServiceNameColumn;
-    @FXML
-    private TextField newServicePriceColumn;
-    @FXML
-    private TextField newServicePriceForToothColumn;
-    @FXML
-    private Button newServiceSave;
-
-    Service newService;
-
-    @FXML
-    public void initialize() {
-        newServiceNameColumn.textProperty().addListener((observable, oldValue, newValue) -> service.setServiceName(newValue));
-        newServicePriceColumn.textProperty().addListener((observable, oldValue, newValue) -> service.setServicePrice(Double.valueOf(newValue)));
-        newServicePriceForToothColumn.textProperty().addListener((observable, oldValue, newValue) -> service.setServicePrice(Double.valueOf(newValue)));
-    }
-
-    void showIncorrectInsertionAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Field filled incorrectly");
-        alert.setContentText("Please re-enter che correct values");
-        alert.showAndWait();
-    }
-
-
-    public void handleSavePerson() {
-        try {
-            if ( service.getServiceName() != null && ((service.getServicePrice() > 0 && service.getServicePriceForTooth() <= 0) || (service.getServicePrice() <= 0 && service.getServicePriceForTooth() > 0)) ) {
-                addServiceToList(service);
-            } else throw new NoSuchElementException();
-        } catch (NoSuchElementException e) {
-            showIncorrectInsertionAlert();
-        }
-
-    }*/
 }

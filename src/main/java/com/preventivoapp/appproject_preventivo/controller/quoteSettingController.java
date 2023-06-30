@@ -1,5 +1,6 @@
 package com.preventivoapp.appproject_preventivo.controller;
 
+import com.preventivoapp.appproject_preventivo.QuoteMainApplication;
 import com.preventivoapp.appproject_preventivo.classes.Quote;
 import com.preventivoapp.appproject_preventivo.classes.Service;
 import com.preventivoapp.appproject_preventivo.classes.ServiceDetail;
@@ -16,12 +17,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class quoteSettingController extends quoteMainController{
     //NEW QUOTE -->
@@ -145,6 +148,8 @@ public class quoteSettingController extends quoteMainController{
         if (quote.getPerson().firstNameProperty().toString().compareTo("") == 0 || quote.getPerson().lastNameProperty().toString().compareTo("") == 0 || quote.getQuoteDate().equals(LocalDate.of(0, 1, 1))){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not all fields were inserted");
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
             alert.setContentText("Please insert all the person detail and the date.");
             alert.showAndWait();
             return;
@@ -152,6 +157,8 @@ public class quoteSettingController extends quoteMainController{
         if (quote.getServicesChosen().size() == 0){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("No services selected");
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
             alert.setContentText("Please select one or more services.");
             alert.showAndWait();
             return;
@@ -161,6 +168,8 @@ public class quoteSettingController extends quoteMainController{
                 if (serviceDetail.getChosenTeeth() == null || serviceDetail.getChosenTeeth().size() == 0){
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Not all fields were inserted");
+                    Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
                     alert.setContentText("Please select the teeth for \"" + serviceDetail.getChosenService().getServiceName() + "\" service.");
                     alert.showAndWait();
                     return;
@@ -212,6 +221,7 @@ public class quoteSettingController extends quoteMainController{
         teethSelectionController.setTeethSelectionController(quoteSelectedService.getItems().get(selectedIndex).getChosenTeeth());
         Stage stage = new Stage();
         stage.setTitle("Select teeth");
+        stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
         stage.setScene(new Scene(parent));
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(windowName.getScene().getWindow());
