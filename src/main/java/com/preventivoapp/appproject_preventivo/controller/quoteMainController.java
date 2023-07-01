@@ -17,16 +17,21 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.*;
 
+import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.List;
 
 public class quoteMainController {
     //QUOTE TAB -->
@@ -429,18 +434,40 @@ public class quoteMainController {
     public void showNoElementSelected(){
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("No element selected");
-        //alert.initOwner(quoteRemove.getScene().getWindow());
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
         alert.setContentText("Please select an element in the table.");
         alert.showAndWait();
     }
-
+    /*
+     * Handler of PREVIEW in the quote tab page
+     */
+    public void handlePreview(Quote quote) throws IOException {
+        //create pdf
+        String path = System.getProperty("user.dir") + "\\setting\\temp.pdf";
+        Pdf pdf = new Pdf(path, true);
+        pdf.createQuote(quote);
+        File file = new File(path);
+        if (file.exists()){
+            if (Desktop.isDesktopSupported()){
+                Desktop.getDesktop().open(file);
+                file.deleteOnExit();
+                return;
+            }
+        }
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
+        alert.setContentText("Could not show the preview of the quote");
+        alert.showAndWait();
+        File fil = new File(path);
+    }
     /*
      * Handler of EXPORT AS PDF BUTTON in the quote tab page
      */
     public void handleExportAsPdf() {
-        try{
+        try {
             int selectedIndex = selectedIndexInQuoteTable(quoteTable);
             Quote quote = getQuoteList().get(selectedIndex);
             Pdf pdf = new Pdf(setting.getPathQuote() + "\\" + quote.getPerson().getFirstName() + "_" + quote.getPerson().getLastName() + "_" + LocalDate.now() + ".pdf", true);

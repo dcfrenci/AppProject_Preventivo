@@ -100,7 +100,7 @@ public class Pdf {
             float ySign = addSign(contentStream, getSpaceSideLong(), height - yHead - yDescription - yTable - yPayment - getCharacterDimension() * 3, getLeading(), getCharacterDimension(), width);
             //save PDF
             contentStream.close();
-            document.addPage(newPage);
+            if (yHead + yDescription + yTable + yPayment + ySign <= height) document.addPage(newPage);
             document.save(getPathFile());
             document.close();
         } catch (IOException e){
@@ -192,20 +192,22 @@ public class Pdf {
                 description.append(" (").append(service.showTeeth()).append(")");
                 price = service.getChosenService().getServicePriceForTooth();
             }
-            addParagraph(contentStream, description.toString(), x, y - writtenLines, width / 2, leading, characterDimension);
-            addLine(contentStream, Double.toString(price), (width / 2) + (width / 4) - x, y - writtenLines, leading, characterDimension, false);
+            float descriptionHeight = addParagraph(contentStream, description.toString(), x, y - writtenLines, width / 2, leading, characterDimension);
+            writtenLines += descriptionHeight;
+            if (service.getChosenService().getServicePrice() > 0 && service.getChosenTeeth().size() > 1){
+                addLine(contentStream, "(" + service.getChosenTeeth().size() + "x) " + price, (width / 2) + (width / 4) - x, y - writtenLines, leading, characterDimension, false);
+            } else {
+                addLine(contentStream, Double.toString(price), (width / 2) + (width / 4) - x, y - writtenLines, leading, characterDimension, false);
+            }
             if (service.getChosenService().getServicePriceForTooth() != 0){
                 price *= service.getChosenTeeth().size();
-                price = round(price);
-                addLine(contentStream, Double.toString(price), width - x, y - writtenLines, leading, characterDimension, false);
             } else {
                 price *= service.getTimeSelected();
-                price = round(price);
-                addLine(contentStream, Double.toString(price), width - x, y - writtenLines, leading, characterDimension, false);
             }
+            price = round(price);
+            addLine(contentStream, Double.toString(price), width - x, y - writtenLines, leading, characterDimension, false);
             writtenLines += characterDimension + leading;
             total += price;
-            System.out.println(price);
         }
         contentStream.setNonStrokingColor(Color.BLACK);
         contentStream.addRect(getSpaceSideShort(), y - writtenLines + 5, width - getSpaceSideShort() * 2, 1f);
@@ -250,9 +252,9 @@ public class Pdf {
         List<ServiceDetail> serviceDetails = new ArrayList<>();
         serviceDetails.add(new ServiceDetail(new Service(new SimpleStringProperty("Service 1"), 0.0, 175.0), List.of(18, 19, 20), 1));
         serviceDetails.add(new ServiceDetail(new Service(new SimpleStringProperty("Service 2"), 750.0, 0.0), List.of(18, 19, 20), 3));
-        serviceDetails.add(new ServiceDetail(new Service(new SimpleStringProperty("Service with a very long name to write down"), 0.0, 175.0), List.of(18, 19, 20), 1));
+        serviceDetails.add(new ServiceDetail(new Service(new SimpleStringProperty("Service with a very long name to write down maybe too long to be written in one single line"), 0.0, 175.0), List.of(18, 19, 20), 1));
         Quote quote = new Quote(new Person(new SimpleStringProperty("Francesco"), new SimpleStringProperty("Della Casa")), serviceDetails, new SimpleObjectProperty<>(LocalDate.now()));
-        Pdf pdf = new Pdf("C:\\Users\\Studi\\Desktop\\Product_Quote\\quote\\quote\\temp.pdf", true);
+        Pdf pdf = new Pdf("C:\\Users\\dcfre\\Desktop\\programma\\temp.pdf", true);
         pdf.createQuote(quote);
     }
 }

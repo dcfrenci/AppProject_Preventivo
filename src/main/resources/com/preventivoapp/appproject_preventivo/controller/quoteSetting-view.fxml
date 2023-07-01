@@ -98,7 +98,7 @@
         <buttons>
           <Button fx:id="newQuoteSave" mnemonicParsing="false" onAction="#handleNewQuoteSave" text="Save" />
             <Button fx:id="newQuoteRemove" mnemonicParsing="false" onAction="#handleNewQuoteRemove" text="Remove" />
-            <Button fx:id="newQuotePreview" mnemonicParsing="false" text="Preview" />
+            <Button fx:id="newQuotePreview" mnemonicParsing="false" onAction="#handlePreviewButton" text="Preview" />
         </buttons>
          <BorderPane.margin>
             <Insets right="10.0" />

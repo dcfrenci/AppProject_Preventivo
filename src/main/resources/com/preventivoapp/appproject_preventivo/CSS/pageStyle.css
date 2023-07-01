@@ -23,7 +23,7 @@
 }
 .blankSpaceBar:top .tab-content-area{
     -fx-border-color: #526D82 transparent transparent transparent;
-    -fx-border-width: 5 0 0 0;
+    -fx-border-width: 3.5 0 0 0;
 }/**/
 .tab-header-background {
     -fx-border-width: 0 0 1 0;

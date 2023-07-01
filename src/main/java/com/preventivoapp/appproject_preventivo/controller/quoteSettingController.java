@@ -236,4 +236,29 @@ public class quoteSettingController extends quoteMainController{
             }
         }
     }
+
+    /**
+     * Method to handle QUOTE PREVIEW
+     */
+    public void handlePreviewButton() throws IOException {
+        boolean complete = quote.getPerson().firstNameProperty().toString().compareTo("") != 0 && quote.getPerson().lastNameProperty().toString().compareTo("") != 0 && !quote.getQuoteDate().equals(LocalDate.of(0, 1, 1));
+        if (quote.getServicesChosen().size() == 0) complete = false;
+        for(ServiceDetail serviceDetail: quote.getServicesChosen()){
+            if (serviceDetail.getChosenService().getServicePriceForTooth() > 0){
+                if (serviceDetail.getChosenTeeth() == null || serviceDetail.getChosenTeeth().size() == 0){
+                    complete = false;
+                    break;
+                }
+            }
+        }
+        if (complete) handlePreview(quote);
+        else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Incomplete quote");
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
+            alert.setContentText("Please insert all the quote requirement");
+            alert.showAndWait();
+        }
+    }
 }
