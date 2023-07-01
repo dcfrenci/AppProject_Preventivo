@@ -209,6 +209,16 @@ public class quoteMainController {
         }
     }
 
+    public void handleUserGuide() throws IOException {
+        //Open the user guide
+        String path = System.getProperty("user.dir")+ "/src/main/resources/com/preventivoapp/appproject_preventivo/Pdf/quoteProgram-manual.pdf";
+        File file = new File(path);
+        if (file.exists()){
+            if (Desktop.isDesktopSupported()){
+                Desktop.getDesktop().open(file);
+            }
+        }
+    }
     private void createAlertError(String string) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -426,9 +436,21 @@ public class quoteMainController {
      */
     @FXML
     public void handleDeleteQuote(){
+
         try{
             int selectedIndex = selectedIndexInQuoteTable(quoteTable);
-            removeQuoteToList(selectedIndex);
+            Quote quote = getQuoteList().get(selectedIndex);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.initModality(Modality.WINDOW_MODAL);
+            alert.setTitle("Delete confirmation");
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
+            alert.setHeaderText("Delete the quote: \"" + quote.getPerson().getLastName() + " " + quote.getPerson().getFirstName() + "\" ?");
+            alert.setContentText("Are you sure you want to delete this quote?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.isPresent() && result.get() == ButtonType.OK) {
+                removeQuoteToList(selectedIndex);
+            }
         } catch (NoSuchElementException e){
             showNoElementSelected();
         }
@@ -437,7 +459,18 @@ public class quoteMainController {
     public void handleDeleteService(){
         try{
             int selectedIndex = selectedIndexInServiceTable(serviceTable);
-            removeServiceToList(selectedIndex);
+            Service service = getServicesList().get(selectedIndex);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.initModality(Modality.WINDOW_MODAL);
+            alert.setTitle("Delete confirmation");
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
+            alert.setHeaderText("Delete the service: \"" + service.getServiceName() + "\" ?");
+            alert.setContentText("Are you sure you want to delete this service?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.isPresent() && result.get() == ButtonType.OK) {
+                removeServiceToList(selectedIndex);
+            }
         } catch (NoSuchElementException e){
             showNoElementSelected();
         }
