@@ -24,7 +24,7 @@
 .blankSpaceBar:top .tab-content-area{
     -fx-border-color: #526D82 transparent transparent transparent;
     -fx-border-width: 3.5 0 0 0;
-}/**/
+}
 .tab-header-background {
     -fx-border-width: 0 0 1 0;
     -fx-border-color: #526D82;
@@ -32,12 +32,7 @@
 .tab {
     -fx-background-color: white;
 }
-.table-view {
-    -fx-background-color: #DDE6ED;
-}
-.table-view .column-header{
-    -fx-background-color: white;
-}
+
 .tab-header-area .headers-region .tab:top{
     -fx-background-color: white;
     -fx-focus-color: transparent;
@@ -53,11 +48,18 @@
     -fx-text-fill: white;
     -fx-focus-color: transparent;
 }
+/*TABLE*/
+.table-view {
+    -fx-background-color: #DDE6ED;
+}
+.table-view .column-header {
+    -fx-background-color: white;
+}
 /*BUTTON*/
 .bottomButtonBar {
     -fx-background-color: white;
 }
-.button{
+.button {
     -fx-background-color: #27374D;
     -fx-text-fill: white;
     -fx-border-radius: 5 5 5 5;

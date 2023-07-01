@@ -67,6 +67,17 @@ public class quoteMainController {
         quoteNameColumn.setCellValueFactory(param -> param.getValue().getPerson().firstNameProperty());
         quoteLastNameColumn.setCellValueFactory(param -> param.getValue().getPerson().lastNameProperty());
         quoteDateColumn.setCellValueFactory(new PropertyValueFactory<>("quoteDate"));
+        quoteTable.setOnMouseClicked(event -> {
+            if (event.getClickCount() >= 2) {
+                try {
+                    int selectedIndex = selectedIndexInQuoteTable(quoteTable);
+                    Quote quote = getQuoteList().get(selectedIndex);
+                    handlePreview(quote);
+                } catch (NoSuchElementException | IOException e) {
+                    showNoElementSelected();
+                }
+            }
+        });
 
         //Load PRICE LIST table
         serviceNameColumn.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
@@ -461,7 +472,6 @@ public class quoteMainController {
         stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
         alert.setContentText("Could not show the preview of the quote");
         alert.showAndWait();
-        File fil = new File(path);
     }
     /*
      * Handler of EXPORT AS PDF BUTTON in the quote tab page

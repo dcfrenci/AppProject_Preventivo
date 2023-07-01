@@ -194,8 +194,8 @@ public class Pdf {
             }
             float descriptionHeight = addParagraph(contentStream, description.toString(), x, y - writtenLines, width / 2, leading, characterDimension);
             writtenLines += descriptionHeight;
-            if (service.getChosenService().getServicePrice() > 0 && service.getChosenTeeth().size() > 1){
-                addLine(contentStream, "(" + service.getChosenTeeth().size() + "x) " + price, (width / 2) + (width / 4) - x, y - writtenLines, leading, characterDimension, false);
+            if (service.getChosenService().getServicePrice() > 0 && service.getTimeSelected() > 1){
+                addLine(contentStream, "(" + service.getTimeSelected() + "x) " + price, (width / 2) + (width / 4) - x, y - writtenLines, leading, characterDimension, false);
             } else {
                 addLine(contentStream, Double.toString(price), (width / 2) + (width / 4) - x, y - writtenLines, leading, characterDimension, false);
             }
