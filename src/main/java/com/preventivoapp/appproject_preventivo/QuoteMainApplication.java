@@ -1,6 +1,5 @@
 package com.preventivoapp.appproject_preventivo;
 
-import com.preventivoapp.appproject_preventivo.classes.Quote;
 import com.preventivoapp.appproject_preventivo.controller.quoteMainController;
 import javafx.application.Application;
 import javafx.application.Platform;

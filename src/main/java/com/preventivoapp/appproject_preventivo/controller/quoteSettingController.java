@@ -125,11 +125,13 @@ public class quoteSettingController extends quoteMainController{
             int selectedIndex = selectedIndexInServiceTable(quoteAllService);
             ServiceDetail serviceDetail = new ServiceDetail(quoteAllService.getItems().get(selectedIndex));
             serviceDetail.setChosenTeeth(null);
-            for(ServiceDetail service: quote.getServicesChosen()){
-                if(service.getChosenService().getServiceName().compareTo(serviceDetail.getChosenService().getServiceName()) == 0){
-                    service.setTimeSelected(service.getTimeSelected() + 1);
-                    setObservableChosenService();
-                    return;
+            if (serviceDetail.getChosenService().getServicePrice() > 0) {
+                for (ServiceDetail service : quote.getServicesChosen()) {
+                    if (service.getChosenService().getServiceName().compareTo(serviceDetail.getChosenService().getServiceName()) == 0) {
+                        service.setTimeSelected(service.getTimeSelected() + 1);
+                        setObservableChosenService();
+                        return;
+                    }
                 }
             }
             quote.getServicesChosen().add(serviceDetail);

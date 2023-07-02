@@ -24,6 +24,7 @@
               <MenuItem mnemonicParsing="false" onAction="#handleImportServiceList" text="Import price list" />
                   <MenuItem mnemonicParsing="false" onAction="#handleExportServiceList" text="Export price list" />
                   <MenuItem fx:id="settingMenu" mnemonicParsing="false" onAction="#handleSaveQuotePath" text="Settings" />
+                  <MenuItem mnemonicParsing="false" onAction="#handlePdfSetting" text="PDF setting" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">

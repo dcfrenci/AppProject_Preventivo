@@ -33,6 +33,8 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 
+import static java.lang.Float.MIN_NORMAL;
+
 public class quoteMainController {
     //QUOTE TAB -->
     @FXML private TableColumn<Quote, LocalDate> quoteDateColumn;
@@ -57,6 +59,7 @@ public class quoteMainController {
     private FilteredList<Quote> quoteSearched;
     private FilteredList<Service> serviceSearched;
     private Setting setting;
+    private Pdf pdf;
 
     /*
      * Initializes the controller class. This method is automatically called after the fxml file has been loaded.
@@ -107,11 +110,13 @@ public class quoteMainController {
                 if (!new File(setting.getPathSetting() + "\\setting.json").createNewFile()) createAlertError("Could not create setting file");
                 if (!new File(setting.getPathSetting() + "\\quoteList.json").createNewFile()) createAlertError("Could not create quoteList file");
                 if (!new File(setting.getPathSetting() + "\\serviceList.json").createNewFile()) createAlertError("Could not create serviceList file");
+                if (!new File(setting.getPathSetting() + "\\pdfSetting.json").createNewFile()) createAlertError("Could not create PDF setting file");
                 //set the quote directory
                 handleSaveQuotePath();
                 //load QUOTE and SERVICE table
                 loadQuotes(false);
                 loadServices(false);
+                pdf = new Pdf(MIN_NORMAL, MIN_NORMAL, MIN_NORMAL, MIN_NORMAL, MIN_NORMAL, null, "");
             } else {
                 //check if the file already exists
                 if (!new File(setting.getPathSetting() + "\\setting.json").exists()) {
@@ -127,6 +132,7 @@ public class quoteMainController {
                 //load QUOTE and SERVICE table
                 loadQuotes(true);
                 loadServices(true);
+                handleLoadPDF();
             }
         } catch (IOException e){
             createAlertError("Could not load data");
@@ -209,6 +215,28 @@ public class quoteMainController {
         }
     }
 
+    public void handlePdfSetting() throws IOException {
+        //Load the .fxml file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("pdfSetting-view.fxml"));
+        Parent parent = loader.load();
+        //Create a controller of the new page used to load the serviceList into the new controller
+        pdfSettingController pdfSettingController = loader.getController();
+        if (pdf == null) pdfSettingController.setPdfSettingController(null);
+        else pdfSettingController.setPdfSettingController(pdf);
+        //Create a new stage = new window with all its properties
+        Stage stage = new Stage();
+        stage.setMaximized(true);
+        stage.setTitle("Pdf setting");
+        stage.getIcons().add(new Image(Objects.requireNonNull(QuoteMainApplication.class.getResourceAsStream("Images/program-icon.png"))));
+        stage.setScene(new Scene(parent));
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(quoteNew.getScene().getWindow());
+        stage.showAndWait();
+        if (pdfSettingController.getToSave()) {
+            //save the new scheme
+            pdf = pdfSettingController.getPdf();
+        }
+    }
     public void handleUserGuide() throws IOException {
         //Open the user guide
         String path = System.getProperty("user.dir")+ "/src/main/resources/com/preventivoapp/appproject_preventivo/Pdf/quoteProgram-manual.pdf";
@@ -219,7 +247,7 @@ public class quoteMainController {
             }
         }
     }
-    private void createAlertError(String string) {
+    public void createAlertError(String string) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -228,7 +256,7 @@ public class quoteMainController {
         alert.showAndWait();
     }
     /*
-     * LOADING AND SAVING
+     * LOADING in the program
      */
     private void loadQuotes(boolean load){
         quoteList = FXCollections.observableArrayList();
@@ -285,7 +313,7 @@ public class quoteMainController {
             List<Quote> loadedQuote = mapper.readValue(file, new TypeReference<>() {});
             quoteList.addAll(loadedQuote);
         } catch (IOException e){
-            createAlertError("Could not load data");
+            createAlertError("Could not load quotes data");
             e.printStackTrace();
         }
     }
@@ -300,7 +328,22 @@ public class quoteMainController {
             List<Service> loadedService = mapper.readValue(file, new TypeReference<>() {});
             serviceList.addAll(loadedService);
         } catch (IOException e){
-            createAlertError("Could not load data");
+            createAlertError("Could not load services data");
+            e.printStackTrace();
+        }
+    }
+
+    private void handleLoadPDF() {
+        //load pdf with preexisting element
+        try {
+            File file = new File(setting.getPathSetting() + "\\pdfSetting.json");
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            mapper.registerModule(new JavaTimeModule());
+            Pdf loadedPDF = mapper.readValue(file, new TypeReference<>() {});
+            pdf = new Pdf(loadedPDF, "");
+        } catch (IOException e){
+            createAlertError("Could not load pdf setting data");
             e.printStackTrace();
         }
     }
@@ -318,6 +361,9 @@ public class quoteMainController {
             //save setting
             file = new File(setting.getPathSetting() + "\\setting.json");
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, setting.getPathQuote());
+            //save pdf setting
+            file = new File(setting.getPathSetting() + "\\pdfSetting.json");
+            mapper.writerWithDefaultPrettyPrinter().writeValue(file, pdf);
         } catch (IOException e){
             createAlertError("Could not load data");
         }
@@ -489,8 +535,8 @@ public class quoteMainController {
     public void handlePreview(Quote quote) throws IOException {
         //create pdf
         String path = System.getProperty("user.dir") + "\\setting\\temp.pdf";
-        Pdf pdf = new Pdf(path, true);
-        pdf.createQuote(quote);
+        Pdf pdfPreview = new Pdf(pdf, path);
+        pdfPreview.createQuote(quote);
         File file = new File(path);
         if (file.exists()){
             if (Desktop.isDesktopSupported()){
@@ -513,8 +559,8 @@ public class quoteMainController {
         try {
             int selectedIndex = selectedIndexInQuoteTable(quoteTable);
             Quote quote = getQuoteList().get(selectedIndex);
-            Pdf pdf = new Pdf(setting.getPathQuote() + "\\" + quote.getPerson().getFirstName() + "_" + quote.getPerson().getLastName() + "_" + LocalDate.now() + ".pdf", true);
-            pdf.createQuote(quote);
+            Pdf pdfExport = new Pdf(pdf, setting.getPathQuote() + "\\" + quote.getPerson().getFirstName() + "_" + quote.getPerson().getLastName() + "_" + LocalDate.now() + ".pdf");
+            pdfExport.createQuote(quote);
         } catch (NoSuchElementException e){
             showNoElementSelected();
         }
