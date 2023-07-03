@@ -25,6 +25,14 @@ public class Person {
     }
 
     public void setFirstName(String firstName) {
+        if (firstName.startsWith(" ")){
+            setFirstName(firstName.substring(1));
+            return;
+        }
+        if (firstName.endsWith(" ")){
+            setFirstName(firstName.substring(0, firstName.length() - 2));
+            return;
+        }
         this.firstName.set(firstName);
     }
 
@@ -37,6 +45,14 @@ public class Person {
     }
 
     public void setLastName(String lastName) {
+        if (lastName.startsWith(" ")){
+            setLastName(lastName.substring(1));
+            return;
+        }
+        if (lastName.endsWith(" ")){
+            setLastName(lastName.substring(0, lastName.length() - 2));
+            return;
+        }
         this.lastName.set(lastName);
     }
 

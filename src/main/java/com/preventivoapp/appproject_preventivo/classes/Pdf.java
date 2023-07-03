@@ -1,5 +1,7 @@
 package com.preventivoapp.appproject_preventivo.classes;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -12,32 +14,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Float.MIN_NORMAL;
-
+@JsonSerialize(using = PdfSerializer.class)
+@JsonDeserialize(using = PdfDeserializer.class)
 public class Pdf {
     private final float characterDimension;
     private final float spaceSideShort;
     private final float spaceSideLong;
     private final float spaceTop;
     private float leading;
-    private final PDFont font;
+    private final String font;
     private final String pathFile;
+    private final String language;
+    private final List<String> languageEnglish = new ArrayList<>(List.of("Mx. ", "Description", "Price", "Amount", "Total:", "Payment:", "Signature for acceptance"));
+    private final List<String> languageItalian = new ArrayList<>(List.of("Sig. ", "Descrizione", "Prezzo", "Importo", "Totale", "Pagamento:", "Firma per accettazione"));
     private List<String> pdfHead;
     private List<String> pdfDescription;
     private List<String> pdfPayment;
 
-    /*public Pdf(String pathFile, boolean standard) {
-        this.pathFile = pathFile;
-        if (standard) {
-            this.characterDimension = 11;
-            this.spaceSideShort = 25;
-            this.spaceSideLong = 40;
-            this.spaceTop = 42;
-            this.leading = 1;
-            this.font = PDType1Font.HELVETICA;
-        }
-    }*/
-
-    public Pdf(float characterDimension, float leading, float spaceTop, float spaceSideLong, float spaceSideShort, PDFont font, String pathFile){
+    public Pdf(float characterDimension, float leading, float spaceTop, float spaceSideLong, float spaceSideShort, PDFont font, String pathFile, String language){
         if (characterDimension == MIN_NORMAL) this.characterDimension = 11;
         else this.characterDimension = characterDimension;
         if (leading == MIN_NORMAL) this.leading = 1;
@@ -46,14 +40,13 @@ public class Pdf {
         else this.spaceTop = spaceTop;
         if (spaceSideLong == MIN_NORMAL) this.spaceSideLong = 40;
         else this.spaceSideLong = spaceSideLong;
-        if (spaceSideShort == MIN_NORMAL) this.spaceSideShort = 40;
+        if (spaceSideShort == MIN_NORMAL) this.spaceSideShort = 25;
         else this.spaceSideShort = spaceSideShort;
-        if (font == null) this.font = PDType1Font.HELVETICA;
-        else this.font = font;
+        if (font == null) this.font = "HELVETICA";
+        else this.font = setFont(font);
         this.pathFile = pathFile;
-        /*this.pdfHead = new ArrayList<>();
-        this.pdfDescription = new ArrayList<>();
-        this.pdfPayment = new ArrayList<>();*/
+        if (language == null) this.language = "English";
+        else this.language = language;
     }
 
     public Pdf(Pdf origin, String newPath){
@@ -62,10 +55,11 @@ public class Pdf {
         this.spaceTop = origin.getSpaceTop();
         this.spaceSideLong = origin.getSpaceSideLong();
         this.spaceSideShort = origin.getSpaceSideShort();
-        this.font = origin.getFont();
+        this.font = origin.getFontString();
         this.pdfHead = origin.getPdfHeadList();
         this.pdfDescription = origin.getPdfDescriptionList();
         this.pdfPayment = origin.getPdfPaymentList();
+        this.language = origin.getLanguage();
         //differ from origin
         this.pathFile = newPath;
     }
@@ -91,6 +85,12 @@ public class Pdf {
     }
 
     public PDFont getFont() {
+        if (font.equalsIgnoreCase("COURIER")) return PDType1Font.COURIER;
+        if (font.equalsIgnoreCase("TIMES ROMAN")) return PDType1Font.TIMES_ROMAN;
+        return PDType1Font.HELVETICA;
+    }
+
+    public String getFontString() {
         return font;
     }
 
@@ -108,6 +108,20 @@ public class Pdf {
 
     public String getPdfPayment() {
         return listStringToString(pdfPayment);
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public String setFont(PDFont font) {
+        if (font.toString().toUpperCase().contains("TIMES-ROMAN")){
+            return "TIMES ROMAN";
+        }
+        if (font.toString().toUpperCase().contains("COURIER")){
+            return "COURIER";
+        }
+        return "HELVETICA";
     }
 
     public void setPdfHead(String pdfHead) {
@@ -145,11 +159,12 @@ public class Pdf {
                 stringBuilder.append(c);
             }
         }
+        if (string.charAt(string.length() - 1) != '\n') stringList.add(stringBuilder.toString());
         return stringList;
     }
 
     private String listStringToString(List<String> stringList) {
-        if (stringList.size() == 0) return "";
+        if (stringList == null  || stringList.size() == 0) return "";
         StringBuilder stringBuilder = new StringBuilder();
         for (String string: stringList){
             stringBuilder.append(string);
@@ -169,8 +184,8 @@ public class Pdf {
             float yHead = addHead(contentStream, quote.getPerson(), quote.getQuoteDate(), getSpaceSideShort(), height - getSpaceTop(), getLeading(), getCharacterDimension(), width) + getSpaceTop();
             //price table
                 //description
-            String headTable = "Sottoponiamo alla vostra cortese attenzione il seguente preventivo e piano di cura";
-            float yDescription = addParagraph(contentStream, headTable, getSpaceSideLong(), height - yHead - getCharacterDimension() * 3, width - getSpaceSideLong(), 1, getCharacterDimension()) + getCharacterDimension() * 3;
+            if (getPdfDescription() == null || getPdfDescription().equals("")) setPdfDescription("(Missing pdf description)");
+            float yDescription = addParagraph(contentStream, getPdfDescription(), getSpaceSideLong(), height - yHead - getCharacterDimension() * 3, width - getSpaceSideLong(), 1, getCharacterDimension()) + getCharacterDimension() * 3;
                 //table
             float yTable = addTable(quote, contentStream, getSpaceSideShort(), height - yHead - yDescription - getCharacterDimension() * 2, getLeading(), getCharacterDimension(), width) + getCharacterDimension() * 2;
             //bottom page
@@ -243,34 +258,38 @@ public class Pdf {
 
     private float addHead(PDPageContentStream contentStream, Person person, LocalDate date, float x, float y, float leading, float characterDimension, float width) throws IOException {
         float writtenLines = 0;
-        /*//sx
-        addLine(contentStream, "Studio dentistico associato", x, y, leading, characterDimension, true);
-        writtenLines += characterDimension + leading;
-        addLine(contentStream, "Dott. Della Bella A. - Dott. Scarfone M.", x, y - writtenLines * 1, leading, characterDimension, true);
-        addLine(contentStream, "Via Martiri della Libertà n.21", x, y - writtenLines * 2, leading, characterDimension, true);
-        addLine(contentStream, "Novi di Modena tel. 059-677050", x, y - writtenLines * 3, leading, characterDimension, true);
-        //dx
-        addLine(contentStream, date.toString(), width - getSpaceSideShort(), y, leading, characterDimension, false);
-        addLine(contentStream, "Sig. " + person.getFirstName()+ " " + person.getLastName(), width - getSpaceSideShort(), y - writtenLines * 3, leading, characterDimension, false);
-        return writtenLines * 3;
-        */
         //head description
+        if (getPdfHeadList() == null || getPdfHead().equals("")) setPdfHead("(Missing head pdf)\n ");
         for (String string: getPdfHeadList()){
             addLine(contentStream, string, x, y - writtenLines, leading, characterDimension, true);
             writtenLines += characterDimension + leading;
         }
         //date and person
         addLine(contentStream, date.toString(), width - getSpaceSideShort(), y, leading, characterDimension, false);
-        addLine(contentStream, "Sig. " + person.getFirstName()+ " " + person.getLastName(), width - getSpaceSideShort(), y - writtenLines, leading, characterDimension, false);
+        String client = "Mx. ";
+        int index = languageEnglish.indexOf(client);
+        if (getLanguage().equalsIgnoreCase("Italian")) client = languageItalian.get(index);
+        if (writtenLines == characterDimension + leading) {
+            writtenLines += characterDimension + leading;
+            addLine(contentStream, client + person.getFirstName()+ " " + person.getLastName(), width - getSpaceSideShort(), y - writtenLines + characterDimension + leading, leading, characterDimension, false);
+        } else {
+            addLine(contentStream, client + person.getFirstName()+ " " + person.getLastName(), width - getSpaceSideShort(), y - writtenLines + characterDimension + leading, leading, characterDimension, false);
+        }
         return writtenLines;
     }
 
     private float addTable(Quote quote, PDPageContentStream contentStream, float x, float y, float leading, float characterDimension, float width) throws IOException{
         float writtenLines = 0;
         //column name
-        addLine(contentStream, "Descrizione", x, y, leading, characterDimension, true);
-        addLine(contentStream, "Prezzo", width / 2, y, leading, characterDimension, true);
-        addLine(contentStream, "Importo", (width / 2) + (width / 4), y, leading, characterDimension, true);
+        if (getLanguage().equalsIgnoreCase("Italian")) {
+            addLine(contentStream, languageItalian.get(languageEnglish.indexOf("Description")), x, y, leading, characterDimension, true);
+            addLine(contentStream, languageItalian.get(languageEnglish.indexOf("Price")), width / 2, y, leading, characterDimension, true);
+            addLine(contentStream, languageItalian.get(languageEnglish.indexOf("Amount")), (width / 2) + (width / 4), y, leading, characterDimension, true);
+        } else {
+            addLine(contentStream, "Description", x, y, leading, characterDimension, true);
+            addLine(contentStream, "Price", width / 2, y, leading, characterDimension, true);
+            addLine(contentStream, "Amount", (width / 2) + (width / 4), y, leading, characterDimension, true);
+        }
         writtenLines += characterDimension + leading;
         //fill columns
         double total = 0;
@@ -303,7 +322,10 @@ public class Pdf {
         contentStream.addRect(getSpaceSideShort(), y - writtenLines + 5, width - getSpaceSideShort() * 2, 1f);
         contentStream.fill();
         writtenLines += 11;
-        addLine(contentStream, "Totale:", (width / 2) + (width / 4), y - writtenLines, leading, characterDimension, true);
+        String totalString = "Total:";
+        int index = languageEnglish.indexOf(totalString);
+        if (getLanguage().equalsIgnoreCase("Italian")) totalString = languageItalian.get(index);
+        addLine(contentStream, totalString, (width / 2) + (width / 4), y - writtenLines, leading, characterDimension, true);
         addLine(contentStream, Double.toString(total), width - x, y - writtenLines, leading, characterDimension, false);
         return writtenLines;
     }
@@ -314,16 +336,11 @@ public class Pdf {
     }
     private float addPaymentDescription(PDPageContentStream contentStream, float x, float y, float leading, float characterDimension) throws IOException {
         float writtenLines = 0;
-        String payment = "Pagamento:";
+        String payment = "Payment:";
+        int index = languageEnglish.indexOf(payment);
+        if (getLanguage().equalsIgnoreCase("Italian")) payment = languageItalian.get(index);
         addLine(contentStream, payment, x, y, leading, characterDimension, true);
-        /*addParagraph(contentStream, "50% inizio lavori", x + stringWidth(string + "    ", characterDimension, getFont()), y - writtenLines, width - x, leading, characterDimension);
-        writtenLines += characterDimension + leading;
-        addParagraph(contentStream, "25% metà lavori", x + stringWidth(string + "    ", characterDimension, getFont()), y - writtenLines, width - x, leading, characterDimension);
-        writtenLines += characterDimension + leading;
-        addParagraph(contentStream, "25% fine lavori", x + stringWidth(string + "    ", characterDimension, getFont()), y - writtenLines, width - x, leading, characterDimension);
-        writtenLines += characterDimension + leading;
-        addParagraph(contentStream, "Pianificazione pagamenti condivisa con il paziente", x + stringWidth(string + "    ", characterDimension, getFont()), y - writtenLines, width - x, leading, characterDimension);
-        writtenLines += characterDimension + leading;*/
+        if (getPdfPaymentList() == null || getPdfPayment().equals("")) setPdfPayment("(Missing payment description)");
         for (String string: getPdfPaymentList()){
             addLine(contentStream, string, x + stringWidth(payment + "    ", characterDimension, getFont()), y - writtenLines, leading, characterDimension, true);
             writtenLines += characterDimension + leading;
@@ -333,7 +350,12 @@ public class Pdf {
 
     private float addSign(PDPageContentStream contentStream, float x, float y, float leading, float characterDimension, float width) throws IOException {
         float writtenLines = 0;
-        addLine(contentStream, "Firma per accettazione", x, y, leading, characterDimension, true);
+        int index = languageEnglish.indexOf("Signature for acceptance");
+        if (getLanguage().equalsIgnoreCase("Italian")){
+            addLine(contentStream, languageItalian.get(index), x, y, leading, characterDimension, true);
+        } else {
+            addLine(contentStream, languageEnglish.get(index), x, y, leading, characterDimension, true);
+        }
         writtenLines += characterDimension + leading;
         contentStream.setNonStrokingColor(Color.BLACK);
         contentStream.addRect(getSpaceSideLong(), y - writtenLines - characterDimension * 2, width / 2 - x, 1f);
@@ -341,14 +363,4 @@ public class Pdf {
         writtenLines += 1 + characterDimension * 2;
         return writtenLines;
     }
-
-    /*public static void main(String [] args){
-        List<ServiceDetail> serviceDetails = new ArrayList<>();
-        serviceDetails.add(new ServiceDetail(new Service(new SimpleStringProperty("Service 1"), 0.0, 175.0), List.of(18, 19, 20), 1));
-        serviceDetails.add(new ServiceDetail(new Service(new SimpleStringProperty("Service 2"), 750.0, 0.0), List.of(18, 19, 20), 3));
-        serviceDetails.add(new ServiceDetail(new Service(new SimpleStringProperty("Service with a very long name to write down maybe too long to be written in one single line"), 0.0, 175.0), List.of(18, 19, 20), 1));
-        Quote quote = new Quote(new Person(new SimpleStringProperty("Francesco"), new SimpleStringProperty("Della Casa")), serviceDetails, new SimpleObjectProperty<>(LocalDate.now()));
-        Pdf pdf = new Pdf("C:\\Users\\dcfre\\Desktop\\programma\\temp.pdf", true);
-        pdf.createQuote(quote);
-    }*/
 }

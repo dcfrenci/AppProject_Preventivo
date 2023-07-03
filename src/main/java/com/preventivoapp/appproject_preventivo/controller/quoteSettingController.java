@@ -1,6 +1,7 @@
 package com.preventivoapp.appproject_preventivo.controller;
 
 import com.preventivoapp.appproject_preventivo.QuoteMainApplication;
+import com.preventivoapp.appproject_preventivo.classes.Pdf;
 import com.preventivoapp.appproject_preventivo.classes.Quote;
 import com.preventivoapp.appproject_preventivo.classes.Service;
 import com.preventivoapp.appproject_preventivo.classes.ServiceDetail;
@@ -42,6 +43,7 @@ public class quoteSettingController extends quoteMainController{
     @FXML private TableView<Service> quoteAllService;
     @FXML private TableView<ServiceDetail> quoteSelectedService;
     private Quote quote;
+    private Pdf pdf;
     private FilteredList<Service> serviceSearchedToSelect;
     private boolean toSave;
     @FXML
@@ -101,9 +103,10 @@ public class quoteSettingController extends quoteMainController{
      * Load the serviceList of the controller with the ObservableList and create the filteredList used to show services in the table
      * @param setterServiceList to set the list of ALL services
      */
-    public void setQuoteSettingController(ObservableList<Service> setterServiceList, Quote oldQuote) {
+    public void setQuoteSettingController(ObservableList<Service> setterServiceList, Quote oldQuote, Pdf oldPdf) {
         this.serviceSearchedToSelect = new FilteredList<>(setterServiceList, service -> true);
         quoteAllService.setItems(serviceSearchedToSelect);
+        pdf = oldPdf;
         if (oldQuote != null){
             windowName.setText("Edit Quote");
             this.quote = oldQuote;
@@ -253,7 +256,7 @@ public class quoteSettingController extends quoteMainController{
                 }
             }
         }
-        if (complete) handlePreview(quote);
+        if (complete) handlePreview(quote, pdf);
         else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Incomplete quote");

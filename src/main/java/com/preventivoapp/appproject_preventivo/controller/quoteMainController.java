@@ -75,7 +75,7 @@ public class quoteMainController {
                 try {
                     int selectedIndex = selectedIndexInQuoteTable(quoteTable);
                     Quote quote = getQuoteList().get(selectedIndex);
-                    handlePreview(quote);
+                    handlePreview(quote, null);
                 } catch (NoSuchElementException | IOException e) {
                     showNoElementSelected();
                 }
@@ -116,7 +116,7 @@ public class quoteMainController {
                 //load QUOTE and SERVICE table
                 loadQuotes(false);
                 loadServices(false);
-                pdf = new Pdf(MIN_NORMAL, MIN_NORMAL, MIN_NORMAL, MIN_NORMAL, MIN_NORMAL, null, "");
+                pdf = new Pdf(MIN_NORMAL, MIN_NORMAL, MIN_NORMAL, MIN_NORMAL, MIN_NORMAL, null, "", null);
             } else {
                 //check if the file already exists
                 if (!new File(setting.getPathSetting() + "\\setting.json").exists()) {
@@ -363,6 +363,7 @@ public class quoteMainController {
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, setting.getPathQuote());
             //save pdf setting
             file = new File(setting.getPathSetting() + "\\pdfSetting.json");
+            mapper.configure(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS, true);
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, pdf);
         } catch (IOException e){
             createAlertError("Could not load data");
@@ -404,7 +405,7 @@ public class quoteMainController {
         Parent parent = loader.load();
         //Create a controller of the new page used to load the serviceList into the new controller
         quoteSettingController quoteSettingController = loader.getController();
-        quoteSettingController.setQuoteSettingController(getServicesList(), null);
+        quoteSettingController.setQuoteSettingController(getServicesList(), null, pdf);
         //Create a new stage = new window with all its properties
         Stage stage = new Stage();
         stage.setMaximized(true);
@@ -462,7 +463,7 @@ public class quoteMainController {
             showNoElementSelected();
             return;
         }
-        quoteSettingController.setQuoteSettingController(getServicesList(), (Quote) quoteTable.getItems().get(indexSelected).clone());
+        quoteSettingController.setQuoteSettingController(getServicesList(), (Quote) quoteTable.getItems().get(indexSelected).clone(), pdf);
         //Create a new stage = new window with all its properties
         Stage stage = new Stage();
         stage.setMaximized(true);
@@ -532,10 +533,12 @@ public class quoteMainController {
     /*
      * Handler of PREVIEW in the quote tab page
      */
-    public void handlePreview(Quote quote) throws IOException {
+    public void handlePreview(Quote quote, Pdf toPreview) throws IOException {
         //create pdf
         String path = System.getProperty("user.dir") + "\\setting\\temp.pdf";
-        Pdf pdfPreview = new Pdf(pdf, path);
+        Pdf pdfPreview;
+        if (toPreview != null) pdfPreview = new Pdf(toPreview, path);
+        else pdfPreview = new Pdf(pdf, path);
         pdfPreview.createQuote(quote);
         File file = new File(path);
         if (file.exists()){
