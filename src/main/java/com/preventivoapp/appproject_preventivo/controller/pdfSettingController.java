@@ -115,7 +115,7 @@ public class pdfSettingController extends quoteMainController{
         if (string.equals("")) return false;
         for (char c: string.toCharArray()){
             if (!Character.isDigit(c)) {
-                createAlertError("For " + textField + " is possible to accept only positive number");
+                createAlertError("For " + textField.getId().substring("box".length()) + " is possible to accept only positive number");
                 return true;
             }
         }
