@@ -185,7 +185,7 @@ public class teethSelectionController {
      * HANDLER of BUTTONS
      */
     public void handleSaveButton(ActionEvent actionEvent){
-        toSave = true;
+        setToSave(true);
         Stage thisWindow = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         thisWindow.close();
     }

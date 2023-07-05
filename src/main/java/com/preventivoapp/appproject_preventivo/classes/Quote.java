@@ -34,18 +34,12 @@ public class Quote {
     public Person getPerson() {
         return person;
     }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
+    
 
     public List<ServiceDetail> getServicesChosen() {
         return servicesChosen;
     }
 
-    public void setServicesChosen(List<ServiceDetail> servicesChosen) {
-        this.servicesChosen = servicesChosen;
-    }
 
     public LocalDate getQuoteDate() {
         return quoteDate.get();
@@ -59,12 +53,6 @@ public class Quote {
         this.quoteDate.set(quoteDate);
     }
 
-    public List<Integer> getTeethSelected(Service service){
-        for(ServiceDetail elem: getServicesChosen()){
-            if(elem.getChosenService().getServiceName().compareTo(service.getServiceName()) == 0) return elem.getChosenTeeth();
-        }
-        return null;
-    }
 
     @Override
     public String toString() {
@@ -86,7 +74,6 @@ public class Quote {
         quote.person = (Person) this.person.clone();
         quote.servicesChosen = cloneServiceChosen();
         quote.quoteDate = this.quoteDateProperty();
-        //quote.servicesChosen = (List<ServiceDetail>) this.servicesChosen.clone();
         return quote;
     }
     private List<ServiceDetail> cloneServiceChosen(){

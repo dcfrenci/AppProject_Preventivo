@@ -41,7 +41,7 @@ public class serviceSettingController extends quoteMainController {
     public void setServiceSettingController(Service oldService){
         if (oldService != null){
             windowName.setText("Edit Service");
-            this.service = oldService;
+            this.service = new Service((Service) oldService.clone());
             serviceNameField.setText(service.getServiceName());
             servicePriceField.setText(Double.toString(service.getServicePrice()));
             servicePriceForToothField.setText(Double.toString(service.getServicePriceForTooth()));

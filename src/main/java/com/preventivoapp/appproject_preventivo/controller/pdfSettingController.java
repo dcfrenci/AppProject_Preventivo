@@ -144,7 +144,7 @@ public class pdfSettingController extends quoteMainController{
         if (textArea.getText().equals("")) return "";
         StringBuilder stringBuilder = new StringBuilder();
         for (char c: textArea.getText().toCharArray()){
-            if (c >= ' ') stringBuilder.append(c);
+            if (c >= ' ' || c == '\n') stringBuilder.append(c);
         }
         return stringBuilder.toString();
     }

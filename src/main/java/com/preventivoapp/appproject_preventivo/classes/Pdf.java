@@ -136,15 +136,15 @@ public class Pdf {
         this.pdfPayment = stringToListString(pdfPayment);
     }
 
-    private List<String> getPdfHeadList() {
+    public List<String> getPdfHeadList() {
         return this.pdfHead;
     }
 
-    private List<String> getPdfDescriptionList() {
+    public List<String> getPdfDescriptionList() {
         return this.pdfDescription;
     }
 
-    private List<String> getPdfPaymentList() {
+    public List<String> getPdfPaymentList() {
         return this.pdfPayment;
     }
     private List<String> stringToListString(String string){
@@ -204,6 +204,7 @@ public class Pdf {
     }
 
     private float stringWidth(String string, float characterDimension, PDFont font) throws IOException{
+        if (string.length() == 0) return 0;
         return font.getStringWidth(string) / 1000 * characterDimension;
     }
 
@@ -220,40 +221,48 @@ public class Pdf {
     }
 
     private float addParagraph(PDPageContentStream contentStream, String string, float x, float y, float xMax, float leading, float fontDimension) throws  IOException {
-        float writtenLines = 0;
-        //create the array list of words from the string
-        ArrayList<String> words = new ArrayList<>();
-        while (string.length() > 0){
-            if (!string.contains(" ")) {
-                words.add(string);
-                break;
+        //create the array list of sentences
+        float paragraph = 0;
+        List<String> lines = new ArrayList<>();
+        if (string.indexOf('\n') != - 1) lines = stringToListString(string);
+        else lines.add(string);
+        for (String line: lines) {
+            float writtenLines = 1;
+            //create the array list of words from the string
+            ArrayList<String> words = new ArrayList<>();
+            while (line.length() > 0) {
+                if (!line.contains(" ")) {
+                    words.add(line);
+                    break;
+                } else {
+                    String word = line.substring(0, line.indexOf(" "));
+                    words.add(word);
+                    line = line.substring(line.indexOf(" ") + 1);
+                }
             }
-            else {
-                String word = string.substring(0, string.indexOf(" "));
-                words.add(word);
-                string = string.substring(string.indexOf(" ") + 1);
+            //write
+            contentStream.beginText();
+            contentStream.setFont(getFont(), fontDimension);
+            contentStream.setLeading(fontDimension + leading);
+            contentStream.newLineAtOffset(x, y - paragraph);
+            float lineDimension = x;
+            for (String word : words) {
+                //if (word.equals("")) continue;
+                if (lineDimension + stringWidth(word + " ", fontDimension, getFont()) < xMax) {
+                    lineDimension += stringWidth(word + " ", fontDimension, getFont());
+                    contentStream.showText(word + " ");
+                } else {
+                    contentStream.newLine();
+                    contentStream.showText(word + " ");
+                    lineDimension = x + stringWidth(word + " ", fontDimension, getFont());
+                    writtenLines++;
+                }
             }
+            contentStream.endText();
+            contentStream.moveTo(0, 0);
+            paragraph += writtenLines * (fontDimension + leading);
         }
-        //write
-        contentStream.beginText();
-        contentStream.setFont(getFont(), fontDimension);
-        contentStream.setLeading(fontDimension + leading);
-        contentStream.newLineAtOffset(x, y);
-        float lineDimension = x;
-        for (String word: words){
-            if (lineDimension + stringWidth(word + " ", fontDimension, getFont()) < xMax){
-                lineDimension += stringWidth(word + " ", fontDimension, getFont());
-                contentStream.showText(word + " ");
-            } else {
-                contentStream.newLine();
-                contentStream.showText(word + " ");
-                lineDimension = x + stringWidth(word + " ", fontDimension, getFont());
-                writtenLines++;
-            }
-        }
-        contentStream.endText();
-        contentStream.moveTo(0, 0);
-        return writtenLines * (fontDimension + leading);
+        return paragraph;
     }
 
     private float addHead(PDPageContentStream contentStream, Person person, LocalDate date, float x, float y, float leading, float characterDimension, float width) throws IOException {
