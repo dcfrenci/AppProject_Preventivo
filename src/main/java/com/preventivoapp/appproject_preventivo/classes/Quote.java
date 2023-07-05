@@ -34,7 +34,7 @@ public class Quote {
     public Person getPerson() {
         return person;
     }
-    
+
 
     public List<ServiceDetail> getServicesChosen() {
         return servicesChosen;
