@@ -35,11 +35,17 @@ public class Quote {
         return person;
     }
 
+    public void setPerson(Person person) {
+        this.person = person;
+    }
 
     public List<ServiceDetail> getServicesChosen() {
         return servicesChosen;
     }
 
+    public void setServicesChosen(List<ServiceDetail> servicesChosen) {
+        this.servicesChosen = servicesChosen;
+    }
 
     public LocalDate getQuoteDate() {
         return quoteDate.get();
