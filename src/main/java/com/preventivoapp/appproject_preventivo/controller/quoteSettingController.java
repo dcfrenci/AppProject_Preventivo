@@ -27,25 +27,39 @@ import java.time.LocalDate;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-public class quoteSettingController extends quoteMainController{
+public class quoteSettingController extends quoteMainController {
     //NEW QUOTE -->
-    @FXML private DatePicker newQuoteDate;
-    @FXML private TextField newQuoteLastName;
-    @FXML private TextField newQuoteName;
-    @FXML private TableColumn<ServiceDetail, String> newQuoteNameChosenColumn;
-    @FXML private TableColumn<Service, String> newQuoteNameColumn;
-    @FXML private TableColumn<ServiceDetail, Integer> newQuoteNumberColumn;
-    @FXML private Label windowName;
-    @FXML private TableColumn<Service, Double> newQuotePriceColumn;
-    @FXML private TableColumn<Service, Double> newQuotePriceForToothColumn;
-    @FXML private TextField newQuoteSearch;
-    @FXML private TableColumn<ServiceDetail, String> newQuoteSelectedTooth;
-    @FXML private TableView<Service> quoteAllService;
-    @FXML private TableView<ServiceDetail> quoteSelectedService;
+    @FXML
+    private DatePicker newQuoteDate;
+    @FXML
+    private TextField newQuoteLastName;
+    @FXML
+    private TextField newQuoteName;
+    @FXML
+    private TableColumn<ServiceDetail, String> newQuoteNameChosenColumn;
+    @FXML
+    private TableColumn<Service, String> newQuoteNameColumn;
+    @FXML
+    private TableColumn<ServiceDetail, Integer> newQuoteNumberColumn;
+    @FXML
+    private Label windowName;
+    @FXML
+    private TableColumn<Service, Double> newQuotePriceColumn;
+    @FXML
+    private TableColumn<Service, Double> newQuotePriceForToothColumn;
+    @FXML
+    private TextField newQuoteSearch;
+    @FXML
+    private TableColumn<ServiceDetail, String> newQuoteSelectedTooth;
+    @FXML
+    private TableView<Service> quoteAllService;
+    @FXML
+    private TableView<ServiceDetail> quoteSelectedService;
     private Quote quote;
     private Pdf pdf;
     private FilteredList<Service> serviceSearchedToSelect;
     private boolean toSave;
+
     @FXML
     public void initialize() {
         setToSave(false);
@@ -57,11 +71,13 @@ public class quoteSettingController extends quoteMainController{
         //Initialized the table of ALL services
         newQuoteNameColumn.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
         newQuotePriceColumn.setCellValueFactory(param -> {
-            if (param.getValue().getServicePrice() == 0) return null;
+            if (param.getValue().getServicePrice() == 0)
+                return null;
             return new SimpleObjectProperty<>(param.getValue().getServicePrice());
         });
         newQuotePriceForToothColumn.setCellValueFactory(param -> {
-            if (param.getValue().getServicePriceForTooth() == 0) return null;
+            if (param.getValue().getServicePriceForTooth() == 0)
+                return null;
             return new SimpleObjectProperty<>(param.getValue().getServicePriceForTooth());
         });
 
@@ -69,7 +85,8 @@ public class quoteSettingController extends quoteMainController{
         newQuoteNameChosenColumn.setCellValueFactory(param -> param.getValue().getChosenService().serviceNameProperty());
         newQuoteNumberColumn.setCellValueFactory(new PropertyValueFactory<>("TimeSelected"));
         newQuoteSelectedTooth.setCellValueFactory(param -> {
-            if (param.getValue().getChosenTeeth() == null) return new SimpleStringProperty("");
+            if (param.getValue().getChosenTeeth() == null)
+                return new SimpleStringProperty("");
             return new SimpleStringProperty(param.getValue().showTeeth());
         });
 
@@ -83,31 +100,35 @@ public class quoteSettingController extends quoteMainController{
             }
         });
     }
-    public Quote getQuote(){
+
+    public Quote getQuote() {
         return quote;
     }
 
-    public Boolean getToSave(){
+    public Boolean getToSave() {
         return toSave;
     }
 
-    public void setToSave(boolean status){
+    public void setToSave(boolean status) {
         this.toSave = status;
     }
-    private void setObservableChosenService(){
+
+    private void setObservableChosenService() {
         ObservableList<ServiceDetail> observableChosenService = FXCollections.observableArrayList(quote.getServicesChosen());
         quoteSelectedService.setItems(observableChosenService);
         quoteSelectedService.refresh();
     }
+
     /**
      * Load the serviceList of the controller with the ObservableList and create the filteredList used to show services in the table
+     *
      * @param setterServiceList to set the list of ALL services
      */
     public void setQuoteSettingController(ObservableList<Service> setterServiceList, Quote oldQuote, Pdf oldPdf) {
         this.serviceSearchedToSelect = new FilteredList<>(setterServiceList, service -> true);
         quoteAllService.setItems(serviceSearchedToSelect);
         pdf = oldPdf;
-        if (oldQuote != null){
+        if (oldQuote != null) {
             windowName.setText("Edit Quote");
             this.quote = oldQuote;
             newQuoteName.setText(quote.getPerson().getFirstName());
@@ -119,12 +140,13 @@ public class quoteSettingController extends quoteMainController{
             setObservableChosenService();
         }
     }
+
     /**
      * Method to handle ADD SERVICE TO QUOTE
      * Get the service from quoteAllService table and add it to the quote if already present update N°
      */
-    public void handleNewQuoteAdd(){
-        try{
+    public void handleNewQuoteAdd() {
+        try {
             int selectedIndex = selectedIndexInServiceTable(quoteAllService);
             ServiceDetail serviceDetail = new ServiceDetail(quoteAllService.getItems().get(selectedIndex));
             serviceDetail.setChosenTeeth(null);
@@ -139,7 +161,7 @@ public class quoteSettingController extends quoteMainController{
             }
             quote.getServicesChosen().add(serviceDetail);
             setObservableChosenService();
-        } catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             showNoElementSelected();
         }
     }
@@ -149,8 +171,8 @@ public class quoteSettingController extends quoteMainController{
      * Control if the quote has all the fields completed then close the newQuote window
      * (the new quote will be saved in the quoteMainController.handleNewQuote method)
      */
-    public void handleNewQuoteSave(ActionEvent actionEvent){
-        if (quote.getPerson().firstNameProperty().toString().compareTo("") == 0 || quote.getPerson().lastNameProperty().toString().compareTo("") == 0 || quote.getQuoteDate().equals(LocalDate.of(0, 1, 1))){
+    public void handleNewQuoteSave(ActionEvent actionEvent) {
+        if (quote.getPerson().firstNameProperty().toString().compareTo("") == 0 || quote.getPerson().lastNameProperty().toString().compareTo("") == 0 || quote.getQuoteDate().equals(LocalDate.of(0, 1, 1))) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not all fields were inserted");
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -159,7 +181,7 @@ public class quoteSettingController extends quoteMainController{
             alert.showAndWait();
             return;
         }
-        if (quote.getServicesChosen().size() == 0){
+        if (quote.getServicesChosen().size() == 0) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("No services selected");
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -168,9 +190,9 @@ public class quoteSettingController extends quoteMainController{
             alert.showAndWait();
             return;
         }
-        for(ServiceDetail serviceDetail: quote.getServicesChosen()){
-            if (serviceDetail.getChosenService().getServicePriceForTooth() > 0){
-                if (serviceDetail.getChosenTeeth() == null || serviceDetail.getChosenTeeth().size() == 0){
+        for (ServiceDetail serviceDetail : quote.getServicesChosen()) {
+            if (serviceDetail.getChosenService().getServicePriceForTooth() > 0) {
+                if (serviceDetail.getChosenTeeth() == null || serviceDetail.getChosenTeeth().size() == 0) {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Not all fields were inserted");
                     Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -185,15 +207,16 @@ public class quoteSettingController extends quoteMainController{
         Stage thisWindow = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         thisWindow.close();
     }
+
     /**
      * Method to handle REMOVE SERVICE FROM SELECTED
      * Remove the service selected from the selected service list in the quote
      */
-    public void handleNewQuoteRemove(){
-        try{
+    public void handleNewQuoteRemove() {
+        try {
             int selectedIndex = selectedIndexInServiceDetailTable(quoteSelectedService);
-            for(ServiceDetail serviceDetail: quote.getServicesChosen()){
-                if(serviceDetail.getChosenService().getServiceName().compareTo(quoteSelectedService.getItems().get(selectedIndex).getChosenService().getServiceName()) == 0){
+            for (ServiceDetail serviceDetail : quote.getServicesChosen()) {
+                if (serviceDetail.getChosenService().getServiceName().compareTo(quoteSelectedService.getItems().get(selectedIndex).getChosenService().getServiceName()) == 0) {
                     if (serviceDetail.getTimeSelected() > 1) {
                         serviceDetail.setTimeSelected(serviceDetail.getTimeSelected() - 1);
                         quoteSelectedService.refresh();
@@ -203,7 +226,7 @@ public class quoteSettingController extends quoteMainController{
             }
             quote.getServicesChosen().remove(quoteSelectedService.getItems().get(selectedIndex));
             quoteSelectedService.getItems().remove(selectedIndex);
-        } catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             showNoElementSelected();
         }
     }
@@ -219,7 +242,8 @@ public class quoteSettingController extends quoteMainController{
             showNoElementSelected();
             return;
         }
-        if (quoteSelectedService.getItems().get(selectedIndex).getChosenService().getServicePriceForTooth() <= 0) return;
+        if (quoteSelectedService.getItems().get(selectedIndex).getChosenService().getServicePriceForTooth() <= 0)
+            return;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("teethSelection-view.fxml"));
         Parent parent = loader.load();
         teethSelectionController teethSelectionController = loader.getController();
@@ -231,9 +255,9 @@ public class quoteSettingController extends quoteMainController{
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(windowName.getScene().getWindow());
         stage.showAndWait();
-        if (teethSelectionController.getToSave()){
-            for(ServiceDetail serviceDetail: quote.getServicesChosen()){
-                if(serviceDetail.getChosenService().getServiceName().compareTo(quoteSelectedService.getItems().get(selectedIndex).getChosenService().getServiceName()) == 0){
+        if (teethSelectionController.getToSave()) {
+            for (ServiceDetail serviceDetail : quote.getServicesChosen()) {
+                if (serviceDetail.getChosenService().getServiceName().compareTo(quoteSelectedService.getItems().get(selectedIndex).getChosenService().getServiceName()) == 0) {
                     serviceDetail.setChosenTeeth(teethSelectionController.mapToList());
                     quoteSelectedService.refresh();
                     break;
@@ -247,16 +271,18 @@ public class quoteSettingController extends quoteMainController{
      */
     public void handlePreviewButton() throws IOException {
         boolean complete = quote.getPerson().firstNameProperty().toString().compareTo("") != 0 && quote.getPerson().lastNameProperty().toString().compareTo("") != 0 && !quote.getQuoteDate().equals(LocalDate.of(0, 1, 1));
-        if (quote.getServicesChosen().size() == 0) complete = false;
-        for(ServiceDetail serviceDetail: quote.getServicesChosen()){
-            if (serviceDetail.getChosenService().getServicePriceForTooth() > 0){
-                if (serviceDetail.getChosenTeeth() == null || serviceDetail.getChosenTeeth().size() == 0){
+        if (quote.getServicesChosen().size() == 0)
+            complete = false;
+        for (ServiceDetail serviceDetail : quote.getServicesChosen()) {
+            if (serviceDetail.getChosenService().getServicePriceForTooth() > 0) {
+                if (serviceDetail.getChosenTeeth() == null || serviceDetail.getChosenTeeth().size() == 0) {
                     complete = false;
                     break;
                 }
             }
         }
-        if (complete) handlePreview(quote, pdf);
+        if (complete)
+            handlePreview(quote, pdf);
         else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Incomplete quote");

@@ -12,83 +12,121 @@ import java.util.List;
 import java.util.Map;
 
 public class teethSelectionController {
-    @FXML private CheckBox tooth11;
-    @FXML private CheckBox tooth12;
-    @FXML private CheckBox tooth13;
-    @FXML private CheckBox tooth14;
-    @FXML private CheckBox tooth15;
-    @FXML private CheckBox tooth16;
-    @FXML private CheckBox tooth17;
-    @FXML private CheckBox tooth18;
-    @FXML private CheckBox tooth21;
-    @FXML private CheckBox tooth22;
-    @FXML private CheckBox tooth23;
-    @FXML private CheckBox tooth24;
-    @FXML private CheckBox tooth25;
-    @FXML private CheckBox tooth26;
-    @FXML private CheckBox tooth27;
-    @FXML private CheckBox tooth28;
-    @FXML private CheckBox tooth31;
-    @FXML private CheckBox tooth32;
-    @FXML private CheckBox tooth33;
-    @FXML private CheckBox tooth34;
-    @FXML private CheckBox tooth35;
-    @FXML private CheckBox tooth36;
-    @FXML private CheckBox tooth37;
-    @FXML private CheckBox tooth38;
-    @FXML private CheckBox tooth41;
-    @FXML private CheckBox tooth42;
-    @FXML private CheckBox tooth43;
-    @FXML private CheckBox tooth44;
-    @FXML private CheckBox tooth45;
-    @FXML private CheckBox tooth46;
-    @FXML private CheckBox tooth47;
-    @FXML private CheckBox tooth48;
+    @FXML
+    private CheckBox tooth11;
+    @FXML
+    private CheckBox tooth12;
+    @FXML
+    private CheckBox tooth13;
+    @FXML
+    private CheckBox tooth14;
+    @FXML
+    private CheckBox tooth15;
+    @FXML
+    private CheckBox tooth16;
+    @FXML
+    private CheckBox tooth17;
+    @FXML
+    private CheckBox tooth18;
+    @FXML
+    private CheckBox tooth21;
+    @FXML
+    private CheckBox tooth22;
+    @FXML
+    private CheckBox tooth23;
+    @FXML
+    private CheckBox tooth24;
+    @FXML
+    private CheckBox tooth25;
+    @FXML
+    private CheckBox tooth26;
+    @FXML
+    private CheckBox tooth27;
+    @FXML
+    private CheckBox tooth28;
+    @FXML
+    private CheckBox tooth31;
+    @FXML
+    private CheckBox tooth32;
+    @FXML
+    private CheckBox tooth33;
+    @FXML
+    private CheckBox tooth34;
+    @FXML
+    private CheckBox tooth35;
+    @FXML
+    private CheckBox tooth36;
+    @FXML
+    private CheckBox tooth37;
+    @FXML
+    private CheckBox tooth38;
+    @FXML
+    private CheckBox tooth41;
+    @FXML
+    private CheckBox tooth42;
+    @FXML
+    private CheckBox tooth43;
+    @FXML
+    private CheckBox tooth44;
+    @FXML
+    private CheckBox tooth45;
+    @FXML
+    private CheckBox tooth46;
+    @FXML
+    private CheckBox tooth47;
+    @FXML
+    private CheckBox tooth48;
     private Map<String, Boolean> teeth;
     private boolean toSave;
+
     @FXML
-    public void initialize(){
+    public void initialize() {
         setToSave(false);
     }
 
-    public boolean getToSave(){
+    public boolean getToSave() {
         return toSave;
     }
-    private void setToSave(boolean status){
+
+    private void setToSave(boolean status) {
         this.toSave = status;
     }
-    public void setTeethSelectionController(List<Integer> teethSelected){
+
+    public void setTeethSelectionController(List<Integer> teethSelected) {
         if (teethSelected != null) {
             this.teeth = listToMap(teethSelected);
         } else {
             this.teeth = voidMap();
         }
     }
-    public List<Integer> mapToList(){
+
+    public List<Integer> mapToList() {
         List<Integer> list = new ArrayList<>();
-        for(int i = 11; i < 49; i++){
-            if (i % 10 == 9){
+        for (int i = 11; i < 49; i++) {
+            if (i % 10 == 9) {
                 i++;
                 continue;
             }
-            if (teeth.get("tooth" + i)){
+            if (teeth.get("tooth" + i)) {
                 list.add(i);
             }
         }
         return list;
     }
-    private Map<String, Boolean> listToMap(List<Integer> list){
+
+    private Map<String, Boolean> listToMap(List<Integer> list) {
         Map<String, Boolean> map = voidMap();
-        for(Integer nTooth: list){
+        for (Integer nTooth : list) {
             map.replace("tooth" + nTooth, true);
             setSelectedCheckBox("tooth" + nTooth, true);
         }
         return map;
     }
-    private Map<String, Boolean> voidMap(){
+
+    private Map<String, Boolean> voidMap() {
         Map<String, Boolean> map = new HashMap<>();
-        for(int i = 11; i < 49; i++){
-            if (i % 10 == 9){
+        for (int i = 11; i < 49; i++) {
+            if (i % 10 == 9) {
                 i++;
                 continue;
             }
@@ -97,17 +135,22 @@ public class teethSelectionController {
         }
         return map;
     }
-    private String getCheckBoxName(String string){
+
+    private String getCheckBoxName(String string) {
         StringBuilder toothName = new StringBuilder();
         boolean copy = false;
-        for (char elem: string.toCharArray()){
-            if (elem == ',')    break;
-            if (copy)           toothName.append(elem);
-            if (elem == '=')    copy = true;
+        for (char elem : string.toCharArray()) {
+            if (elem == ',')
+                break;
+            if (copy)
+                toothName.append(elem);
+            if (elem == '=')
+                copy = true;
         }
         return toothName.toString();
     }
-    private void setSelectedCheckBox(String string, boolean state){
+
+    private void setSelectedCheckBox(String string, boolean state) {
         switch (string) {
             case "tooth11" -> tooth11.setSelected(state);
             case "tooth12" -> tooth12.setSelected(state);
@@ -143,7 +186,8 @@ public class teethSelectionController {
             case "tooth48" -> tooth48.setSelected(state);
         }
     }
-    private boolean getSelectedCheckBox(String string){
+
+    private boolean getSelectedCheckBox(String string) {
         return switch (string) {
             case "tooth11" -> tooth11.isSelected();
             case "tooth12" -> tooth12.isSelected();
@@ -184,19 +228,22 @@ public class teethSelectionController {
     /*
      * HANDLER of BUTTONS
      */
-    public void handleSaveButton(ActionEvent actionEvent){
+    public void handleSaveButton(ActionEvent actionEvent) {
         setToSave(true);
         Stage thisWindow = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         thisWindow.close();
     }
-    public void handleResetButton(){
+
+    public void handleResetButton() {
         this.teeth = voidMap();
     }
-    public void handleCancelButton(ActionEvent actionEvent){
+
+    public void handleCancelButton(ActionEvent actionEvent) {
         Stage thisWindow = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         thisWindow.close();
     }
-    public void handleChangeState(ActionEvent actionEvent){
+
+    public void handleChangeState(ActionEvent actionEvent) {
         teeth.put(getCheckBoxName(actionEvent.getSource().toString()), getSelectedCheckBox(getCheckBoxName(actionEvent.getSource().toString())));
     }
 }

@@ -12,10 +12,14 @@ import javafx.stage.Stage;
 import java.util.Objects;
 
 public class serviceSettingController extends quoteMainController {
-    @FXML private TextField serviceNameField;
-    @FXML private TextField servicePriceField;
-    @FXML private TextField servicePriceForToothField;
-    @FXML private Label windowName;
+    @FXML
+    private TextField serviceNameField;
+    @FXML
+    private TextField servicePriceField;
+    @FXML
+    private TextField servicePriceForToothField;
+    @FXML
+    private Label windowName;
     private Service service;
 
     @FXML
@@ -38,8 +42,8 @@ public class serviceSettingController extends quoteMainController {
         });
     }
 
-    public void setServiceSettingController(Service oldService){
-        if (oldService != null){
+    public void setServiceSettingController(Service oldService) {
+        if (oldService != null) {
             windowName.setText("Edit Service");
             this.service = new Service((Service) oldService.clone());
             serviceNameField.setText(service.getServiceName());
@@ -50,12 +54,12 @@ public class serviceSettingController extends quoteMainController {
         }
     }
 
-    public Service getService(){
+    public Service getService() {
         return service;
     }
 
-    private boolean containsAlphabetic(String string){
-        for (char elem: string.toCharArray()){
+    private boolean containsAlphabetic(String string) {
+        for (char elem : string.toCharArray()) {
             if (Character.isAlphabetic(elem)) {
                 service.setServicePriceForTooth(0);
                 return true;
@@ -64,8 +68,8 @@ public class serviceSettingController extends quoteMainController {
         return false;
     }
 
-    public boolean handleServiceSave(){
-        if (service.getServiceName().length() == 0){
+    public boolean handleServiceSave() {
+        if (service.getServiceName().length() == 0) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not all fields were inserted");
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -74,7 +78,7 @@ public class serviceSettingController extends quoteMainController {
             alert.showAndWait();
             return false;
         }
-        if (service.getServicePrice() != 0 && service.getServicePriceForTooth() != 0){
+        if (service.getServicePrice() != 0 && service.getServicePriceForTooth() != 0) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not all fields were inserted correctly");
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -83,7 +87,7 @@ public class serviceSettingController extends quoteMainController {
             alert.showAndWait();
             return false;
         }
-        if ((service.getServicePrice() <= 0 && service.getServicePriceForTooth() <= 0) || (containsAlphabetic(servicePriceField.getText()) || containsAlphabetic(servicePriceForToothField.getText()))){
+        if ((service.getServicePrice() <= 0 && service.getServicePriceForTooth() <= 0) || (containsAlphabetic(servicePriceField.getText()) || containsAlphabetic(servicePriceForToothField.getText()))) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not all fields were inserted correctly");
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();

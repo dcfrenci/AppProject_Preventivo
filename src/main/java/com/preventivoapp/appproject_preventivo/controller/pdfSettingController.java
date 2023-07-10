@@ -25,22 +25,32 @@ import java.util.Optional;
 
 import static java.lang.Float.MIN_NORMAL;
 
-public class pdfSettingController extends quoteMainController{
-    @FXML private TextArea pdfDescription;
-    @FXML private TextArea pdfHead;
-    @FXML private TextArea pdfPayment;
-    @FXML private TextField boxCharacterDimension;
-    @FXML private TextField boxLeading;
-    @FXML private TextField boxSpaceLong;
-    @FXML private TextField boxSpaceShort;
-    @FXML private TextField boxSpaceTop;
-    @FXML private ComboBox<String> fontSelection;
-    @FXML private ComboBox<String> languageSelection;
+public class pdfSettingController extends quoteMainController {
+    @FXML
+    private TextArea pdfDescription;
+    @FXML
+    private TextArea pdfHead;
+    @FXML
+    private TextArea pdfPayment;
+    @FXML
+    private TextField boxCharacterDimension;
+    @FXML
+    private TextField boxLeading;
+    @FXML
+    private TextField boxSpaceLong;
+    @FXML
+    private TextField boxSpaceShort;
+    @FXML
+    private TextField boxSpaceTop;
+    @FXML
+    private ComboBox<String> fontSelection;
+    @FXML
+    private ComboBox<String> languageSelection;
     private Pdf pdf;
     private boolean toSave;
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         ObservableList<String> fontList = FXCollections.observableArrayList("Helvetica", "Times Roman", "Courier");
         fontSelection.setItems(fontList);
         ObservableList<String> languageList = FXCollections.observableArrayList("English", "Italian");
@@ -77,17 +87,19 @@ public class pdfSettingController extends quoteMainController{
         serviceDetails.add(new ServiceDetail(new Service(new SimpleStringProperty("Service example 2"), 750.0, 0.0), null, 3));
         serviceDetails.add(new ServiceDetail(new Service(new SimpleStringProperty("Service example 3 with a very long name that's written onto two lines"), 0.0, 175.0), List.of(35), 1));
         Person person = new Person(new SimpleStringProperty("Name"), new SimpleStringProperty("Surname"));
-        if (languageSelection.getSelectionModel().getSelectedItem() != null && languageSelection.getSelectionModel().getSelectedItem().equals("Italian")){
+        if (languageSelection.getSelectionModel().getSelectedItem() != null && languageSelection.getSelectionModel().getSelectedItem().equals("Italian")) {
             person.setFirstName("Nome");
             person.setLastName("Cognome");
         }
         Quote quote = new Quote(person, serviceDetails, new SimpleObjectProperty<>(LocalDate.now()));
         handlePreview(quote, checkFields());
     }
+
     public void handleSavePdfSetting(ActionEvent actionEvent) {
         //check fields
         Pdf savePdf = checkFields();
-        if (savePdf == null) return;
+        if (savePdf == null)
+            return;
         //ask confirmation
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.WINDOW_MODAL);
@@ -97,7 +109,7 @@ public class pdfSettingController extends quoteMainController{
         alert.setHeaderText("Are you sure you want to save the current PDF setting ?");
         //alert.setContentText("Are you sure you want to delete this quote?");
         Optional<ButtonType> result = alert.showAndWait();
-        if(result.isPresent() && result.get() == ButtonType.OK) {
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             setToSave(true);
             pdf = savePdf;
             Stage thisWindow = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -112,8 +124,9 @@ public class pdfSettingController extends quoteMainController{
 
     private boolean checkValueBox(TextField textField) {
         String string = textField.getText();
-        if (string.equals("")) return false;
-        for (char c: string.toCharArray()){
+        if (string.equals(""))
+            return false;
+        for (char c : string.toCharArray()) {
             if (!Character.isDigit(c)) {
                 createAlertError("For " + textField.getId().substring("box".length()) + " is possible to accept only positive number");
                 return true;
@@ -124,39 +137,53 @@ public class pdfSettingController extends quoteMainController{
 
     private PDFont getSelectedFont() {
         String font = fontSelection.getSelectionModel().getSelectedItem();
-        if (font == null) return PDType1Font.HELVETICA;
-        if (font.equals("Times Roman")) return PDType1Font.TIMES_ROMAN;
-        if (font.equals("Courier")) return PDType1Font.COURIER;
+        if (font == null)
+            return PDType1Font.HELVETICA;
+        if (font.equals("Times Roman"))
+            return PDType1Font.TIMES_ROMAN;
+        if (font.equals("Courier"))
+            return PDType1Font.COURIER;
         return PDType1Font.HELVETICA;
     }
 
     private String getLanguage() {
         String language = languageSelection.getSelectionModel().getSelectedItem();
-        if (language == null) return "English";
+        if (language == null)
+            return "English";
         return language;
     }
+
     private float getTextBox(TextField textField) {
-        if (textField.getText().equals("")) return MIN_NORMAL;
+        if (textField.getText().equals(""))
+            return MIN_NORMAL;
         return Float.parseFloat(textField.getText());
     }
 
     private String getTextArea(TextArea textArea) {
-        if (textArea.getText().equals("")) return "";
+        if (textArea.getText().equals(""))
+            return "";
         StringBuilder stringBuilder = new StringBuilder();
-        for (char c: textArea.getText().toCharArray()){
-            if (c >= ' ' || c == '\n') stringBuilder.append(c);
+        for (char c : textArea.getText().toCharArray()) {
+            if (c >= ' ' || c == '\n')
+                stringBuilder.append(c);
         }
         return stringBuilder.toString();
     }
 
     private Pdf checkFields() {
-        if (checkValueBox(boxSpaceTop)) return null;
-        if (checkValueBox(boxSpaceShort)) return null;
-        if (checkValueBox(boxSpaceLong)) return null;
-        if (checkValueBox(boxLeading)) return null;
-        if (checkValueBox(boxCharacterDimension)) return null;
+        if (checkValueBox(boxSpaceTop))
+            return null;
+        if (checkValueBox(boxSpaceShort))
+            return null;
+        if (checkValueBox(boxSpaceLong))
+            return null;
+        if (checkValueBox(boxLeading))
+            return null;
+        if (checkValueBox(boxCharacterDimension))
+            return null;
         return getCurrentPdf();
     }
+
     private Pdf getCurrentPdf() {
         PDFont font = getSelectedFont();
         String language = getLanguage();
