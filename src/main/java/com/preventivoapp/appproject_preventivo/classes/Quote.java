@@ -22,10 +22,10 @@ public class Quote {
     public Quote() {
         this.person = new Person(new SimpleStringProperty(""), new SimpleStringProperty(""));
         this.servicesChosen = new ArrayList<>();
-        this.quoteDate = new SimpleObjectProperty<>(LocalDate.of(0, 1,1));
+        this.quoteDate = new SimpleObjectProperty<>(LocalDate.of(0, 1, 1));
     }
 
-    public Quote(Quote copyOf){
+    public Quote(Quote copyOf) {
         this.person = new Person(copyOf.getPerson().firstNameProperty(), copyOf.getPerson().lastNameProperty());
         this.servicesChosen = copyOf.getServicesChosen();
         this.quoteDate = copyOf.quoteDateProperty();
@@ -59,22 +59,17 @@ public class Quote {
         this.quoteDate.set(quoteDate);
     }
 
-
     @Override
     public String toString() {
-        return "Quote={\n" +
-                "\tPerson: " + getPerson().getFirstName() + " (name), " + getPerson().getLastName() + " (lastname)\n" +
-                "\tLocalDate: " + getQuoteDate() + "\n" +
-                "\tChosenServices:\n" +
-                servicesChosen + "}";
+        return "Quote={\n" + "\tPerson: " + getPerson().getFirstName() + " (name), " + getPerson().getLastName() + " (lastname)\n" + "\tLocalDate: " + getQuoteDate() + "\n" + "\tChosenServices:\n" + servicesChosen + "}";
     }
 
     @Override
-    public Object clone(){
+    public Object clone() {
         Quote quote;
         try {
             quote = (Quote) super.clone();
-        } catch (CloneNotSupportedException e){
+        } catch (CloneNotSupportedException e) {
             quote = new Quote(this.getPerson(), this.getServicesChosen(), this.quoteDateProperty());
         }
         quote.person = (Person) this.person.clone();
@@ -82,9 +77,10 @@ public class Quote {
         quote.quoteDate = this.quoteDateProperty();
         return quote;
     }
-    private List<ServiceDetail> cloneServiceChosen(){
+
+    private List<ServiceDetail> cloneServiceChosen() {
         List<ServiceDetail> list = new ArrayList<>();
-        for(ServiceDetail serviceDetail: this.getServicesChosen()){
+        for (ServiceDetail serviceDetail : this.getServicesChosen()) {
             list.add((ServiceDetail) serviceDetail.clone());
         }
         return list;

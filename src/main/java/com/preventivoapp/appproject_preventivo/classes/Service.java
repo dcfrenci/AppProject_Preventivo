@@ -15,17 +15,18 @@ public class Service {
         this.servicePriceForTooth = servicePriceForTooth;
     }
 
-    public Service(){
+    public Service() {
         this.serviceName = new SimpleStringProperty("");
         this.servicePrice = 0;
         this.servicePriceForTooth = 0;
     }
 
-    public Service(Service copyOf){
+    public Service(Service copyOf) {
         this.serviceName = new SimpleStringProperty(copyOf.getServiceName());
         this.servicePrice = copyOf.getServicePrice();
         this.servicePriceForTooth = copyOf.getServicePriceForTooth();
     }
+
     public String getServiceName() {
         return serviceName.get();
     }
@@ -33,7 +34,8 @@ public class Service {
     public ObservableStringValue serviceNameProperty() {
         return serviceName;
     }
-    public StringProperty getServiceNameProperty(){
+
+    public StringProperty getServiceNameProperty() {
         return serviceName;
     }
 
@@ -59,18 +61,15 @@ public class Service {
 
     @Override
     public String toString() {
-        return  "Service:\n" +
-                "\tserviceName=" + getServiceName() +
-                "\n\tservicePrice=" + servicePrice +
-                "\n\tservicePriceForTooth=" + servicePriceForTooth;
+        return "Service:\n" + "\tserviceName=" + getServiceName() + "\n\tservicePrice=" + servicePrice + "\n\tservicePriceForTooth=" + servicePriceForTooth;
     }
 
     @Override
-    public Object clone(){
+    public Object clone() {
         Service service;
         try {
             service = (Service) super.clone();
-        } catch (CloneNotSupportedException e){
+        } catch (CloneNotSupportedException e) {
             service = new Service(this.getServiceNameProperty(), this.getServicePrice(), this.getServicePriceForTooth());
         }
         return service;

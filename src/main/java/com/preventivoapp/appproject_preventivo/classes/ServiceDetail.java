@@ -16,7 +16,8 @@ public class ServiceDetail {
         this.chosenService = chosenService;
         this.timeSelected = 1;
     }
-    public ServiceDetail(Service chosenService, List<Integer> chosenTeeth, int timeSelected){
+
+    public ServiceDetail(Service chosenService, List<Integer> chosenTeeth, int timeSelected) {
         this.chosenService = chosenService;
         this.chosenTeeth = chosenTeeth;
         this.timeSelected = timeSelected;
@@ -46,27 +47,27 @@ public class ServiceDetail {
         this.timeSelected = timeSelected;
     }
 
-    public String showTeeth(){
+    public String showTeeth() {
         StringBuilder string = new StringBuilder();
-        for(Integer elem: getChosenTeeth()){
-            if (!string.isEmpty()) string.append(", ");
+        for (Integer elem : getChosenTeeth()) {
+            if (!string.isEmpty())
+                string.append(", ");
             string.append(elem);
         }
         return string.toString();
     }
+
     @Override
     public String toString() {
-        return "\t\tService: " + getChosenService().getServiceName() + " (name), " + getChosenService().getServicePrice() + " (price), " + getChosenService().getServicePriceForTooth() + " (toothPrice)\n" +
-                "\t\t\t" + getTimeSelected() + " (time selected)\n" +
-                "\t\t\t" + getChosenTeeth() + " (chosen teeth)\n";
+        return "\t\tService: " + getChosenService().getServiceName() + " (name), " + getChosenService().getServicePrice() + " (price), " + getChosenService().getServicePriceForTooth() + " (toothPrice)\n" + "\t\t\t" + getTimeSelected() + " (time selected)\n" + "\t\t\t" + getChosenTeeth() + " (chosen teeth)\n";
     }
 
     @Override
-    public Object clone(){
+    public Object clone() {
         ServiceDetail serviceDetail;
         try {
             serviceDetail = (ServiceDetail) super.clone();
-        } catch (CloneNotSupportedException e){
+        } catch (CloneNotSupportedException e) {
             serviceDetail = new ServiceDetail(this.getChosenService(), this.getChosenTeeth(), this.getTimeSelected());
         }
         serviceDetail.chosenService = (Service) this.chosenService.clone();

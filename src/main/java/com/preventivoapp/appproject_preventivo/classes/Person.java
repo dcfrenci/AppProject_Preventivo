@@ -11,6 +11,7 @@ public class Person {
         this.firstName = new SimpleStringProperty("");
         this.lastName = new SimpleStringProperty("");
     }
+
     public Person(StringProperty firstName, StringProperty lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -25,11 +26,11 @@ public class Person {
     }
 
     public void setFirstName(String firstName) {
-        if (firstName.startsWith(" ")){
+        if (firstName.startsWith(" ")) {
             setFirstName(firstName.substring(1));
             return;
         }
-        if (firstName.endsWith(" ")){
+        if (firstName.endsWith(" ")) {
             setFirstName(firstName.substring(0, firstName.length() - 2));
             return;
         }
@@ -45,11 +46,11 @@ public class Person {
     }
 
     public void setLastName(String lastName) {
-        if (lastName.startsWith(" ")){
+        if (lastName.startsWith(" ")) {
             setLastName(lastName.substring(1));
             return;
         }
-        if (lastName.endsWith(" ")){
+        if (lastName.endsWith(" ")) {
             setLastName(lastName.substring(0, lastName.length() - 2));
             return;
         }
@@ -58,17 +59,15 @@ public class Person {
 
     @Override
     public String toString() {
-        return "firstName=" + firstName +
-                ", lastName=" + lastName
-                ;
+        return "firstName=" + firstName + ", lastName=" + lastName;
     }
 
     @Override
-    public Object clone(){
+    public Object clone() {
         Person person;
         try {
             person = (Person) super.clone();
-        } catch (CloneNotSupportedException e){
+        } catch (CloneNotSupportedException e) {
             person = new Person(this.firstNameProperty(), this.lastNameProperty());
         }
         return person;
