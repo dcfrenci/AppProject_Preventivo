@@ -22,4 +22,4 @@ The application is coded by Francesco Della Casa and Lorenzo Di Maio.
 
 ### Licence 
 
-This application is open source and free to use.
+This software is licensed under MIT License
