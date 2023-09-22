@@ -26,7 +26,7 @@ tasks.withType(JavaCompile) {
 
 application {
     mainModule = 'com.preventivoapp.appproject_preventivo'
-    mainClass = 'com.preventivoapp.appproject_preventivo.HelloApplication'
+    mainClass = 'com.preventivoapp.appproject_preventivo.Main'
 }
 
 javafx {
@@ -50,6 +50,18 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+//The jar block of code must be uncommented if you want to create a .jar of the whole project
+/*jar {
+    //dependsOn copyJavaFXLibs
+    manifest {
+        attributes 'Main-Class' : 'com.preventivoapp.appproject_preventivo.Main'
+    }
+    from {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        configurations.runtimeClasspath.collect {it.isDirectory() ? it : zipTree(it)}
+    }
+}*/
 
 jlink {
     imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")

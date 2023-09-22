@@ -327,7 +327,7 @@ public class Pdf {
             addLine(contentStream, "Price", width / 2, y, leading, characterDimension, true);
             addLine(contentStream, "Amount", (width / 2) + (width / 4), y, leading, characterDimension, true);
         }
-        writtenLines += characterDimension + leading;
+        writtenLines += characterDimension + leading + characterDimension / 2;
         //fill columns
         double total = 0;
         for (ServiceDetail service : quote.getServicesChosen()) {

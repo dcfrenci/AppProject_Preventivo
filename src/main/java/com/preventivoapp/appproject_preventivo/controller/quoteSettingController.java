@@ -86,7 +86,8 @@ public class quoteSettingController extends quoteMainController {
         newQuoteNumberColumn.setCellValueFactory(new PropertyValueFactory<>("TimeSelected"));
         newQuoteSelectedTooth.setCellValueFactory(param -> {
             if (param.getValue().getChosenTeeth() == null)
-                return new SimpleStringProperty("");
+                if (param.getValue().getChosenService().getServicePriceForTooth() > 0) return new SimpleStringProperty(" .....");
+                else return new SimpleStringProperty("");
             return new SimpleStringProperty(param.getValue().showTeeth());
         });
 
@@ -157,6 +158,10 @@ public class quoteSettingController extends quoteMainController {
                         setObservableChosenService();
                         return;
                     }
+                }
+            } else {
+                for (ServiceDetail service : quote.getServicesChosen()) {
+                    if (service.getChosenService().getServiceName().compareTo(serviceDetail.getChosenService().getServiceName()) == 0) return;
                 }
             }
             quote.getServicesChosen().add(serviceDetail);
