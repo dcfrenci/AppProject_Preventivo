@@ -10,11 +10,14 @@ The application aims to produce a quote for a client generating a pdf from the s
 * Possibility to customize the layout and description of pdf.
 * And much more...
 
-To discover all the feature a user guide is available "src/main/resources/com/preventivoapp/appproject_preventivo/Pdf/quoteProgram-manual.pdf"
+To discover all the feature a user guide is available in this [file](https://github.com/dcfrenci/AppProject_Preventivo/blob/master/src/main/resources/com/preventivoapp/appproject_preventivo/Pdf/quoteProgram-manual.pdf).
 
 ### Library required
 * Jackson's library, used to load and save application data.
 * Apache PDF library, used to create the pdf.
+
+### Releases and Download
+You can download this application using this [link](https://github.com/dcfrenci/AppProject_Preventivo/releases) and choose the version you prefere.
 
 ### Contribution 
 
