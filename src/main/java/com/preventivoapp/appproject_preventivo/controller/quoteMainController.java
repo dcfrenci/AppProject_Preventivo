@@ -24,8 +24,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.*;
 
+
 import java.awt.*;
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -264,13 +267,21 @@ public class quoteMainController {
         }
     }
 
-    public void handleUserGuide() throws IOException {
-        //Open the user guide
-        String path = System.getProperty("user.dir") + "/src/main/resources/com/preventivoapp/appproject_preventivo/Pdf/quoteProgram-manual.pdf";
+    public void handleUserGuide() {
+        //Open the user guide on the computer
+        /*String path = System.getProperty("user.dir") + "/src/main/resources/com/preventivoapp/appproject_preventivo/Pdf/quoteProgram-manual.pdf";
         File file = new File(path);
         if (file.exists()) {
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().open(file);
+            }
+        }*/
+        //Open the user guide on the web
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().browse(new URL("https://github.com/dcfrenci/AppProject_Preventivo/blob/2f5799957466e7cbd470143d2e23cb7e6f8ff221/src/main/resources/com/preventivoapp/appproject_preventivo/Pdf/quoteProgram-manual.pdf").toURI());
+            } catch (IOException | URISyntaxException e) {
+                throw new RuntimeException(e);
             }
         }
     }
