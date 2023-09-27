@@ -268,7 +268,7 @@ public class quoteMainController {
     }
 
     public void handleUserGuide() {
-        //Open the user guide on the computer
+        //Open the user guide locally
         /*String path = System.getProperty("user.dir") + "/src/main/resources/com/preventivoapp/appproject_preventivo/Pdf/quoteProgram-manual.pdf";
         File file = new File(path);
         if (file.exists()) {
@@ -531,7 +531,6 @@ public class quoteMainController {
      */
     @FXML
     public void handleDeleteQuote() {
-
         try {
             int selectedIndex = selectedIndexInQuoteTable(quoteTable);
             Quote quote = getQuoteList().get(selectedIndex);
@@ -555,7 +554,7 @@ public class quoteMainController {
     public void handleDeleteService() {
         try {
             int selectedIndex = selectedIndexInServiceTable(serviceTable);
-            Service service = getServicesList().get(selectedIndex);
+            Service service = serviceTable.getItems().get(selectedIndex);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.initModality(Modality.WINDOW_MODAL);
             alert.setTitle("Delete confirmation");

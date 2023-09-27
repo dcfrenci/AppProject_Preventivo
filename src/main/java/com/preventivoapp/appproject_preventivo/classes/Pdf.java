@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static java.lang.Float.MIN_NORMAL;
 
@@ -58,10 +59,7 @@ public class Pdf {
         else
             this.font = setFont(font);
         this.pathFile = pathFile;
-        if (language == null)
-            this.language = "English";
-        else
-            this.language = language;
+        this.language = Objects.requireNonNullElse(language, "English");
     }
 
     public Pdf(Pdf origin, String newPath) {
@@ -301,7 +299,12 @@ public class Pdf {
             writtenLines += characterDimension + leading;
         }
         //date and person
-        addLine(contentStream, date.toString(), width - getSpaceSideShort(), y, leading, characterDimension, false);
+        if (getLanguage().equalsIgnoreCase("Italian")) {
+            String stringDate = date.getDayOfMonth() + "-" + date.getMonthValue() + "-" + date.getYear();
+            addLine(contentStream, stringDate, width - getSpaceSideShort(), y, leading, characterDimension, false);
+        } else {
+            addLine(contentStream, date.toString(), width - getSpaceSideShort(), y, leading, characterDimension, false);
+        }
         String client = "Mx. ";
         int index = languageEnglish.indexOf(client);
         if (getLanguage().equalsIgnoreCase("Italian"))
@@ -320,12 +323,12 @@ public class Pdf {
         //column name
         if (getLanguage().equalsIgnoreCase("Italian")) {
             addLine(contentStream, languageItalian.get(languageEnglish.indexOf("Description")), x, y, leading, characterDimension, true);
-            addLine(contentStream, languageItalian.get(languageEnglish.indexOf("Price")), width / 2, y, leading, characterDimension, true);
-            addLine(contentStream, languageItalian.get(languageEnglish.indexOf("Amount")), (width / 2) + (width / 4), y, leading, characterDimension, true);
+            addLine(contentStream, languageItalian.get(languageEnglish.indexOf("Price")), (width / 2) + (width / 4) - x, y, leading, characterDimension, false);
+            addLine(contentStream, languageItalian.get(languageEnglish.indexOf("Amount")), width - x, y, leading, characterDimension, false);
         } else {
             addLine(contentStream, "Description", x, y, leading, characterDimension, true);
-            addLine(contentStream, "Price", width / 2, y, leading, characterDimension, true);
-            addLine(contentStream, "Amount", (width / 2) + (width / 4), y, leading, characterDimension, true);
+            addLine(contentStream, "Price", (width / 2) + (width / 4) - x, y, leading, characterDimension, false);
+            addLine(contentStream, "Amount", width - x, y, leading, characterDimension, false);
         }
         writtenLines += characterDimension + leading + characterDimension / 2;
         //fill columns
