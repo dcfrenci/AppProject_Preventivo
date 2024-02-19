@@ -1,0 +1,29 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="AppProject_Preventivo:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/AppProject_Preventivo_jar</output-path>
+    <root id="archive" name="AppProject_Preventivo.jar">
+      <element id="module-output" name="AppProject_Preventivo.main" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.datatype/jackson-datatype-jsr310/2.15.0/3c3a0cfba09271fab4603224f2c2e21c6ddf6dc4/jackson-datatype-jsr310-2.15.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-engine/5.9.1/1bf771097bde296c3ab174861954e8aafaaf2e94/junit-jupiter-engine-5.9.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.openjfx/javafx-fxml/17.0.2/5079f88d5345e988222c90a345ad682b7aaccad3/javafx-fxml-17.0.2-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.openjfx/javafx-graphics/17.0.2/6f95886c8fed3e1b21370a199c3937846ef6b3cc/javafx-graphics-17.0.2-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.openjfx/javafx-graphics/17.0.2/1eb7ce07e07ccc2fcb26103f07535e72069519d6/javafx-graphics-17.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.openjfx/javafx-base/17.0.2/ca46f15a306175ac1513211e1d190a5baacd77cc/javafx-base-17.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-commons/1.9.1/3145f821b5cd10abcdc5f925baa5fffa6f1b628f/junit-platform-commons-1.9.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.openjfx/javafx-controls/17.0.2/707f290bacde2738c0a7e1d0b4a8193002c29cf7/javafx-controls-17.0.2-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/pdfbox/2.0.28/82a36bf73db57414b3fb2fc2962859ed453b51bc/pdfbox-2.0.28.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ch.randelshofer/fastdoubleparser/0.8.0/85c25540369921659556ead85e02c99ef0d24280/fastdoubleparser-0.8.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-engine/1.9.1/83591e5089d6cea5f324aa3ecca9b19d5a275803/junit-platform-engine-1.9.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.openjfx/javafx-base/17.0.2/1bd6dc88b180a6239a5067320c2f0d7f3526e1d2/javafx-base-17.0.2-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.opentest4j/opentest4j/1.2.0/28c11eb91f9b6d8e200631d46e20a7f407f2a046/opentest4j-1.2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.15.0/89b0fd554928425a776a6e97ed010034312af21d/jackson-annotations-2.15.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/5.9.1/7bb53fbc0173e9f6a9d21d58297af94b1f2f9ce1/junit-jupiter-api-5.9.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.15.0/d41caa3a4e9f85382702a059a65c512f85ac230/jackson-databind-2.15.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.openjfx/javafx-controls/17.0.2/f52640ea07a0d7fe2ac8b9f945ec58fa22ac1afd/javafx-controls-17.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.15.0/12f334a1dc9c6d2854c43ae314024dde8b3ad572/jackson-core-2.15.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.pdfbox/fontbox/2.0.28/cae8486c676f4119140a06dbec5f97bbae68c34b/fontbox-2.0.28.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.controlsfx/controlsfx/11.1.2/584bc3f468e2c33100fcdbb1daf0a3e095e5e031/controlsfx-11.1.2.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

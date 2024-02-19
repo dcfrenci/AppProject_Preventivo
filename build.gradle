@@ -41,7 +41,10 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.15.0'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.15.0'
+    //implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.15.0'
+    implementation ('com.fasterxml.jackson.core:jackson-databind:2.15.0') {
+        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-annotations'
+    }
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.15.0'
 
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.28'
@@ -51,7 +54,9 @@ test {
     useJUnitPlatform()
 }
 
-//The jar block of code must be uncommented if you want to create a .jar of the whole project
+//The jar block of code must be uncommented if you want to create a .jar of the whole project (fatJar).
+//- Take the .jar file in ../build/libs/
+//- Upload it to "Launch4j" without setting the icon
 /*jar {
     //dependsOn copyJavaFXLibs
     manifest {

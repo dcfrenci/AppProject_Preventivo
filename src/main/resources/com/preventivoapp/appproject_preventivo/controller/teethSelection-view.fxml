@@ -31,7 +31,7 @@
       <CheckBox fx:id="tooth46" layoutX="195.0" layoutY="335.0" mnemonicParsing="false" onAction="#handleChangeState" />
       <CheckBox fx:id="tooth45" layoutX="209.0" layoutY="366.0" mnemonicParsing="false" onAction="#handleChangeState" />
       <CheckBox fx:id="tooth44" layoutX="223.0" layoutY="394.0" mnemonicParsing="false" onAction="#handleChangeState" />
-      <CheckBox fx:id="tooth43" layoutX="247.0" layoutY="419.0" mnemonicParsing="false" onDragDetected="#handleChangeState" />
+      <CheckBox fx:id="tooth43" layoutX="247.0" layoutY="419.0" mnemonicParsing="false" onAction="#handleChangeState" />
       <CheckBox fx:id="tooth42" layoutX="275.0" layoutY="443.0" mnemonicParsing="false" onAction="#handleChangeState" />
       <CheckBox fx:id="tooth41" layoutX="320.0" layoutY="457.0" mnemonicParsing="false" onAction="#handleChangeState" />
       <CheckBox fx:id="tooth38" layoutX="481.0" layoutY="265.0" mnemonicParsing="false" onAction="#handleChangeState" />
