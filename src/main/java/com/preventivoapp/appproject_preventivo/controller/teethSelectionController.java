@@ -76,6 +76,46 @@ public class teethSelectionController {
     private CheckBox tooth47;
     @FXML
     private CheckBox tooth48;
+    @FXML
+    private CheckBox tooth51;
+    @FXML
+    private CheckBox tooth52;
+    @FXML
+    private CheckBox tooth53;
+    @FXML
+    private CheckBox tooth54;
+    @FXML
+    private CheckBox tooth55;
+    @FXML
+    private CheckBox tooth61;
+    @FXML
+    private CheckBox tooth62;
+    @FXML
+    private CheckBox tooth63;
+    @FXML
+    private CheckBox tooth64;
+    @FXML
+    private CheckBox tooth65;
+    @FXML
+    private CheckBox tooth71;
+    @FXML
+    private CheckBox tooth72;
+    @FXML
+    private CheckBox tooth73;
+    @FXML
+    private CheckBox tooth74;
+    @FXML
+    private CheckBox tooth75;
+    @FXML
+    private CheckBox tooth81;
+    @FXML
+    private CheckBox tooth82;
+    @FXML
+    private CheckBox tooth83;
+    @FXML
+    private CheckBox tooth84;
+    @FXML
+    private CheckBox tooth85;
     private Map<String, Boolean> teeth;
     private boolean toSave;
 
@@ -111,6 +151,14 @@ public class teethSelectionController {
                 list.add(i);
             }
         }
+        for (int i = 51; i < 86; i++) {
+            if (i % 10 > 5 || i % 10 == 0) {
+                continue;
+            }
+            if (teeth.get("tooth" + i)) {
+                list.add(i);
+            }
+        }
         return list;
     }
 
@@ -128,6 +176,13 @@ public class teethSelectionController {
         for (int i = 11; i < 49; i++) {
             if (i % 10 == 9) {
                 i++;
+                continue;
+            }
+            map.put("tooth" + i, false);
+            setSelectedCheckBox("tooth" + i, false);
+        }
+        for (int i = 51; i < 86; i++) {
+            if (i % 10 > 5 || i % 10 == 0) {
                 continue;
             }
             map.put("tooth" + i, false);
@@ -184,6 +239,27 @@ public class teethSelectionController {
             case "tooth46" -> tooth46.setSelected(state);
             case "tooth47" -> tooth47.setSelected(state);
             case "tooth48" -> tooth48.setSelected(state);
+            //child teeth
+            case "tooth51" -> tooth51.setSelected(state);
+            case "tooth52" -> tooth52.setSelected(state);
+            case "tooth53" -> tooth53.setSelected(state);
+            case "tooth54" -> tooth54.setSelected(state);
+            case "tooth55" -> tooth55.setSelected(state);
+            case "tooth61" -> tooth61.setSelected(state);
+            case "tooth62" -> tooth62.setSelected(state);
+            case "tooth63" -> tooth63.setSelected(state);
+            case "tooth64" -> tooth64.setSelected(state);
+            case "tooth65" -> tooth65.setSelected(state);
+            case "tooth71" -> tooth71.setSelected(state);
+            case "tooth72" -> tooth72.setSelected(state);
+            case "tooth73" -> tooth73.setSelected(state);
+            case "tooth74" -> tooth74.setSelected(state);
+            case "tooth75" -> tooth75.setSelected(state);
+            case "tooth81" -> tooth81.setSelected(state);
+            case "tooth82" -> tooth82.setSelected(state);
+            case "tooth83" -> tooth83.setSelected(state);
+            case "tooth84" -> tooth84.setSelected(state);
+            case "tooth85" -> tooth85.setSelected(state);
         }
     }
 
@@ -221,6 +297,27 @@ public class teethSelectionController {
             case "tooth46" -> tooth46.isSelected();
             case "tooth47" -> tooth47.isSelected();
             case "tooth48" -> tooth48.isSelected();
+            //child teeth
+            case "tooth51" -> tooth51.isSelected();
+            case "tooth52" -> tooth52.isSelected();
+            case "tooth53" -> tooth53.isSelected();
+            case "tooth54" -> tooth54.isSelected();
+            case "tooth55" -> tooth55.isSelected();
+            case "tooth61" -> tooth61.isSelected();
+            case "tooth62" -> tooth62.isSelected();
+            case "tooth63" -> tooth63.isSelected();
+            case "tooth64" -> tooth64.isSelected();
+            case "tooth65" -> tooth65.isSelected();
+            case "tooth71" -> tooth71.isSelected();
+            case "tooth72" -> tooth72.isSelected();
+            case "tooth73" -> tooth73.isSelected();
+            case "tooth74" -> tooth74.isSelected();
+            case "tooth75" -> tooth75.isSelected();
+            case "tooth81" -> tooth81.isSelected();
+            case "tooth82" -> tooth82.isSelected();
+            case "tooth83" -> tooth83.isSelected();
+            case "tooth84" -> tooth84.isSelected();
+            case "tooth85" -> tooth85.isSelected();
             default -> false;
         };
     }
@@ -229,6 +326,7 @@ public class teethSelectionController {
      * HANDLER of BUTTONS
      */
     public void handleSaveButton(ActionEvent actionEvent) {
+        System.out.println(teeth);
         setToSave(true);
         Stage thisWindow = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         thisWindow.close();
